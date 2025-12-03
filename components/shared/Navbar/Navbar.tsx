@@ -20,14 +20,14 @@ import {
 const navLinks = [
     { label: 'Home', href: '/' },
     { label: 'Coin Bundles', href: '/bundles' },
-    { label: 'Event Tickets', href: '/#tickets' },
+    { label: 'Event Tickets', href: '/tickets' },
     { label: 'Support', href: '/#support' },
 ]
 
 export default function Navbar() {
     return (
         <header className="w-full bg-[#F8C0CC] px-4 py-4">
-            <div className="mx-auto flex w-full  items-center justify-between rounded border border-white/70 bg-white/80 px-4 py-3 text-sm text-gray-800 shadow-lg backdrop-blur sm:px-6">
+            <div className="mx-auto flex w-full items-center justify-between rounded border border-white/70 bg-white/80 px-4 py-3 text-sm text-gray-800 shadow-lg backdrop-blur sm:px-6">
                 {/* Logo */}
                 <Link href="/" className="flex items-center gap-2">
                     <div className="flex h-11 w-11 items-center justify-center rounded-full border border-gray-400 text-lg font-semibold tracking-wide text-gray-800">

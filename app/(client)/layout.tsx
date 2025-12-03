@@ -3,10 +3,12 @@ import Navbar from "@/components/shared/Navbar/Navbar";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div>
+    <div className="flex min-h-screen flex-col">
       <Navbar />
       {children}
-      <Footer />
+      <div className="mt-auto">
+        <Footer />
+      </div>
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import React from "react";
+import Pill from "../Pill/Pill";
 
 interface SectionHeadingProps extends React.ComponentProps<"div"> {
   eyebrow?: string; // small top text (optional)
@@ -22,27 +23,7 @@ export default function SectionHeading({
       className={cn("flex flex-col items-center text-center", className)}
       {...props}
     >
-      {eyebrow && (
-        <div
-          className="h-[30px] rounded-full p-0.5"
-          style={{
-            backgroundImage:
-              "linear-gradient(270deg, #831E34 0%, #E9355C 100%)",
-          }}
-        >
-          <div
-            style={{
-              backgroundImage:
-                "linear-gradient(270deg, #E9355C 0%, #831E34 100%)",
-            }}
-            className="flex h-full w-full items-center justify-center rounded-full px-2.5"
-          >
-            <span className="text-primary-foreground text-sm font-light tracking-[3.36px] capitalize">
-              {eyebrow}
-            </span>
-          </div>
-        </div>
-      )}
+      {eyebrow && <Pill>{eyebrow}</Pill>}
 
       {h2 ? (
         <h2 className="font-heading text-heading-200 mt-2 text-5xl leading-[132%] font-semibold">
