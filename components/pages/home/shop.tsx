@@ -1,6 +1,5 @@
 import SectionHeading from "@/components/shared/SectionHeading/SectionHeading";
 import ShopCard from "@/components/shared/ShopCard/ShopCard";
-import { Button } from "@/components/ui/button";
 
 export default function Shop() {
   return (

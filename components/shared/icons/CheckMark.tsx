@@ -24,3 +24,34 @@ const CheckMark = (props: SVGProps<SVGSVGElement>) => (
   </svg>
 )
 export default CheckMark
+
+export const CheckCircle = (props: SVGProps<SVGSVGElement>) => (
+  <svg
+    width={20}
+    height={20}
+    viewBox="0 0 20 20"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}
+  >
+    <g clipPath="url(#clip0_6302_793)">
+      <path
+        d="M18.3346 9.99996C18.3346 5.39758 14.6036 1.66663 10.0013 1.66663C5.39893 1.66663 1.66797 5.39758 1.66797 9.99996C1.66797 14.6023 5.39893 18.3333 10.0013 18.3333C14.6036 18.3333 18.3346 14.6023 18.3346 9.99996Z"
+        stroke="#E9355C"
+        strokeWidth={1.5}
+      />
+      <path
+        d="M6.66797 10.625C6.66797 10.625 8.0013 11.3854 8.66797 12.5C8.66797 12.5 10.668 8.12496 13.3346 6.66663"
+        stroke="#E9355C"
+        strokeWidth={1.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </g>
+    <defs>
+      <clipPath id="clip0_6302_793">
+        <rect width={20} height={20} fill="white" />
+      </clipPath>
+    </defs>
+  </svg>
+)

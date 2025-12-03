@@ -19,7 +19,7 @@ import {
 
 const navLinks = [
     { label: 'Home', href: '/' },
-    { label: 'Coin Bundles', href: '/#bundles' },
+    { label: 'Coin Bundles', href: '/bundles' },
     { label: 'Event Tickets', href: '/#tickets' },
     { label: 'Support', href: '/#support' },
 ]

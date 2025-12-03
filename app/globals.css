@@ -5,7 +5,7 @@
 
 @theme inline {
   --color-body-100: #58585E;
-  --color-body-200: #4A4C56;
+  --color-body-200: var(--foreground);
   --color-heading-100: #1D1F2C;
   --color-heading-200: #17171E;
   --color-background: var(--background);
@@ -38,6 +38,8 @@
   --color-secondary: var(--secondary);
   --color-primary-foreground: var(--primary-foreground);
   --color-primary: var(--primary);
+  --color-primary-50: #FDEBEF;
+  --color-primary-100: #FAF3FF;
   --color-footer: #171717;
   --color-popover-foreground: var(--popover-foreground);
   --color-popover: var(--popover);
@@ -52,7 +54,7 @@
 :root {
   --radius: 0.625rem;
   --background: #E6DDED;
-  --foreground: oklch(0.145 0 0);
+  --foreground: #4A4C56;
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
