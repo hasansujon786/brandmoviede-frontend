@@ -26,7 +26,7 @@ const navLinks = [
 
 export default function Navbar() {
     return (
-        <header className="w-full bg-[#ffd7e2] px-4 py-4">
+        <header className="w-full bg-[#F8C0CC] px-4 py-4">
             <div className="mx-auto flex w-full  items-center justify-between rounded border border-white/70 bg-white/80 px-4 py-3 text-sm text-gray-800 shadow-lg backdrop-blur sm:px-6">
                 {/* Logo */}
                 <Link href="/" className="flex items-center gap-2">
