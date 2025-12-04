@@ -4,9 +4,10 @@ import Link from "next/link";
 import CalenderIcon from "../icons/CalenderIcon";
 import LocationPinIcon from "../icons/LocationPinIcon";
 import PeoplesIcon from "../icons/PeoplesIcon";
-import Pill, { TicketBadge } from "../Pill/Pill";
+import { TicketBadge } from "../Pill/Pill";
 
 interface TicketCardProps {
+  id: string;
   title: string;
   type: string;
   desc: string;
@@ -72,11 +73,13 @@ export default function TicketCard(props: TicketCardProps) {
       </div>
 
       <div className="mt-8 flex gap-4">
-        <Button variant="primary-secondary" className="flex-1">
-          View Details
+        <Button asChild variant="primary-secondary" className="flex-1">
+          <Link href={`/tickets/${props.id}`}>
+            View Details
+          </Link>
         </Button>
         <Button variant="primary" className="flex-1">
-          Buy Coins
+          Buy Ticket
         </Button>
       </div>
     </div>

@@ -9,6 +9,7 @@
   --color-heading-100: #1d1f2c;
   --color-heading-200: #17171e;
   --color-background: var(--background);
+  --color-background-lighten: #ffffff;
   --color-foreground: var(--foreground);
   --font-heading: var(--font-bricolage-grotesque-sans);
   --font-sans: var(--font-inter-tight-sans);

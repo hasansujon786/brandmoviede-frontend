@@ -5,6 +5,7 @@ import { Ticket } from "lucide-react";
 
 const tickets = [
   {
+    id: "01",
     title: "Sugo Connect 2025",
     type: "MOST_POPULAR",
     desc: "Premier gathering of Sugo Chat enthusiasts for networking and workshops",
@@ -16,6 +17,7 @@ const tickets = [
     image: '/images/tickets/bg-ticket-card.png'
   },
   {
+    id: "02",
     title: "Sugo Developers 2025",
     type: "REGULAR",
     desc: "Premier gathering of Sugo Chat enthusiasts for networking and workshops",
@@ -28,6 +30,7 @@ const tickets = [
     
   },
   {
+    id: "03",
     title: "Sugo Creators Summit",
     type: "NEW",
     desc: "Premier gathering of Sugo Chat enthusiasts for networking and workshops",
@@ -39,6 +42,7 @@ const tickets = [
     image: '/images/tickets/bg-ticket-card.png'
   },
   {
+    id: "04",
     title: "Sugo Connect 2025",
     type: "REGULAR",
     desc: "Premier gathering of Sugo Chat enthusiasts for networking and workshops",
@@ -50,6 +54,7 @@ const tickets = [
     image: '/images/tickets/bg-ticket-card.png'
   },
   {
+    id: "05",
     title: "Sugo Connect 2025",
     type: "REGULAR",
     desc: "Premier gathering of Sugo Chat enthusiasts for networking and workshops",
@@ -61,6 +66,7 @@ const tickets = [
     image: '/images/tickets/bg-ticket-card.png'
   },
   {
+    id: "06",
     title: "Sugo Connect 2025",
     type: "REGULAR",
     desc: "Premier gathering of Sugo Chat enthusiasts for networking and workshops",

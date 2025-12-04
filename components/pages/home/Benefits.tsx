@@ -1,7 +1,7 @@
 import CheckMark from "@/components/shared/icons/CheckMark";
+import Image from "next/image";
 import SectionHeading from "@/components/shared/SectionHeading/SectionHeading";
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
 
 const listItems = [
   "First and foremost, we only look at YOU as a person!",
@@ -41,10 +41,7 @@ started with streaming easier."
 
           <ul className="mt-4 space-y-2">
             {listItems.map((item) => (
-              <li
-                key={item}
-                className="text-body-200 flex text-base"
-              >
+              <li key={item} className="text-body-200 flex text-base">
                 <span className="mt-0.5 mr-2">
                   <CheckMark />
                 </span>

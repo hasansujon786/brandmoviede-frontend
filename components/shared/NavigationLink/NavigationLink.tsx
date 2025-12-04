@@ -10,6 +10,7 @@ interface NavigationLinkProps
   onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void;
 }
 
+// TODO: hight light color perfectly
 export default function NavigationLink({
   className,
   children,
