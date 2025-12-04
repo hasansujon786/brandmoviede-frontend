@@ -1,4 +1,4 @@
-import BundleDetails from "@/components/pages/bundleDetails/BundleDetails";
+import BundleDetails from "@/components/pages/BundleDetails/BundleDetails";
 import NavigationLink from "@/components/shared/NavigationLink/NavigationLink";
 
 export default function BundlePageDetailsPage() {

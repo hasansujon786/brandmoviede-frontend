@@ -1,4 +1,4 @@
-import CustomBundle from "@/components/pages/bundleDetails/CustomBundle";
+import CustomBundle from "@/components/pages/BundleDetails/CustomBundle";
 import NavigationLink from "@/components/shared/NavigationLink/NavigationLink";
 
 export default function BundleCustomPage() {
