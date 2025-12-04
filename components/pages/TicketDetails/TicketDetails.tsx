@@ -6,6 +6,7 @@ import CalenderIcon from "@/components/shared/icons/CalenderIcon";
 import LocationPinIcon from "@/components/shared/icons/LocationPinIcon";
 import PeoplesIcon from "@/components/shared/icons/PeoplesIcon";
 import HighlightNthWord from "@/components/shared/HighlightNthWord/HighlightNthWord";
+import InfoCard from "@/components/shared/InfoCard/InfoCard";
 
 const ticketDetails = {
   id: "01",
@@ -124,23 +125,7 @@ export default function TicketDetails() {
       <section className="bg-background-lighten py-20">
         <div className="custom-container grid grid-cols-3 gap-6">
           {infoCards.map((item) => (
-            <div
-              key={item.label}
-              className="bg-primary-100 border-primary/10 flex aspect-[1.811965812] flex-col items-center justify-center rounded-2xl border px-4 py-8 text-center"
-            >
-              <div className="bg-background-lighten text-primary flex size-14 items-center justify-center rounded-full">
-                {item.icon}
-              </div>
-
-              <h6 className="text-heading-200 font-heading mt-6 text-2xl font-semibold">
-                {item.label}
-              </h6>
-              {item.value.map((v, index) => (
-                <p key={index} className="mt-1 max-w-xs px-2 text-base">
-                  {v}
-                </p>
-              ))}
-            </div>
+            <InfoCard key={item.label} {...item} />
           ))}
         </div>
       </section>

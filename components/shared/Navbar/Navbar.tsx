@@ -19,7 +19,7 @@ const navLinks = [
   { label: "Home", href: "/" },
   { label: "Coin Bundles", href: "/bundles" },
   { label: "Event Tickets", href: "/tickets" },
-  { label: "Support", href: "/#support" },
+  { label: "Support", href: "/support" },
 ];
 
 export default function Navbar() {
