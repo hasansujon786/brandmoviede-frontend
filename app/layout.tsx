@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter_Tight, Bricolage_Grotesque } from "next/font/google";
 import "./globals.css";
 
+import { TwScreenSize } from "@/components/ui/tw-utils";
+
 const interTight = Inter_Tight({
   variable: "--font-inter-tight-sans",
   subsets: ["latin"],
@@ -29,6 +31,7 @@ export default function RootLayout({
       >
         {children}
       </body>
+      <TwScreenSize />
     </html>
   );
 }
