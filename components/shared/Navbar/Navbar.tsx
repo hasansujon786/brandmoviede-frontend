@@ -42,7 +42,7 @@ export default function Navbar() {
                 key={link.label}
                 asChild
                 variant={isActive ? "primary" : "ghost"}
-                className="h-8 rounded-2xl px-4 py-0 font-medium"
+                className="h-9.5 rounded-2xl px-4 py-1 font-medium text-lg"
               >
                 <Link href={link.href}>{link.label}</Link>
               </Button>
