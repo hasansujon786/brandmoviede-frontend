@@ -33,7 +33,7 @@ export default function CartSummary() {
           className="text-foreground h-8 w-full font-normal"
           variant="link"
         >
-          <Link href="/bundels">Conitnue Shopping</Link>
+          <Link href="/bundles">Conitnue Shopping</Link>
         </Button>
       </div>
     </div>

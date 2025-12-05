@@ -100,7 +100,7 @@ export default function BundleDetails() {
               className="text-foreground h-8 w-full font-normal"
               variant="link"
             >
-              <Link href="/bundels">View All Bundles</Link>
+              <Link href="/bundles">View All Bundles</Link>
             </Button>
           </div>
         </div>

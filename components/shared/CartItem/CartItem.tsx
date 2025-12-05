@@ -19,11 +19,7 @@ export default function CartItem() {
         <p className="text-primary mt-1 text-sm">Quantity : 02</p>
       </div>
 
-      <Button
-        variant="ghost"
-        className="text-heading-100 border border-current"
-        size="icon"
-      >
+      <Button variant="ghost" size="icon">
         <Trash2 />
       </Button>
     </div>

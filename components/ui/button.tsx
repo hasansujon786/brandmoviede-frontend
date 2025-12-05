@@ -40,7 +40,7 @@ const sizes: Record<NonNullable<ButtonProps["size"]>, string> = {
   default: "h-14 px-8 text-lg",
   sm: "h-9 px-4 text-xs",
   lg: "h-12 px-6 text-base",
-  icon: "h-11 w-11 rounded-full",
+  icon: "h-10 w-10 rounded-full text-heading-100 border border-[#4B463D]/80",
 };
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(

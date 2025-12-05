@@ -6,6 +6,8 @@ import PhoneIcon from "@/components/shared/icons/PhoneIcon";
 import SupportMessageForm from "../../../components/pages/Support/SupportMessageForm";
 import Image from "next/image";
 import { FAQ } from "@/components/pages/Bundles/FAQ";
+import HeroGradientWrapper from "@/components/shared/HeroGradientWrapper/HeroGradientWrapper";
+import SectionHeading from "@/components/shared/SectionHeading/SectionHeading";
 
 export default function SupportPage() {
   const infoCards = [
@@ -33,6 +35,15 @@ export default function SupportPage() {
 
   return (
     <div>
+      <HeroGradientWrapper>
+        <SectionHeading
+          eyebrow="EVENT TICKET"
+          description="Your one-stop destination for help with coins, events, and your account. Everything you need to get back to your experience."
+        >
+          Sugo <span className="text-primary">Support</span> Center
+        </SectionHeading>
+      </HeroGradientWrapper>
+
       <section className="py-20">
         <div className="custom-container grid grid-cols-4 gap-6">
           {infoCards.map((item) => (

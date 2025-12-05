@@ -14,6 +14,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { usePathname } from "next/navigation";
+import Image from "next/image";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -23,31 +25,29 @@ const navLinks = [
 ];
 
 export default function Navbar() {
+  const pathname = usePathname();
   return (
     <header className="w-full bg-[#F8C0CC] px-4 py-4">
-      <div className="mx-auto flex w-full items-center justify-between rounded border border-white/70 bg-white/80 px-4 py-3 text-sm text-gray-800 shadow-lg backdrop-blur sm:px-6">
+      <div className="bg-primary-50 mx-auto flex w-full items-center justify-between rounded-xl px-4 py-3 text-sm shadow-xs backdrop-blur sm:px-6">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2">
-          <div className="flex h-11 w-11 items-center justify-center rounded-full border border-gray-400 text-lg font-semibold tracking-wide text-gray-800">
-            BL
-          </div>
-          <span className="hidden text-base font-medium text-gray-700 sm:block">
-            B-Link
-          </span>
-        </Link>
+        <Image width={48} height={48} alt="" src="/images/logo-bl.png" />
 
         {/* Desktop nav */}
         <nav className="hidden items-center gap-1 md:flex">
-          {navLinks.map((link, idx) => (
-            <Button
-              key={link.label}
-              asChild
-              variant={idx === 0 ? "primary" : "ghost"}
-              className="px-4 py-2 font-medium"
-            >
-              <Link href={link.href}>{link.label}</Link>
-            </Button>
-          ))}
+          {navLinks.map((link) => {
+            const isActive = link.href == pathname;
+            return (
+              <Button
+                size="sm"
+                key={link.label}
+                asChild
+                variant={isActive ? "primary" : "ghost"}
+                className="h-8 rounded-2xl px-4 py-0 font-medium"
+              >
+                <Link href={link.href}>{link.label}</Link>
+              </Button>
+            );
+          })}
         </nav>
 
         {/* Desktop actions */}
@@ -60,18 +60,15 @@ export default function Navbar() {
               <ShoppingCart className="h-5 w-5" />
             </Link>
           </ActionIcon>
-          <Button variant="primary" className="hidden lg:inline-flex">
-            Launch App
-          </Button>
         </div>
 
         {/* Mobile trigger */}
         <Sheet>
           <SheetTrigger asChild>
             <Button
-              variant="secondary"
+              variant="ghost"
               size="icon"
-              className="flex items-center justify-center md:hidden"
+              className="md:hidden"
               aria-label="Open navigation menu"
             >
               <Menu className="h-5 w-5" />
@@ -87,29 +84,32 @@ export default function Navbar() {
               </SheetDescription>
             </SheetHeader>
 
-            <nav className="mt-8 flex flex-col gap-3">
-              {navLinks.map((link, idx) => (
-                <SheetClose asChild key={link.label}>
-                  <Button
-                    asChild
-                    variant={idx === 0 ? "primary" : "secondary"}
-                    className="justify-between"
-                  >
-                    <Link href={link.href}>
-                      <span>{link.label}</span>
-                    </Link>
-                  </Button>
-                </SheetClose>
-              ))}
+            <nav className="mt-8 flex flex-col gap-3 px-4">
+              {navLinks.map((link) => {
+                const isActive = link.href == pathname;
+                return (
+                  <SheetClose asChild key={link.label}>
+                    <Button
+                      asChild
+                      variant={isActive ? "primary" : "secondary"}
+                      className="justify-between shadow"
+                    >
+                      <Link href={link.href}>
+                        <span>{link.label}</span>
+                      </Link>
+                    </Button>
+                  </SheetClose>
+                );
+              })}
             </nav>
 
             <SheetFooter className="pt-8">
-              <div className="flex items-center justify-between rounded-2xl border border-dashed border-gray-200 px-4 py-3">
+              <div className="border-body-200/30 flex items-center justify-between rounded-2xl border border-dashed px-4 py-3">
                 <div>
-                  <p className="text-sm font-medium text-gray-800">
+                  <p className="text-heading-100 text-sm font-medium">
                     Need help?
                   </p>
-                  <p className="text-xs text-gray-500">support@sugo-coin.com</p>
+                  <p className="text-body-200 text-xs">support@sugo-coin.com</p>
                 </div>
                 <div className="flex gap-2">
                   <ActionIcon aria-label="Account">
@@ -120,9 +120,6 @@ export default function Navbar() {
                   </ActionIcon>
                 </div>
               </div>
-              <Button variant="primary" className="w-full">
-                Launch App
-              </Button>
             </SheetFooter>
           </SheetContent>
         </Sheet>

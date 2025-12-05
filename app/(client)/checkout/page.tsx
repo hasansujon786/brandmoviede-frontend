@@ -21,23 +21,23 @@ export default function CartPage() {
 
       {/* TODO: add stepper */}
       <section className="custom-container grid grid-cols-2 gap-12 py-20">
-        {/* <EmailForm /> */}
-        <PaymentInfoForm />
+        <EmailForm />
+        {/* <PaymentInfoForm /> */}
         <CheckoutSummary />
       </section>
 
-      <section className="custom-container flex flex-col items-center py-20">
-        <CheckoutStatus
-          isSuccess
-          title="Payment Successful!"
-          message="Your 500 coins have been added to your account."
-        />
-        {/* <CheckoutStatus title='Payment Unsuccessful!' message='Your 500 coins haven’t been added to your account.'/> */}
-
-        <div className="mt-12">
-          <SecurePaymentMsg />
-        </div>
-      </section>
+      {/* <section className="custom-container flex flex-col items-center py-20"> */}
+      {/*   <CheckoutStatus */}
+      {/*     isSuccess */}
+      {/*     title="Payment Successful!" */}
+      {/*     message="Your 500 coins have been added to your account." */}
+      {/*   /> */}
+      {/*   <CheckoutStatus title='Payment Unsuccessful!' message='Your 500 coins haven’t been added to your account.'/> */}
+      {/**/}
+      {/*   <div className="mt-12"> */}
+      {/*     <SecurePaymentMsg /> */}
+      {/*   </div> */}
+      {/* </section> */}
     </div>
   );
 }
