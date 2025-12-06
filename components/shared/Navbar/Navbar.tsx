@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { Menu, ShoppingCart, UserRound } from "lucide-react";
+import ConditionalWrapper from "@/components/shared/ConditionalWrapper/ConditionalWrapper";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -16,6 +17,7 @@ import {
 } from "@/components/ui/sheet";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
+import { cn } from "@/lib/utils";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -24,10 +26,19 @@ const navLinks = [
   { label: "Support", href: "/support" },
 ];
 
+const actionLinks = [
+  { label: "Profile", href: "/profile", icon: UserRound },
+  { label: "Cart", href: "/cart", icon: ShoppingCart },
+];
+
 export default function Navbar() {
   const pathname = usePathname();
   return (
-    <header className="w-full bg-[#F8C0CC] px-4 py-4">
+    <header
+      className={cn("w-full bg-[#F8C0CC] px-4 py-4 transition-colors duration-100", {
+        "bg-transparent": pathname.startsWith("/profile"),
+      })}
+    >
       <div className="bg-primary-50 mx-auto flex w-full items-center justify-between rounded-xl px-4 py-3 text-sm shadow-xs backdrop-blur sm:px-6">
         {/* Logo */}
         <Image width={48} height={48} alt="" src="/images/logo-bl.png" />
@@ -42,7 +53,7 @@ export default function Navbar() {
                 key={link.label}
                 asChild
                 variant={isActive ? "primary" : "ghost"}
-                className="h-9.5 rounded-2xl px-4 py-1 font-medium text-lg"
+                className="h-9.5 rounded-2xl px-4 py-1 text-lg font-medium"
               >
                 <Link href={link.href}>{link.label}</Link>
               </Button>
@@ -52,14 +63,7 @@ export default function Navbar() {
 
         {/* Desktop actions */}
         <div className="hidden items-center gap-2 md:flex">
-          <ActionIcon aria-label="Account">
-            <UserRound className="h-5 w-5" />
-          </ActionIcon>
-          <ActionIcon asChild aria-label="Cart">
-            <Link href="/cart">
-              <ShoppingCart className="h-5 w-5" />
-            </Link>
-          </ActionIcon>
+          <ActionIcons isMobile={false} />
         </div>
 
         {/* Mobile trigger */}
@@ -111,13 +115,9 @@ export default function Navbar() {
                   </p>
                   <p className="text-body-200 text-xs">support@sugo-coin.com</p>
                 </div>
+
                 <div className="flex gap-2">
-                  <ActionIcon aria-label="Account">
-                    <UserRound className="h-5 w-5" />
-                  </ActionIcon>
-                  <ActionIcon aria-label="Cart">
-                    <ShoppingCart className="h-5 w-5" />
-                  </ActionIcon>
+                  <ActionIcons isMobile />
                 </div>
               </div>
             </SheetFooter>
@@ -128,6 +128,42 @@ export default function Navbar() {
   );
 }
 
-function ActionIcon(props: React.ComponentProps<typeof Button>) {
-  return <Button variant="ghost" size="icon" {...props} />;
+function ActionIcon(
+  props: React.ComponentProps<typeof Button> & { isActive: boolean },
+) {
+  return (
+    <Button
+      className={cn({
+        "border-primary text-white": props.isActive,
+      })}
+      variant={props.isActive ? "primary" : "ghost"}
+      size="icon"
+      {...props}
+    />
+  );
+}
+
+function ActionIcons(props: { isMobile: boolean }) {
+  const pathname = usePathname();
+
+  return (
+    <>
+      {actionLinks.map((link) => {
+        const isActive = pathname.startsWith(link.href);
+        return (
+          <ConditionalWrapper
+            key={link.label}
+            condition={props.isMobile}
+            wrapper={(children) => <SheetClose asChild>{children}</SheetClose>}
+          >
+            <ActionIcon isActive={isActive} asChild aria-label="Cart">
+              <Link href={link.href}>
+                <link.icon className="h-5 w-5 text-current" />
+              </Link>
+            </ActionIcon>
+          </ConditionalWrapper>
+        );
+      })}
+    </>
+  );
 }

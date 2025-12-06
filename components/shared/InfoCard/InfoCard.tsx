@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 
-interface InfoCardProps {
+interface InfoCardProps extends React.ComponentProps<"div"> {
   icon: React.JSX.Element;
   label: string;
   value: string[];
@@ -26,14 +26,18 @@ export default function InfoCard({
   label,
   value,
   variant = "default",
+  className,
+  ...props
 }: InfoCardProps) {
   const c = variants[variant] ?? variants.default;
 
   return (
     <div
+      {...props}
       className={cn(
         "flex aspect-[1.811965812] flex-col items-center justify-center rounded-2xl border px-4 py-8 text-center",
         c.wrapper,
+        className,
       )}
     >
       <div
