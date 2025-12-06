@@ -2,6 +2,7 @@ import HeadsetIcon from "@/components/shared/icons/HeadsetIcon";
 import InfoCard from "@/components/shared/InfoCard/InfoCard";
 import { TodoListChecked } from "@/components/shared/icons/CheckMark";
 import RecentOrders from "@/components/pages/Profile/Dashboard/RecentOrders/RecentOrders";
+import ActiveTicket from "@/components/pages/Profile/Dashboard/ActiveTicket/ActiveTicket";
 
 const infoCards = [
   {
@@ -34,6 +35,10 @@ export default function ProfileDashboardPage() {
 
       <section className="">
         <RecentOrders />
+      </section>
+
+      <section className="">
+        <ActiveTicket />
       </section>
     </div>
   );
