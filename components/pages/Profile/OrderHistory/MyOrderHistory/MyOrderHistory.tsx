@@ -1,9 +1,7 @@
 "use client";
-
 import OrderTable, { getData } from "../../../../shared/OrderTable/OrderTable";
 
-export default function RecentOrders() {
+export default function MyOrderHistory() {
   const data = getData();
-
-  return <OrderTable title="Recent Orders" data={data.slice(0, 3)} />;
+  return <OrderTable title="Order History" data={data} />;
 }
