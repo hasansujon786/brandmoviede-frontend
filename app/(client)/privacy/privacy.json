@@ -1,0 +1,49 @@
+{
+  "terms_and_conditions": {
+    "1. Introduction": [
+      "Welcome to Sugo Reseller Platform (\"we,\" \"us,\" or \"our\"). These Terms and Conditions govern your use of our website and services. By accessing or using our platform, you agree to be bound by these terms.",
+      "Please read these terms carefully before using our services. If you do not agree with any part of these terms, you must not use our platform."
+    ],
+    "2. Account Terms": {
+      "description": "When you create an account with us, you must provide accurate and complete information. You are responsible for:",
+      "responsibilities": [
+        "Maintaining the security of your account and password",
+        "All activities that occur under your account",
+        "Notifying us immediately of any unauthorized use",
+        "Ensuring your account information remains up to date"
+      ],
+      "Age Requirement": "You must be at least 18 years old to use our services. By using our platform, you represent that you meet this age requirement."
+    },
+    "3. Digital Products And Services": {
+      "3 1 Coin Bundles": {
+        "description": "Sugo coins are digital currency used within the Sugo Chat app. When you purchase coin bundles:",
+        "details": [
+          "You receive a unique redemption code via email",
+          "Coins must be redeemed in the Sugo Chat app",
+          "Coins do not expire once added to your account",
+          "Coins have no monetary value and cannot be exchanged for cash",
+          "Coins are non-transferable except as explicitly allowed in the app"
+        ]
+      },
+      "3.2 Event Tickets": {
+        "description": "Event tickets are digital passes for Sugo events. By purchasing tickets:",
+        "details": [
+          "You agree to the specific terms and conditions of each event",
+          "Tickets are subject to availability",
+          "Event organizers reserve the right to cancel or reschedule events",
+          "Refund policies vary by event and are clearly stated"
+        ]
+      }
+    },
+    "4. Payment And Pricing": {
+      "description": "All prices are displayed in USD and are subject to change without notice. By making a purchase:",
+      "details": [
+        "You authorize us to charge your payment method",
+        "You agree that prices include all applicable taxes",
+        "You understand that promotional prices are time-limited",
+        "You accept that some payment methods may incur additional fees"
+      ],
+      "Security Note": "We use secure, industry-standard payment processing. We do not store your complete payment card information on our servers."
+    }
+  }
+}
