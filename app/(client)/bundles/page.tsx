@@ -1,5 +1,5 @@
 import { FAQ } from "@/components/pages/Bundles/FAQ";
-import Shop from "@/components/pages/Home/Shop";
+import Shop from "@/components/pages/home/Shop";
 
 export default function CoinBundlesPage() {
   return (
