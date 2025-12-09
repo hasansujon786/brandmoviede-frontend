@@ -129,14 +129,14 @@ export default function Navbar() {
 }
 
 function ActionIcon(
-  props: React.ComponentProps<typeof Button> & { isActive: boolean },
+  {isActive, ...props}: React.ComponentProps<typeof Button> & { isActive: boolean },
 ) {
   return (
     <Button
       className={cn({
-        "border-primary text-white": props.isActive,
+        "border-primary text-white": isActive,
       })}
-      variant={props.isActive ? "primary" : "ghost"}
+      variant={isActive ? "primary" : "ghost"}
       size="icon"
       {...props}
     />

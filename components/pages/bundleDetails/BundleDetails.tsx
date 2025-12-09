@@ -1,8 +1,11 @@
+"use client";
+
 import { CheckCircle } from "@/components/shared/icons/CheckMark";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
 import SummaryCard from "@/components/shared/SummaryCard/SummaryCard";
+import CounterButton from "@/components/shared/CounterButton/CounterButton";
 
 export default function BundleDetails() {
   const bundle = {
@@ -85,9 +88,7 @@ export default function BundleDetails() {
             items={purchaseInfo.items}
             main={purchaseInfo.main}
           >
-            <div className="bg-card flex h-14 items-center justify-center rounded-[10px] border">
-              <span className="text-body-200 text-center text-2xl">1</span>
-            </div>
+            <CounterButton className="bg-card h-14 w-full" />
           </SummaryCard>
 
           <div className="mt-8 space-y-2">

@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
+import CounterButton from "../CounterButton/CounterButton";
 
 export default function ShopCard() {
   return (
@@ -22,10 +23,12 @@ export default function ShopCard() {
         <div className="text-body-200 text-lg">17,000 coins</div>
       </div>
       <div className="mt-8 flex gap-3">
-        <div className="flex w-30 items-center justify-center rounded-[10px] border">
-          <span className="text-body-200 text-center text-2xl">1</span>
-        </div>
-        <Button variant="primary" className="flex-1">
+        <CounterButton />
+
+        <Button
+          variant="primary"
+          className="bg-primary-50 text-body-200 hover:bg-primary hover:text-primary-foreground flex-1"
+        >
           Buy Coins
         </Button>
       </div>

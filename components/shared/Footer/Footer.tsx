@@ -35,6 +35,12 @@ export default function Footer() {
     },
   ];
 
+  const footerLinks = [
+    { title: "Privacy Policy", href: "/privacy" },
+    { title: "Terms & Conditions", href: "/terms" },
+    { title: "GDPR Compliance", href: "/" },
+  ];
+
   return (
     <footer className="bg-footer py-8 md:py-15">
       <div className="custom-container grid gap-6 md:grid-cols-2 lg:grid-cols-[2fr_3fr] lg:gap-12">
@@ -73,6 +79,19 @@ export default function Footer() {
               </ul>
             </div>
           ))}
+        </div>
+      </div>
+      <div className="custom-container">
+        <div className="mt-8 flex h-16 items-center justify-between border-t border-white/10">
+          <p>© 2025 Brand Light. All rights reserved.</p>
+
+          <div className="flex gap-6">
+            {footerLinks.map((item) => (
+              <Link key={item.title} href={item.href}>
+                {item.title}
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
     </footer>
