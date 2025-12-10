@@ -4,7 +4,11 @@ import { Field, FieldGroup, FieldLabel, FieldSet } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-export default function PaymentInfoForm() {
+interface PaymentInfoFormProps {
+  onNext: () => void;
+}
+
+export default function PaymentInfoForm({ onNext }: PaymentInfoFormProps) {
   return (
     <div>
       <h5 className="text-heading-200 font-heading text-3xl font-semibold">
@@ -13,7 +17,13 @@ export default function PaymentInfoForm() {
       <p className="mt-3 text-xl">
         Your payment details are encrypted and secure.
       </p>
-      <form className="mt-4">
+      <form
+        className="mt-4"
+        onSubmit={(e) => {
+          e.preventDefault();
+          onNext();
+        }}
+      >
         <FieldSet>
           <FieldGroup>
             <Field>
@@ -48,7 +58,7 @@ export default function PaymentInfoForm() {
           </FieldGroup>
         </FieldSet>
 
-        <Button variant="primary" className="mt-8 w-full">
+        <Button onClick={onNext} variant="primary" className="mt-8 w-full">
           Continue to Payment
         </Button>
       </form>

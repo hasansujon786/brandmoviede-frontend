@@ -1,43 +1,66 @@
-import HeroGradientWrapper from "@/components/shared/HeroGradientWrapper/HeroGradientWrapper";
-import SectionHeading from "@/components/shared/SectionHeading/SectionHeading";
+"use client";
+import CheckoutStatus from "@/components/pages/Checkout/CheckoutStatus";
+import CheckoutSummary from "@/components/pages/Checkout/CheckoutSummary";
 import EmailForm from "@/components/pages/Checkout/EmailForm";
 import PaymentInfoForm from "@/components/pages/Checkout/PaymentInfoForm";
-import CheckoutSummary from "@/components/pages/Checkout/CheckoutSummary";
 import SecurePaymentMsg from "@/components/pages/Checkout/SecurePaymentMsg";
-import CheckoutStatus from "@/components/pages/Checkout/CheckoutStatus";
+import Stepper, { STEP_ICONS } from "@/components/shared/Stepper/Stepper";
+import { useStepper } from "@/components/shared/Stepper/StepperContext";
+import { useEffect, useState } from "react";
 
-export default function CartPage() {
+export default function CheckoutPage() {
+  const { step, nextStep, prevStep } = useStepper();
+  const [status, setStatus] = useState<null | "SUCCESS" | "FAILED">(null);
+
+  useEffect(() => {
+    if (step === 2) {
+      setTimeout(() => {
+        setStatus("SUCCESS");
+      }, 1000);
+    }
+  }, [step]);
+
+  if (status === "SUCCESS" && step === 2) {
+    return <Status />;
+  }
+
   return (
-    <div>
-      <HeroGradientWrapper>
-        <SectionHeading
-          eyebrow="CHECKOUT"
-          description="Review your order and complete payment to own these limited-edition pieces forever."
-          descriptionClassName="max-w-auto"
-        >
-          Finalize Your <span className="text-primary">Purchase</span>
-        </SectionHeading>
-      </HeroGradientWrapper>
+    <div className="min-h-screen">
+      {/* <div className="flex gap-3"> */}
+      {/*   <button onClick={prevStep}>prev</button> */}
+      {/*   <p>{step}</p> */}
+      {/*   <button onClick={nextStep}>next</button> */}
+      {/* </div> */}
 
-      {/* TODO: add stepper */}
-      <section className="custom-container grid grid-cols-2 gap-12 py-20">
-        <EmailForm />
-        {/* <PaymentInfoForm /> */}
-        <CheckoutSummary />
+      <section className="custom-container mt-20">
+        <Stepper stepIcons={STEP_ICONS} />
       </section>
 
-      {/* <section className="custom-container flex flex-col items-center py-20"> */}
-      {/*   <CheckoutStatus */}
-      {/*     isSuccess */}
-      {/*     title="Payment Successful!" */}
-      {/*     message="Your 500 coins have been added to your account." */}
-      {/*   /> */}
-      {/*   <CheckoutStatus title='Payment Unsuccessful!' message='Your 500 coins haven’t been added to your account.'/> */}
-      {/**/}
-      {/*   <div className="mt-12"> */}
-      {/*     <SecurePaymentMsg /> */}
-      {/*   </div> */}
-      {/* </section> */}
+      <section className="custom-container grid grid-cols-2 gap-12 py-20">
+        {step === 0 ? (
+          <EmailForm onNext={nextStep} />
+        ) : (
+          <PaymentInfoForm onNext={nextStep} />
+        )}
+        <CheckoutSummary />
+      </section>
     </div>
   );
 }
+
+const Status = () => {
+  return (
+    <section className="custom-container flex min-h-screen flex-col items-center py-20">
+      <CheckoutStatus
+        isSuccess
+        title="Payment Successful!"
+        message="Your 500 coins have been added to your account."
+      />
+      {/* <CheckoutStatus title='Payment Unsuccessful!' message='Your 500 coins haven’t been added to your account.'/> */}
+
+      <div className="mt-12">
+        <SecurePaymentMsg />
+      </div>
+    </section>
+  );
+};

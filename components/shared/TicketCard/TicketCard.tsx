@@ -4,7 +4,7 @@ import Link from "next/link";
 import CalenderIcon from "../icons/CalenderIcon";
 import LocationPinIcon from "../icons/LocationPinIcon";
 import PeoplesIcon from "../icons/PeoplesIcon";
-import { TicketBadge } from "../Pill/Pill";
+import { TicketBadge, TicketStatus } from "../Pill/Pill";
 
 interface TicketCardProps {
   id: string;
@@ -37,7 +37,7 @@ export default function TicketCard(props: TicketCardProps) {
 
   return (
     <div className="bg-card rounded-2xl p-4">
-      <TicketBadge status={props.type} />
+      <TicketBadge status={props.type as TicketStatus} />
       <h3 className="text-heading-200 mt-4 text-3xl font-semibold">
         {props.title}
       </h3>
@@ -74,9 +74,7 @@ export default function TicketCard(props: TicketCardProps) {
 
       <div className="mt-8 flex gap-4">
         <Button asChild variant="primary-secondary" className="flex-1">
-          <Link href={`/tickets/${props.id}`}>
-            View Details
-          </Link>
+          <Link href={`/tickets/${props.id}`}>View Details</Link>
         </Button>
         <Button variant="primary" className="flex-1">
           Buy Ticket

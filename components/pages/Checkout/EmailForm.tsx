@@ -1,10 +1,14 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { Field, FieldGroup, FieldLabel, FieldSet } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 
-export default function EmailForm() {
+interface EmailFormProps {
+  onNext: () => void;
+}
+
+export default function EmailForm({ onNext }: EmailFormProps) {
   return (
     <div>
       <h5 className="text-heading-200 font-heading text-3xl font-semibold">
@@ -13,7 +17,13 @@ export default function EmailForm() {
       <p className="mt-3 text-xl">
         Your digital code will be sent to this email address
       </p>
-      <form className="mt-4">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          onNext();
+        }}
+        className="mt-4"
+      >
         <FieldSet>
           <FieldGroup>
             <Field>

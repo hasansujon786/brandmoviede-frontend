@@ -66,9 +66,11 @@ export function getPillClass(s?: string) {
   return state[s as keyof typeof state];
 }
 
+export type TicketStatus = keyof typeof state;
+
 interface TicketBadgeProps {
   className?: string;
-  status?: keyof typeof state;
+  status?: TicketStatus;
 }
 
 export function TicketBadge({ className, status }: TicketBadgeProps) {
