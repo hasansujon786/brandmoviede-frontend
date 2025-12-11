@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import HeroGradientWrapper from "@/components/shared/HeroGradientWrapper/HeroGradientWrapper";
 import SectionHeading from "@/components/shared/SectionHeading/SectionHeading";
@@ -11,8 +11,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   return (
     <>
-      <HeroGradientWrapper>
+      <HeroGradientWrapper className="">
         <SectionHeading
+          className=""
           eyebrow="SUGO COIN"
           description="Select a ready-made bundle for instant value or create your own custom amount. Get the coins you want, your way."
         >

@@ -4,7 +4,7 @@ import privacyData from "../privacy/privacy.json";
 
 export default function PrivacyPage() {
   return (
-    <div className="custom-container w-full py-20">
+    <div className="custom-container w-full py-20 pt-30">
       <SectionHeading eyebrow="LEGAL POLICIES" h2>
         Terms & Conditions
       </SectionHeading>

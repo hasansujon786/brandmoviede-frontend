@@ -4,7 +4,7 @@ import privacyData from "./privacy.json";
 
 export default function PrivacyPage() {
   return (
-    <div className="custom-container w-full py-20">
+    <div className="custom-container w-full py-20 pt-30">
       <SectionHeading eyebrow="LEGAL POLICIES" h2>
         Privacy & Policy
       </SectionHeading>
@@ -17,4 +17,3 @@ export const metadata = {
   title: "Terms & Conditions | Sugo Coin",
   description: "Official Terms & Conditions for Sugo Coin",
 };
-

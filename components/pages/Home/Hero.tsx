@@ -10,7 +10,7 @@ export default function Hero() {
           "linear-gradient(180deg, #F8C0CC 3.26%, #D7B2F3 80.92%, var(--background) 100%)",
       }}
     >
-      <div className="custom-container">
+      <div className="custom-container pt-22">
         <SectionHeading
           eyebrow="SUGO COIN"
           description="Purchase coin bundles for in-app use or secure your tickets for our exclusive annual events. Simple, fast, and reliable."

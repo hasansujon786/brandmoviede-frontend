@@ -34,11 +34,7 @@ const actionLinks = [
 export default function Navbar() {
   const pathname = usePathname();
   return (
-    <header
-      className={cn("w-full bg-[#F8C0CC] px-4 py-4 transition-colors duration-100", {
-        "bg-transparent": pathname.startsWith("/profile"),
-      })}
-    >
+    <header className="fixed top-4 z-100 flex w-full px-4">
       <div className="bg-primary-50 mx-auto flex w-full items-center justify-between rounded-xl px-4 py-3 text-sm shadow-xs backdrop-blur sm:px-6">
         {/* Logo */}
         <Image width={48} height={48} alt="" src="/images/logo-bl.png" />
@@ -128,9 +124,10 @@ export default function Navbar() {
   );
 }
 
-function ActionIcon(
-  {isActive, ...props}: React.ComponentProps<typeof Button> & { isActive: boolean },
-) {
+function ActionIcon({
+  isActive,
+  ...props
+}: React.ComponentProps<typeof Button> & { isActive: boolean }) {
   return (
     <Button
       className={cn({
