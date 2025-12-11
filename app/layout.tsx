@@ -30,8 +30,8 @@ export default function RootLayout({
         className={`${interTight.className} ${bricolageGrotesque.variable} antialiased`}
       >
         {children}
+        <TwScreenSize />
       </body>
-      <TwScreenSize />
     </html>
   );
 }

@@ -78,7 +78,7 @@ const tickets = [
 
 export default function TicketShop() {
   return (
-    <>
+    <div className="py-10 lg:py-20">
       <SectionHeading
         h2
         eyebrow="SHOP"
@@ -86,11 +86,11 @@ export default function TicketShop() {
       >
         Event <span className="text-primary">Ticket</span> Shop
       </SectionHeading>
-      <section className="custom-container my-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {tickets.map((item) => (
-          <TicketCard key={item.title} {...item} />
+      <section className="custom-container mt-8 grid gap-4 md:grid-cols-2 lg:mt-12 lg:grid-cols-3">
+        {tickets.map((item, index) => (
+          <TicketCard key={index} {...item} />
         ))}
       </section>
-    </>
+    </div>
   );
 }

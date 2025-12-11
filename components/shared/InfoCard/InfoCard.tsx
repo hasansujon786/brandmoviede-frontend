@@ -35,7 +35,7 @@ export default function InfoCard({
     <div
       {...props}
       className={cn(
-        "flex aspect-[1.811965812] flex-col items-center justify-center rounded-2xl border px-4 py-8 text-center",
+        "flex flex-col items-center justify-center rounded-2xl border px-4 py-8 text-center",
         c.wrapper,
         className,
       )}

@@ -72,7 +72,7 @@ export default function TicketDetails() {
 
   return (
     <div>
-      <div className="custom-container py-20">
+      <div className="custom-container py-10 lg:py-20">
         <NavigationLink href="/tickets">
           Event Tickets / Tickets Details
         </NavigationLink>
@@ -80,15 +80,15 @@ export default function TicketDetails() {
         <section className="mt-8">
           <Image
             src={image}
-            className="aspect-[4.7826086957] rounded-xl object-cover object-center"
+            className="aspect-[4.7826086957] h-[276px] rounded-xl object-cover object-center"
             width={1320}
             height={276}
             alt=""
           />
 
-          <div className="mt-8 flex items-center justify-between">
+          <div className="mt-8 flex flex-col-reverse justify-between gap-3 md:flex-row md:items-center">
             <HighlightNthWord
-              className="text-5xl leading-[132%] font-semibold"
+              className="text-h2 leading-[132%] font-semibold"
               title={title}
               n={2}
             />
@@ -98,7 +98,7 @@ export default function TicketDetails() {
           <p className="mt-4 text-base">{subtitle}</p>
         </section>
 
-        <section className="mt-6 grid grid-cols-2 gap-6">
+        <section className="mt-6 grid gap-6 lg:grid-cols-2">
           <div className="space-y-3">
             <h5 className="text-xl font-medium">About The Event</h5>
             {aboutTheEvent.map((item, index) => (
@@ -110,7 +110,7 @@ export default function TicketDetails() {
 
           <div>
             <h5 className="text-xl font-medium">What’s Included</h5>
-            <ul className="mt-3 grid grid-cols-2 gap-1.5">
+            <ul className="mt-3 grid gap-1.5 sm:grid-cols-2">
               {includedFeatures.map((item) => (
                 <li className="flex items-center gap-3 text-base" key={item}>
                   <CheckCircle />
@@ -122,10 +122,14 @@ export default function TicketDetails() {
         </section>
       </div>
 
-      <section className="bg-background-lighten py-20">
-        <div className="custom-container grid grid-cols-3 gap-6">
-          {infoCards.map((item) => (
-            <InfoCard key={item.label} {...item} />
+      <section className="bg-background-lighten py-10 lg:py-20">
+        <div className="custom-container grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {infoCards.map((item, index) => (
+            <InfoCard
+              className="last:col-span-full lg:last:col-auto"
+              key={index}
+              {...item}
+            />
           ))}
         </div>
       </section>

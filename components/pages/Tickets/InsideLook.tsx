@@ -26,7 +26,7 @@ export default function InsideLook() {
     },
   ];
   return (
-    <section className="bg-card py-20">
+    <section className="bg-card py-10 lg:py-20">
       <div className="custom-container">
         <SectionHeading
           h2
@@ -38,23 +38,25 @@ export default function InsideLook() {
           Your Inside Look at <span className="text-primary">Sugo</span> Events
         </SectionHeading>
 
-        <div className="-mt-12 grid grid-cols-3 items-end gap-6">
+        <div className="mt-4 grid items-end gap-6 md:grid-cols-3 lg:-mt-6 xl:-mt-12">
           {info.map((item) => (
             <div
               key={item.title}
               style={{ backgroundImage: `url(${item.bg})` }}
               className={cn(
-                "relative aspect-[1.46206] overflow-hidden rounded-2xl bg-cover bg-bottom bg-no-repeat p-4 first:aspect-[2.01904] last:aspect-[1.11578]",
+                "relative overflow-hidden rounded-2xl bg-cover bg-bottom bg-no-repeat p-3 md:aspect-[1.11578] lg:aspect-[1.46206] lg:first:aspect-[2.01904] lg:last:aspect-[1.11578] xl:p-4",
               )}
             >
               <div className="absolute inset-0 bg-[#FFCFDA]/40" />
               <div className="relative z-10 flex h-full flex-col">
                 {item.icon}
 
-                <h5 className="text-heading-200 mt-auto text-3xl font-semibold">
+                <h5 className="text-heading-200 mt-8 text-2xl font-semibold md:mt-auto xl:text-3xl">
                   {item.title}
                 </h5>
-                <p className="text-xl mt-2 leading-[132%]">{item.desc}</p>
+                <p className="mt-2 text-base leading-[132%] xl:text-xl">
+                  {item.desc}
+                </p>
               </div>
             </div>
           ))}

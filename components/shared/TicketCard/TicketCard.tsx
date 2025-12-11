@@ -5,6 +5,7 @@ import CalenderIcon from "../icons/CalenderIcon";
 import LocationPinIcon from "../icons/LocationPinIcon";
 import PeoplesIcon from "../icons/PeoplesIcon";
 import { TicketBadge, TicketStatus } from "../Pill/Pill";
+import { ContainerSize } from "@/components/ui/tw-utils";
 
 interface TicketCardProps {
   id: string;
@@ -36,14 +37,16 @@ export default function TicketCard(props: TicketCardProps) {
   ];
 
   return (
-    <div className="bg-card rounded-2xl p-4">
+    <div className="bg-card @container relative rounded-2xl p-3 @xs:p-4">
       <TicketBadge status={props.type as TicketStatus} />
-      <h3 className="text-heading-200 mt-4 text-3xl font-semibold">
+      <h3 className="text-heading-200 mt-4 text-2xl font-semibold @xs:text-3xl">
         {props.title}
       </h3>
-      <p className="mt-1 pr-12 text-xl leading-[160%]">{props.desc}</p>
+      <p className="mt-1 pr-12 text-base leading-[160%] @xs:text-xl">
+        {props.desc}
+      </p>
 
-      <div className="mt-6 aspect-[2.80] w-full overflow-hidden rounded-xl bg-gray-100">
+      <div className="mt-6 aspect-[2.80] min-h-[140px] w-full overflow-hidden rounded-xl bg-gray-100">
         <Image
           src={props.image}
           width={360}
@@ -53,7 +56,16 @@ export default function TicketCard(props: TicketCardProps) {
         />
       </div>
 
-      <div className="mt-4 flex justify-between">
+      <div className="mt-4 flex flex-col gap-4 @xs:flex-row-reverse @xs:justify-between">
+        <div className="">
+          <div className="text-heading-100 text-2xl font-semibold">
+            {props.price}
+          </div>
+          <div className="text-body-200 mt-2 text-base">
+            {props.ticketAvailableCount}
+          </div>
+        </div>
+
         <div className="space-y-2">
           {info.map((item, index) => (
             <div className="flex items-center gap-2 text-base" key={index}>
@@ -62,23 +74,13 @@ export default function TicketCard(props: TicketCardProps) {
             </div>
           ))}
         </div>
-        <div className="text-right">
-          <div className="text-heading-100 text-2xl font-semibold">
-            {props.price}
-          </div>
-          <div className="text-body-200 mt-2 text-base">
-            {props.ticketAvailableCount}
-          </div>
-        </div>
       </div>
 
-      <div className="mt-8 flex gap-4">
-        <Button asChild variant="primary-secondary" className="flex-1">
+      <div className="mt-8 grid gap-4 @xs:grid-cols-2">
+        <Button asChild variant="primary-secondary">
           <Link href={`/tickets/${props.id}`}>View Details</Link>
         </Button>
-        <Button variant="primary" className="flex-1">
-          Buy Ticket
-        </Button>
+        <Button variant="primary">Buy Ticket</Button>
       </div>
     </div>
   );

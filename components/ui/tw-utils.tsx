@@ -9,7 +9,7 @@ export const ContainerSize = () => {
 
   return (
     <div className="absolute top-0 right-0 z-50 w-full">
-      <div className="@container flex items-center justify-end">
+      <div className="@container outline flex items-center justify-end">
         <p className="mt-3 mr-3 grid h-8 w-8 place-items-center rounded-sm bg-green-500 text-center text-sm text-white">
           <span className="block @sm:hidden">xs</span>
           <span className="hidden @sm:block @md:hidden">sm</span>
