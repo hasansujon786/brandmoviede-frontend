@@ -22,7 +22,7 @@ export default function ShopCard() {
         <div className="text-heading-100 text-2xl font-medium">€10 EUR</div>
         <div className="text-body-200 text-lg">17,000 coins</div>
       </div>
-      <div className="mt-8 flex gap-3">
+      <div className="mt-8 grid gap-3 sm:grid-cols-[160px_1fr]">
         <CounterButton />
 
         <Button

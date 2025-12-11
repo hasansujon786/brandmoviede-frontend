@@ -18,13 +18,15 @@ export default function Benefits() {
           'url("/images/home/benefit-agency/benefit-agency-bg.png")',
       }}
     >
-      <div className="custom-container grid grid-cols-2 gap-4">
-        <Image
-          src="/images/home/benefit-agency/mobile-with-coins.png"
-          alt=""
-          width={514}
-          height={636}
-        />
+      <div className="custom-container grid gap-4 lg:grid-cols-2">
+        <div className="flex items-start justify-center lg:justify-start">
+          <Image
+            src="/images/home/benefit-agency/mobile-with-coins.png"
+            alt=""
+            width={514}
+            height={636}
+          />
+        </div>
 
         <div>
           <SectionHeading
@@ -32,7 +34,7 @@ export default function Benefits() {
             eyebrow="Your Growth Partner"
             description="We support you from the very beginning to make getting
 started with streaming easier."
-            descriptionClassName="mt-3 text-xl"
+            descriptionClassName="mt-3 text-xl max-w-full"
             className="items-start text-left"
           >
             What is the <span className="text-primary">Benefit</span> of an
@@ -50,7 +52,7 @@ started with streaming easier."
             ))}
           </ul>
 
-          <Button className="mt-12" variant="primary">
+          <Button className="mt-12 w-full sm:w-auto" variant="primary">
             Learn More
           </Button>
         </div>

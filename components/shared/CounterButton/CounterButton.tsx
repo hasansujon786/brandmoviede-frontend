@@ -48,7 +48,7 @@ export default function CounterButton({
   return (
     <div
       className={cn(
-        "flex w-40 items-center justify-between rounded-[10px] border",
+        "flex h-14 gap-4 items-center justify-between rounded-[10px] border",
         className,
       )}
     >

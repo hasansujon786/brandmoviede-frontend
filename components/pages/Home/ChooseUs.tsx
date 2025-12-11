@@ -23,26 +23,29 @@ const icons = [
 export default function ChooseUs() {
   return (
     <section className="py-20">
-      <div className="custom-container grid grid-cols-2 gap-12">
+      <div className="custom-container grid gap-12 lg:grid-cols-2">
         <div>
           <SectionHeading
             h2
             eyebrow="Your Best Choice"
             description="Secure instant access to a versatile digital asset engineered for seamless blockchain transactions, exclusive ecosystem utility, and empowering your position within the decentralized landscape your reliable gateway to digital asset liquidity and growth."
-            descriptionClassName="mt-3 text-xl"
+            descriptionClassName="mt-3 text-xl max-w-full"
             className="items-start text-left"
           >
             Why <span className="text-primary">Choose</span> Us?
           </SectionHeading>
 
-          <Button className="mt-12" variant="primary">
+          <Button className="mt-12 w-full sm:w-auto" variant="primary">
             Learn More
           </Button>
         </div>
 
-        <div className="flex flex-col gap-6">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-1">
           {icons.map((item) => (
-            <div key={item.title} className="flex gap-4 px-4 py-5">
+            <div
+              key={item.title}
+              className="flex flex-col items-center gap-4 px-4 py-5 first:col-span-full lg:flex-row lg:items-start"
+            >
               <Image
                 className="aspect-square w-20"
                 width={300}
@@ -50,7 +53,7 @@ export default function ChooseUs() {
                 src={item.icon}
                 alt=""
               />
-              <div className="">
+              <div className="max-w-md text-center lg:text-left">
                 <p className="text-heading-100 text-2xl font-bold">
                   {item.title}
                 </p>

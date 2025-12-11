@@ -9,17 +9,17 @@ const partners = [
 export default function OurPartner() {
   return (
     <section
-      className="mt-20 bg-cover bg-bottom-right bg-no-repeat pb-20 pt-10"
+      className="mt-20 bg-cover bg-bottom-right bg-no-repeat pt-10 pb-20"
       style={{ backgroundImage: 'url("/images/home/bg-our-partner.png")' }}
     >
       <div className="custom-container">
         <SectionHeading h2>
           Our <span className="text-primary">partner</span>
         </SectionHeading>
-        <div className="flex items-center mt-8 justify-between">
+        <div className="mt-12 flex flex-col items-center justify-center gap-4 sm:mt-8 sm:flex-row sm:justify-between">
           {partners.map((item) => (
             <Image
-              className="h-12 object-contain first:object-left last:object-right"
+              className="h-12 object-contain sm:first:object-left sm:last:object-right"
               key={item}
               src={item}
               alt=""

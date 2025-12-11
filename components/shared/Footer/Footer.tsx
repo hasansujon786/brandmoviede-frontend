@@ -42,7 +42,7 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="bg-footer py-8 md:py-15">
+    <footer className="bg-footer pt-8 md:pt-15">
       <div className="custom-container grid gap-6 md:grid-cols-2 lg:grid-cols-[2fr_3fr] lg:gap-12">
         <div className="space-y-6">
           <Image width={200} height={66} alt="" src="/images/logo-full.png" />
@@ -61,7 +61,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="grid grid-cols-2">
+        <div className="flex justify-start gap-16 md:justify-center lg:gap-32">
           {navLinks.map((item) => (
             <div key={item.title}>
               <p className="font-heading text-2xl text-white">{item.title}</p>
@@ -81,13 +81,14 @@ export default function Footer() {
           ))}
         </div>
       </div>
+
       <div className="custom-container">
-        <div className="mt-8 flex h-16 items-center justify-between border-t border-white/10">
+        <div className="mt-8 flex flex-col items-center justify-between gap-6 border-t border-white/10 py-4 md:flex-row md:py-6">
           <p>© 2025 Brand Light. All rights reserved.</p>
 
-          <div className="flex gap-6">
+          <div className="flex flex-wrap justify-center gap-6 gap-y-4">
             {footerLinks.map((item) => (
-              <Link key={item.title} href={item.href}>
+              <Link className="text-center" key={item.title} href={item.href}>
                 {item.title}
               </Link>
             ))}

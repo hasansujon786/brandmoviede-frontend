@@ -26,11 +26,11 @@ export default function SectionHeading({
       {eyebrow && <Pill>{eyebrow}</Pill>}
 
       {h2 ? (
-        <h2 className="font-heading text-heading-200 mt-2 text-5xl leading-[132%] font-semibold">
+        <h2 className="font-heading text-heading-200 mt-2 text-3xl leading-[132%] font-semibold sm:text-4xl md:text-5xl">
           {children}
         </h2>
       ) : (
-        <h1 className="font-heading text-heading-200 mt-2 text-7xl leading-[124%] font-extrabold">
+        <h1 className="font-heading text-heading-200 mt-2 text-4xl leading-[124%] font-extrabold sm:text-5xl md:text-7xl">
           {children}
         </h1>
       )}
