@@ -23,14 +23,14 @@ export default function SectionHeading({
       className={cn("flex flex-col items-center text-center", className)}
       {...props}
     >
-      {eyebrow && <Pill>{eyebrow}</Pill>}
+      {eyebrow && <Pill className="mb-2">{eyebrow}</Pill>}
 
       {h2 ? (
-        <h2 className="font-heading text-heading-200 mt-2 text-3xl leading-[132%] font-semibold sm:text-4xl md:text-5xl">
+        <h2 className="font-heading text-heading-200 text-h2 leading-[132%] font-semibold">
           {children}
         </h2>
       ) : (
-        <h1 className="font-heading text-heading-200 mt-2 text-4xl leading-[124%] font-extrabold sm:text-5xl md:text-7xl">
+        <h1 className="font-heading text-heading-200 text-h1 leading-[124%] font-extrabold">
           {children}
         </h1>
       )}

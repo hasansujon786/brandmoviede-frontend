@@ -1,9 +1,12 @@
 import SectionHeading from "@/components/shared/SectionHeading/SectionHeading";
 import ShopCard from "@/components/shared/ShopCard/ShopCard";
+import { cn } from "@/lib/utils";
 
-export default function Shop() {
+interface ShopProps extends React.ComponentProps<"section"> {}
+
+export default function Shop({ className }: ShopProps) {
   return (
-    <section className="custom-container">
+    <section className={cn("custom-container py-10 lg:py-20", className)}>
       <SectionHeading
         h2
         eyebrow="SHOP"

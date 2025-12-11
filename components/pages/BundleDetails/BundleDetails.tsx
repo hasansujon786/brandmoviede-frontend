@@ -35,8 +35,8 @@ export default function BundleDetails() {
   };
 
   return (
-    <section className="bg-card rounded-2xl p-8">
-      <div className="grid grid-cols-[1fr_1.2fr_1fr] gap-6">
+    <section className="bg-card rounded-2xl p-4 md:p-6 lg:p-8">
+      <div className="grid gap-6 md:grid-cols-[1fr_1.4fr] xl:grid-cols-[1fr_1.2fr_1fr]">
         <Image
           src="/images/sugo-coin.png"
           width={360}
@@ -46,12 +46,12 @@ export default function BundleDetails() {
         />
 
         <div>
-          <h2 className="text-heading-100 text-5xl font-medium">
+          <h2 className="text-heading-100 text-h2 font-medium">
             {bundle.price}
           </h2>
           <h5 className="text-body-200 mt-3 text-lg">{bundle.coins}</h5>
 
-          <div className="mt-8 flex justify-between gap-6">
+          <div className="mt-4 flex flex-col gap-6 sm:flex-row md:mt-8 xl:justify-between">
             <div>
               <h4 className="text-xl font-medium">What’s Included</h4>
               <ul className="mt-4 flex flex-col gap-1.5">
@@ -78,7 +78,7 @@ export default function BundleDetails() {
           </div>
         </div>
 
-        <div>
+        <div className="col-span-full xl:col-auto">
           <p className="text-heading-200 font-heading text-3xl font-semibold">
             Purchase Details
           </p>

@@ -137,6 +137,14 @@
   @apply mx-auto max-w-[1300px] px-3 lg:px-5;
 }
 
+@utility text-h1 {
+  @apply text-4xl leading-[124%] sm:text-5xl md:text-7xl;
+}
+
+@utility text-h2 {
+  @apply text-[32px] sm:text-4xl md:text-5xl;
+}
+
 .pill {
   --g-dark: #831e34;
   --g-light: #e9355c;

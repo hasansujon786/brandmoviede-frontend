@@ -4,13 +4,11 @@ import Shop from "@/components/pages/Home/Shop";
 export default function CoinBundlesPage() {
   return (
     <div>
-      <div className="bg-card py-20">
+      {/* TODO: show paginations */}
+      <div className="bg-card">
         <Shop />
-        {/* // TODO: show paginations */}
       </div>
-      <div className="custom-container py-20">
-        <FAQ />
-      </div>
+      <FAQ />
     </div>
   );
 }

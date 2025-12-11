@@ -46,7 +46,7 @@ const questions = [
 
 export function FAQ() {
   return (
-    <div>
+    <section className="custom-container py-10 lg:py-20">
       <SectionHeading
         h2
         eyebrow="Frequently Asked Questions"
@@ -55,7 +55,11 @@ export function FAQ() {
         How Can We <span className="text-primary">Help?</span>
       </SectionHeading>
 
-      <Accordion type="single" collapsible className="grid w-full gap-6 mt-12">
+      <Accordion
+        type="single"
+        collapsible
+        className="mt-12 grid w-full gap-3 md:gap-6"
+      >
         {questions.map((item) => (
           <AccordionItem key={item.title} value={item.title}>
             <AccordionTrigger>{item.title}</AccordionTrigger>
@@ -67,6 +71,6 @@ export function FAQ() {
           </AccordionItem>
         ))}
       </Accordion>
-    </div>
+    </section>
   );
 }

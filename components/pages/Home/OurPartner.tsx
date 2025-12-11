@@ -9,14 +9,15 @@ const partners = [
 export default function OurPartner() {
   return (
     <section
-      className="mt-20 bg-cover bg-bottom-right bg-no-repeat pt-10 pb-20"
+      className="bg-cover bg-bottom-right bg-no-repeat"
       style={{ backgroundImage: 'url("/images/home/bg-our-partner.png")' }}
     >
-      <div className="custom-container">
-        <SectionHeading h2>
+      <div className="custom-container flex flex-col items-center gap-6 py-10 sm:p-12 lg:py-20">
+        <SectionHeading h2 className="-mt-4">
           Our <span className="text-primary">partner</span>
         </SectionHeading>
-        <div className="mt-12 flex flex-col items-center justify-center gap-4 sm:mt-8 sm:flex-row sm:justify-between">
+
+        <div className="flex w-full max-w-5xl flex-col items-center justify-center gap-4 sm:flex-row sm:justify-between">
           {partners.map((item) => (
             <Image
               className="h-12 object-contain sm:first:object-left sm:last:object-right"

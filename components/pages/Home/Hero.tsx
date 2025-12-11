@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 export default function Hero() {
   return (
     <section
-      className="pt-6 pb-24 md:pt-48 md:pb-78"
+      className="pt-6 pb-20 sm:pb-24 md:pt-48 md:pb-78"
       style={{
         background:
           "linear-gradient(180deg, #F8C0CC 3.26%, #D7B2F3 80.92%, var(--background) 100%)",
