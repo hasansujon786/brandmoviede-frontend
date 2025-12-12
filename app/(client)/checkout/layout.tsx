@@ -10,13 +10,15 @@ export default function Layout({ children }: React.PropsWithChildren) {
     <StepperProvider maxIndex={STEP_ICONS.length - 1}>
       <div>
         <HeroGradientWrapper>
-          <SectionHeading
-            eyebrow="CHECKOUT"
-            description="Review your order and complete payment to own these limited-edition pieces forever."
-            descriptionClassName="max-w-auto"
-          >
-            Finalize Your <span className="text-primary">Purchase</span>
-          </SectionHeading>
+          <div className="custom-container">
+            <SectionHeading
+              eyebrow="CHECKOUT"
+              description="Review your order and complete payment to own these limited-edition pieces forever."
+              descriptionClassName="max-w-auto"
+            >
+              Finalize Your <span className="text-primary">Purchase</span>
+            </SectionHeading>
+          </div>
         </HeroGradientWrapper>
         {children}
       </div>

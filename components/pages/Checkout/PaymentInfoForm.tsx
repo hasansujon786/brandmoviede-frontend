@@ -52,8 +52,8 @@ export default function PaymentInfoForm({ onNext }: PaymentInfoFormProps) {
             </Field>
 
             <Field>
-              <FieldLabel htmlFor="expiry-date">Expiry Date</FieldLabel>
-              <Input id="expiry-date" autoComplete="off" placeholder="MM/YY" />
+              <FieldLabel htmlFor="cvc">CVC</FieldLabel>
+              <Input id="cvc" autoComplete="off" placeholder="123" />
             </Field>
           </FieldGroup>
         </FieldSet>

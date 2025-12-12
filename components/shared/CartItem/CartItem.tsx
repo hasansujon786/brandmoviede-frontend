@@ -4,7 +4,7 @@ import { Trash2 } from "lucide-react";
 
 export default function CartItem() {
   return (
-    <div className="bg-card flex items-center justify-between gap-4 rounded-2xl p-4 py-3">
+    <div className="bg-card flex items-center justify-between gap-4 rounded-2xl px-3 py-2 lg:px-4 lg:py-3">
       <Image
         src="/images/sugo-coin.png"
         width={72}

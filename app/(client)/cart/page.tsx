@@ -7,15 +7,17 @@ export default function CartPage() {
   return (
     <div>
       <HeroGradientWrapper>
-        <SectionHeading
-          eyebrow="CART"
-          description="You're just one step away from owning these limited-edition pieces."
-        >
-          Your <span className="text-primary">Curated</span> Collection
-        </SectionHeading>
+        <div className="custom-container">
+          <SectionHeading
+            eyebrow="CART"
+            description="You're just one step away from owning these limited-edition pieces."
+          >
+            Your <span className="text-primary">Curated</span> Collection
+          </SectionHeading>
+        </div>
       </HeroGradientWrapper>
 
-      <section className="custom-container grid grid-cols-2 gap-12 py-20">
+      <section className="custom-container grid lg:grid-cols-2 gap-8 py-10 lg:py-20 xl:gap-12">
         <CartList />
         <CartSummary />
       </section>

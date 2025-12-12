@@ -36,12 +36,13 @@ export default function CheckoutPage() {
         <Stepper stepIcons={STEP_ICONS} />
       </section>
 
-      <section className="custom-container grid grid-cols-2 gap-12 py-20">
+      <section className="custom-container grid gap-8 py-10 lg:grid-cols-2 lg:py-20 xl:gap-12">
         {step === 0 ? (
           <EmailForm onNext={nextStep} />
         ) : (
           <PaymentInfoForm onNext={nextStep} />
         )}
+
         <CheckoutSummary />
       </section>
     </div>
