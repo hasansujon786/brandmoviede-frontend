@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -14,12 +15,17 @@ const navLinks = [
 export default function Sidebar() {
   const pathname = usePathname();
   return (
-    <div className="bg-card flex flex-col gap-2 rounded-xl p-3">
+    <div className="lg:bg-card flex gap-3 overflow-x-scroll p-3 lg:flex-col lg:gap-2 lg:overflow-x-auto lg:rounded-xl">
       {navLinks.map((link) => {
         const isActive = pathname === link.href;
         return (
           <Button
-            className="justify-start px-4 text-right"
+            className={cn(
+              "h-10 justify-start rounded-full px-4 text-right text-base lg:h-14 lg:rounded-[10px] lg:text-lg",
+              {
+                "bg-card": !isActive,
+              },
+            )}
             variant={isActive ? "primary" : "ghost"}
             asChild
             key={link.label}

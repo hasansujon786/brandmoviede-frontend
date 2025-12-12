@@ -20,8 +20,8 @@ const infoCards = [
 export default function ProfileDashboardPage() {
   return (
     <div className="space-y-8">
-      <section>
-        <div className="grid grid-cols-2 gap-6">
+      <section className="@container">
+        <div className="grid gap-4 lg:gap-6 @xs:grid-cols-2">
           {infoCards.map((item) => (
             <InfoCard
               className="aspect-auto items-start"

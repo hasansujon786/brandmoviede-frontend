@@ -36,13 +36,14 @@ export default function TicketItem({
   const isInactive = status === "inactive";
 
   return (
-    <div className="bg-card border-input flex flex-col justify-between gap-4 rounded-2xl border px-4 py-8 lg:flex-row">
+    <div className="bg-card border-input flex flex-col justify-between gap-4 rounded-2xl border p-3 lg:flex-row lg:px-4 lg:py-8">
       <div className="space-y-2">
         <Badge variant={isInactive ? "destructive" : "success"}>{status}</Badge>
         <h3 className="text-heading-100 font-heading mb-4 text-2xl font-semibold">
           {title}
         </h3>
 
+        {/* date & expire_date */}
         <div className="">
           {info.map((item, index) => (
             <div
@@ -58,7 +59,7 @@ export default function TicketItem({
 
       <div
         className={cn(
-          "flex flex-col justify-center space-y-2 rounded-xl p-4",
+          "flex flex-col justify-center rounded-xl p-3 lg:space-y-2 lg:p-4",
           isInactive ? "bg-primary-200" : "bg-primary",
         )}
       >
@@ -66,13 +67,13 @@ export default function TicketItem({
           Ticket ID
         </p>
 
-        <div className="flex w-full justify-between md:gap-x-32">
-          <p className="text-primary-foreground font-heading text-3xl font-semibold">
+        <div className="flex w-full items-center justify-between gap-3 md:gap-x-32">
+          <p className="text-primary-foreground font-heading overflow-x-scroll text-lg font-semibold md:text-2xl lg:text-3xl">
             {ticket_id}
           </p>
 
           <Button
-            className="rounded-[12px] border-transparent"
+            className="shrink-0 rounded-[12px] border-transparent"
             variant="secondary"
             size="icon"
           >

@@ -35,21 +35,21 @@ export default function InfoCard({
     <div
       {...props}
       className={cn(
-        "flex flex-col items-center justify-center rounded-2xl border px-4 py-8 text-center",
+        "flex flex-col items-center justify-center rounded-2xl border px-4 py-4 text-center lg:py-8",
         c.wrapper,
         className,
       )}
     >
       <div
         className={cn(
-          "flex size-14 items-center justify-center rounded-full",
+          "flex size-12 items-center justify-center rounded-full lg:size-14",
           c.icon,
         )}
       >
         {icon}
       </div>
 
-      <h6 className="text-heading-200 font-heading mt-6 text-2xl font-semibold">
+      <h6 className="text-heading-200 font-heading mt-4 font-semibold md:text-xl lg:mt-6 lg:text-2xl">
         {label}
       </h6>
       {value.map((v, index) => (

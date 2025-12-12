@@ -32,7 +32,7 @@ export default function CheckoutPage() {
       {/*   <button onClick={nextStep}>next</button> */}
       {/* </div> */}
 
-      <section className="custom-container mt-20">
+      <section className="custom-container mt-10 lg:mt-20">
         <Stepper stepIcons={STEP_ICONS} />
       </section>
 
@@ -51,7 +51,7 @@ export default function CheckoutPage() {
 
 const Status = () => {
   return (
-    <section className="custom-container flex min-h-screen flex-col items-center py-20">
+    <section className="custom-container flex min-h-screen flex-col items-center py-10 lg:py-20">
       <CheckoutStatus
         isSuccess
         title="Payment Successful!"

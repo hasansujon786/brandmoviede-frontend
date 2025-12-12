@@ -5,7 +5,7 @@ import { User } from "lucide-react";
 
 export default function ProfileSettings() {
   return (
-    <div className="bg-card rounded-2xl px-4 py-8">
+    <div className="bg-card rounded-2xl px-4 py-4 lg:py-8">
       <div className="flex items-center gap-6">
         <div className="bg-primary-50 text-primary flex size-16 items-center justify-center rounded-full">
           <User className="size-8" />
@@ -18,7 +18,7 @@ export default function ProfileSettings() {
 
       <form className="mt-4">
         <FieldSet>
-          <FieldGroup className="flex-row">
+          <FieldGroup className="md:flex-row">
             <Field>
               <FieldLabel htmlFor="first-name">First Name</FieldLabel>
               <Input
@@ -63,7 +63,7 @@ export default function ProfileSettings() {
           </FieldGroup>
         </FieldSet>
 
-        <Button variant="primary" className="mt-8">
+        <Button variant="primary" className="mt-8 w-full sm:w-auto">
           Edit Profile
         </Button>
       </form>

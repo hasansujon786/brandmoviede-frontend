@@ -4,11 +4,11 @@ export default function ProfileDashboardLayout({
   children,
 }: React.PropsWithChildren) {
   return (
-    <div className="custom-container flex w-full gap-12 pt-30 py-8">
-      <div>
+    <div className="custom-container flex w-full flex-col gap-4 lg:flex-row lg:items-start lg:gap-12">
+      <aside className="top-0 -mx-3 pt-24 lg:sticky lg:mx-0 lg:pt-30">
         <Sidebar />
-      </div>
-      <div className="flex-1">{children}</div>
+      </aside>
+      <div className="flex-1 pb-10 lg:pt-30">{children}</div>
     </div>
   );
 }
