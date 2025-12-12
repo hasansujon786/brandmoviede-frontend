@@ -36,25 +36,27 @@ export default function SupportPage() {
   return (
     <div>
       <HeroGradientWrapper>
-        <SectionHeading
-          eyebrow="EVENT TICKET"
-          description="Your one-stop destination for help with coins, events, and your account. Everything you need to get back to your experience."
-        >
-          Sugo <span className="text-primary">Support</span> Center
-        </SectionHeading>
+        <div className="custom-container">
+          <SectionHeading
+            eyebrow="EVENT TICKET"
+            description="Your one-stop destination for help with coins, events, and your account. Everything you need to get back to your experience."
+          >
+            Sugo <span className="text-primary">Support</span> Center
+          </SectionHeading>
+        </div>
       </HeroGradientWrapper>
 
-      <section className="py-20">
-        <div className="custom-container grid grid-cols-4 gap-6">
+      <section className="py-10 lg:py-20">
+        <div className="custom-container grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
           {infoCards.map((item) => (
             <InfoCard variant="light" key={item.label} {...item} />
           ))}
         </div>
       </section>
 
-      <section className="custom-container grid grid-cols-2 gap-12 py-20">
+      <section className="custom-container grid gap-12 py-10 lg:grid-cols-2 lg:py-20">
         <SupportMessageForm />
-        <div className="overflow-hidden rounded-2xl">
+        <div className="hidden overflow-hidden rounded-2xl lg:block">
           <Image
             className="h-full w-full object-cover"
             width={648}
@@ -65,9 +67,7 @@ export default function SupportPage() {
         </div>
       </section>
 
-      <section className="custom-container py-20">
-        <FAQ />
-      </section>
+      <FAQ />
     </div>
   );
 }

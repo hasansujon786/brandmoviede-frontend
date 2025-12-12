@@ -95,7 +95,7 @@ export default function TicketDetails() {
 
             <Button variant="primary">Get Your Ticket</Button>
           </div>
-          <p className="mt-4 text-base">{subtitle}</p>
+          <p className="mt-4 text-base max-w-4xl">{subtitle}</p>
         </section>
 
         <section className="mt-6 grid gap-6 lg:grid-cols-2">
