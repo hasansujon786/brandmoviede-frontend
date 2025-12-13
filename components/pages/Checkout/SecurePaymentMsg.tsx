@@ -14,7 +14,9 @@ export default function SecurePaymentMsg() {
       <ul className="space-y-1">
         {messages.map((item, index) => (
           <li key={index} className="flex gap-2">
-            <CheckMarkBadge className='mt-1.5' />
+            <div>
+              <CheckMarkBadge className="mt-1.5" />
+            </div>
             <p className="text-body-200 text-base">{item}</p>
           </li>
         ))}
