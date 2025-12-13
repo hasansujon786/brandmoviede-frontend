@@ -1,50 +1,100 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import { CheckMarkDoubleIcon } from "../icons/CheckMark";
 import CreditCardIcon from "../icons/CreditCardIcon";
 import EmailIcon from "../icons/EmailIcon";
-import { useStepper } from "./StepperContext";
+import { usePaymentStatus } from "@/components/pages/Checkout/context/PaymentStatusContext";
+
+const steps = [
+  { label: "Checkout", path: "/checkout", icon: EmailIcon },
+  { label: "Payment", path: "/checkout/payment", icon: CreditCardIcon },
+  { label: "Result", path: "/checkout/result", icon: CheckMarkDoubleIcon },
+];
 
 export const STEP_ICONS = [EmailIcon, CreditCardIcon, CheckMarkDoubleIcon];
+const DELAY = 700; // ms
 
-export default function Stepper({
-  stepIcons,
-}: {
-  stepIcons: React.ComponentType<React.ComponentProps<"svg">>[];
-}) {
-  const { step, pillStep, MAX_INDEX, DELAY, setStep } = useStepper();
-  const scaleX = step / MAX_INDEX;
+export const useNextStep = () => {
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const activeIndex = steps.findIndex((s) => s.path === pathname);
+
+  const goNext = () => {
+    if (activeIndex === -1) return;
+
+    const next = steps[activeIndex + 1];
+    if (!next) return;
+
+    router.push(next.path);
+  };
+
+  return { goNext, activeIndex, isLast: activeIndex === steps.length - 1 };
+};
+
+export default function Stepper() {
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const activeIndex = steps.findIndex((s) => s.path === pathname);
+  const safeIndex = Math.max(0, activeIndex);
+
+  const [activePillIndex, setActivePillIndex] = useState(safeIndex);
+  const scaleX = safeIndex / (steps.length - 1);
+
+  const prevIndexRef = useRef(safeIndex);
+
+  useEffect(() => {
+    const prev = prevIndexRef.current;
+    prevIndexRef.current = safeIndex;
+
+    // moving forward → delay
+    // moving backward → update immediately
+    const delay = safeIndex > prev ? DELAY - 200 : 0;
+    const t = setTimeout(() => setActivePillIndex(safeIndex), delay);
+    return () => clearTimeout(t);
+  }, [safeIndex]);
+
+  const { isLast } = useNextStep();
+  const { status } = usePaymentStatus();
+  if (isLast && (status === "success" || status === "failed")) {
+    return null;
+  }
 
   return (
-    <div className="relative flex justify-between">
-      <div className="bg-card absolute top-1/2 left-1/2 -z-10 h-4 w-[calc(100%-50px)] -translate-1/2">
-        <div
-          className="bg-primary absolute top-0 left-0 h-full w-full origin-left rounded-2xl transition-transform ease-in-out"
-          style={{
-            transform: `scaleX(${scaleX})`,
-            transitionDuration: `${DELAY}ms`,
-          }}
-        />
+    <section className="custom-container mt-10 lg:mt-20">
+      <div className="relative flex justify-between">
+        {/* Progress bar */}
+        <div className="bg-card absolute top-1/2 left-1/2 -z-10 h-4 w-[calc(100%-50px)] -translate-1/2">
+          <div
+            className="bg-primary absolute inset-0 origin-left rounded-2xl transition-transform"
+            style={{
+              transform: `scaleX(${scaleX})`,
+              transitionDuration: `${DELAY}ms`,
+            }}
+          />
+        </div>
+
+        {steps.map(({ icon: Icon, path }, index) => {
+          const isActive = index <= activePillIndex;
+          const isClickable = index === activePillIndex - 1;
+
+          return (
+            <StepperPoint
+              key={path}
+              isActive={isActive}
+              disabled={!isClickable}
+              onClick={() => isClickable && router.push(path)}
+            >
+              <Icon className="size-6" />
+            </StepperPoint>
+          );
+        })}
       </div>
-
-      {stepIcons.map((Icon, index) => {
-        const isActive = index <= pillStep;
-        const isPreviousPIll = pillStep - 1 === index;
-
-        return (
-          <StepperPoint
-            disabled={!isPreviousPIll}
-            onClick={() => setStep(index)}
-            key={index}
-            isActive={isActive}
-          >
-            {/* {String(isPreviousPIll)} */}
-            <Icon className="size-6 text-current" />
-          </StepperPoint>
-        );
-      })}
-    </div>
+    </section>
   );
 }
 

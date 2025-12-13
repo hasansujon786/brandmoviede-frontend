@@ -1,13 +1,16 @@
 "use client";
 
+import CheckoutSummary from "@/components/pages/Checkout/CheckoutSummary";
+import { PaymentStatusProvider } from "@/components/pages/Checkout/context/PaymentStatusContext";
 import HeroGradientWrapper from "@/components/shared/HeroGradientWrapper/HeroGradientWrapper";
 import SectionHeading from "@/components/shared/SectionHeading/SectionHeading";
-import { STEP_ICONS } from "@/components/shared/Stepper/Stepper";
-import { StepperProvider } from "@/components/shared/Stepper/StepperContext";
+import Stepper, { useNextStep } from "@/components/shared/Stepper/Stepper";
 
 export default function Layout({ children }: React.PropsWithChildren) {
+  const { isLast } = useNextStep();
+
   return (
-    <StepperProvider maxIndex={STEP_ICONS.length - 1}>
+    <PaymentStatusProvider>
       <div>
         <HeroGradientWrapper>
           <div className="custom-container">
@@ -20,8 +23,20 @@ export default function Layout({ children }: React.PropsWithChildren) {
             </SectionHeading>
           </div>
         </HeroGradientWrapper>
-        {children}
+
+        <div className="min-h-screen">
+          <Stepper />
+
+          {isLast ? (
+            children
+          ) : (
+            <section className="custom-container grid gap-8 py-10 lg:grid-cols-2 lg:py-20 xl:gap-12">
+              {children}
+              <CheckoutSummary />
+            </section>
+          )}
+        </div>
       </div>
-    </StepperProvider>
+    </PaymentStatusProvider>
   );
 }

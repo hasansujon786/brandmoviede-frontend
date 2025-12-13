@@ -1,14 +1,15 @@
 "use client";
 
+import { useNextStep } from "@/components/shared/Stepper/Stepper";
 import { Button } from "@/components/ui/button";
 import { Field, FieldGroup, FieldLabel, FieldSet } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 
-interface EmailFormProps {
-  onNext: () => void;
-}
+interface EmailFormProps {}
 
-export default function EmailForm({ onNext }: EmailFormProps) {
+export default function EmailForm(props: EmailFormProps) {
+  const { goNext } = useNextStep();
+
   return (
     <div>
       <h5 className="text-heading-200 font-heading text-3xl font-semibold">
@@ -20,7 +21,7 @@ export default function EmailForm({ onNext }: EmailFormProps) {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          onNext();
+          goNext();
         }}
         className="mt-4"
       >

@@ -1,14 +1,17 @@
 "use client";
 
+import { useNextStep } from "@/components/shared/Stepper/Stepper";
+import { Button } from "@/components/ui/button";
 import { Field, FieldGroup, FieldLabel, FieldSet } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { usePaymentStatus } from "./context/PaymentStatusContext";
 
-interface PaymentInfoFormProps {
-  onNext: () => void;
-}
+interface PaymentInfoFormProps {}
 
-export default function PaymentInfoForm({ onNext }: PaymentInfoFormProps) {
+export default function PaymentInfoForm({}: PaymentInfoFormProps) {
+  const { goNext } = useNextStep();
+  const { resetStatus } = usePaymentStatus();
+
   return (
     <div>
       <h5 className="text-heading-200 font-heading text-3xl font-semibold">
@@ -21,7 +24,8 @@ export default function PaymentInfoForm({ onNext }: PaymentInfoFormProps) {
         className="mt-4"
         onSubmit={(e) => {
           e.preventDefault();
-          onNext();
+          resetStatus();
+          goNext();
         }}
       >
         <FieldSet>
@@ -58,7 +62,7 @@ export default function PaymentInfoForm({ onNext }: PaymentInfoFormProps) {
           </FieldGroup>
         </FieldSet>
 
-        <Button onClick={onNext} variant="primary" className="mt-8 w-full">
+        <Button variant="primary" className="mt-8 w-full">
           Continue to Payment
         </Button>
       </form>
