@@ -1,4 +1,4 @@
-import { SVGProps } from "react"
+import { SVGProps } from "react";
 const LockIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg
     width={16}
@@ -27,5 +27,35 @@ const LockIcon = (props: SVGProps<SVGSVGElement>) => (
       strokeLinejoin="round"
     />
   </svg>
-)
-export default LockIcon
+);
+export default LockIcon;
+
+export const LockWithKey = (props: SVGProps<SVGSVGElement>) => (
+  <svg
+    width={24}
+    height={24}
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}
+  >
+    <path
+      d="M18 10.997C17.6078 10.1967 16.5481 9.02147 14.3703 9.07148C14.3703 9.07148 12.6431 8.99646 10.6906 8.99646C8.7382 8.99646 7.82413 9.04218 6.26004 9.07148C5.25877 9.04647 3.35634 9.27154 2.48022 11.3471C1.90449 13.0975 1.87946 16.7735 2.22991 18.624C2.305 19.5743 2.80564 20.8997 4.35762 21.5999C5.30883 22.1 6.83578 21.8999 7.98724 22M5.98469 8.19624C5.93463 5.82059 5.8345 3.94508 8.58801 2.39466C9.51419 2.01956 10.8909 1.69447 12.5931 2.49469C14.3703 3.56998 14.5917 4.70796 14.7458 4.99537C15.1713 6.12068 14.9462 7.72111 14.9962 8.37129"
+      stroke="currentColor"
+      strokeWidth={1.5}
+      strokeLinecap="round"
+    />
+    <path
+      d="M15.5 19.7351C15.5 20.9792 14.4911 21.9656 13.2552 21.9656C12.0194 21.9656 11 20.9792 11 19.7351C11 18.4911 12.0194 17.4915 13.2552 17.4915C14.4911 17.4915 15.5 18.4911 15.5 19.7351Z"
+      stroke="currentColor"
+      strokeWidth={1.5}
+      strokeLinecap="round"
+    />
+    <path
+      d="M15.2251 17.7909L17.2157 15.8482M17.2157 15.8482L18.6265 14.4906C18.9501 14.2149 19.6001 13.5692 20.3732 14.3089L22.0001 15.8482M17.2157 15.8482L18.8251 17.3936"
+      stroke="currentColor"
+      strokeWidth={1.5}
+      strokeLinecap="round"
+    />
+  </svg>
+);
