@@ -9,6 +9,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
     | "default"
     | "primary"
     | "primary-secondary"
+    | "primary-inverse"
     | "secondary"
     | "ghost"
     | "outline"
@@ -26,6 +27,8 @@ const variants: Record<NonNullable<ButtonProps["variant"]>, string> = {
     "bg-primary text-white hover:bg-[#ff4d77]/90 focus-visible:outline-primary",
   ["primary-secondary"]:
     "bg-primary-50 border border-[#ff4d77]/90 text-forground hover:bg-[#ff4d77]/90 hover:text-primary-foreground focus-visible:outline-primary",
+  ["primary-inverse"]:
+    "bg-card border border-[#ff4d77]/90 text-primary hover:bg-[#ff4d77]/90 hover:text-primary-foreground focus-visible:outline-primary",
   secondary:
     "bg-white text-gray-700 shadow hover:text-gray-900 focus-visible:outline-ring",
   ghost:

@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Sidebar,
   SidebarContent,
@@ -19,20 +21,35 @@ import {
   SignOutIcon,
   TicketIcon,
 } from "./AppSidebarIcons";
+import { usePathname } from "next/navigation";
 
 const links = [
   { title: "Dashboard", icon: DashboardIcon, url: "/dashboard" },
-  { title: "Sugo Coin Management", icon: DoubleCoinIcon, url: "/dashboard" },
-  { title: "Event Ticket Management", icon: TicketIcon, url: "/dashboard" },
-  { title: "Analytics & insights", icon: AnalyticsIcon, url: "/dashboard" },
-  { title: "Settings", icon: SettingsIcon, url: "/dashboard" },
+  {
+    title: "Sugo Coin Management",
+    icon: DoubleCoinIcon,
+    url: "/dashboard/coins",
+  },
+  {
+    title: "Event Ticket Management",
+    icon: TicketIcon,
+    url: "/dashboard/tickets",
+  },
+  {
+    title: "Analytics & insights",
+    icon: AnalyticsIcon,
+    url: "/dashboard/analytics",
+  },
+  { title: "Settings", icon: SettingsIcon, url: "/dashboard/settings" },
 ];
 
 export function AppSidebar() {
+  const pathname = usePathname();
+
   return (
     <Sidebar>
       <SidebarHeader className="">
-        <div className="flex items-center justify-center border-b border-b-[#F8C0CC] py-3">
+        <div className="flex h-18 items-center justify-center border-b border-b-[#F8C0CC]">
           <Image
             alt=""
             width={136}
@@ -48,7 +65,15 @@ export function AppSidebar() {
             <SidebarMenu>
               {links.map((item, index) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton isActive={index == 0} size="lg" asChild>
+                  <SidebarMenuButton
+                    isActive={
+                      pathname === links[0].url
+                        ? item.url == pathname
+                        : item.url.startsWith(pathname)
+                    }
+                    size="lg"
+                    asChild
+                  >
                     <Link href={item.url}>
                       <span>
                         <item.icon className="size-6" />
