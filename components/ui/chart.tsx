@@ -253,6 +253,28 @@ function ChartTooltipContent({
 
 const ChartLegend = RechartsPrimitive.Legend;
 
+export const CustomLegend = ({ config }: { config: ChartConfig }) => {
+  const items = Object.keys(config).map((k) => config[k]);
+
+  if (!items?.length) {
+    return null;
+  }
+
+  return (
+    <div className="flex gap-4">
+      {items.map((item, index) => (
+        <div key={index} className="flex items-center justify-center gap-1.5">
+          <div
+            style={{ backgroundColor: item.color }}
+            className="bg-sidebar-border size-3 rounded-full"
+          />
+          <p className="text-body-200 text-xs font-medium">{item.label}</p>
+        </div>
+      ))}
+    </div>
+  );
+};
+
 function ChartLegendContent({
   className,
   hideIcon = false,

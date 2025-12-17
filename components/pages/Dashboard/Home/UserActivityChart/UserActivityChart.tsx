@@ -1,26 +1,14 @@
 "use client";
 
-import { TrendingUp } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
-
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   ChartContainer,
-  ChartLegend,
-  ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
+  CustomLegend,
   type ChartConfig,
 } from "@/components/ui/chart";
-import { createPortal } from "react-dom";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 export const description = "A multiple bar chart";
 
@@ -50,7 +38,7 @@ const chartConfig: ChartConfig = {
   },
 };
 
-export default function ChartBarMultiple() {
+export default function UserActivityChart() {
   return (
     <Card className="overflow-x-hidden">
       <CardHeader className="flex items-center justify-between">
@@ -98,25 +86,3 @@ export default function ChartBarMultiple() {
     </Card>
   );
 }
-
-export const CustomLegend = ({ config }: { config: ChartConfig }) => {
-  const items = Object.keys(config).map((k) => config[k]);
-
-  if (!items?.length) {
-    return null;
-  }
-
-  return (
-    <div className="flex gap-4">
-      {items.map((item, index) => (
-        <div key={index} className="flex items-center justify-center gap-1.5">
-          <div
-            style={{ backgroundColor: item.color }}
-            className="bg-sidebar-border size-3 rounded-full"
-          />
-          <p className="text-body-200 text-xs font-medium">{item.label}</p>
-        </div>
-      ))}
-    </div>
-  );
-};
