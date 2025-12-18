@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { LockWithKey } from "@/components/shared/icons/LockIcon";
+import { LockWithKeyIcon } from "@/components/shared/icons/LockIcon";
 import { ChevronRight } from "@/components/shared/icons/chevron";
 import CreditCardIcon from "@/components/shared/icons/CreditCardIcon";
 import { Label } from "@/components/ui/label";
@@ -14,7 +14,7 @@ export default function SecurityCard() {
       <CardContent className="flex flex-1 flex-col gap-4">
         <div className="flex gap-4 rounded bg-[#FDEBEF] px-2 py-2.5">
           <div className="text-primary flex size-12 items-center justify-center rounded-full bg-[#F8C0CC]">
-            <LockWithKey />
+            <LockWithKeyIcon />
           </div>
           <div className="mr-auto">
             <p className="text-heading-100">Two Factor Authentication</p>

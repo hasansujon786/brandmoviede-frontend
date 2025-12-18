@@ -15,15 +15,21 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { cn } from "@/lib/utils";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  config?: {
+    borderColor?: string;
+    headerClass?: string;
+  };
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  config = { borderColor: "var(--input)" },
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
@@ -32,11 +38,22 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="overflow-hidden rounded-md border border-input text-body-200">
-      <Table className='bg-card'>
+    <div
+      style={{
+        borderColor: config?.borderColor,
+      }}
+      className="text-body-200 overflow-hidden rounded-md border"
+    >
+      <Table className="bg-card">
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow className="bg-primary-400 hover:bg-primary-400" key={headerGroup.id}>
+            <TableRow
+              className={cn(
+                "bg-primary-400 hover:bg-primary-400",
+                config?.headerClass,
+              )}
+              key={headerGroup.id}
+            >
               {headerGroup.headers.map((header) => {
                 return (
                   <TableHead
@@ -59,7 +76,9 @@ export function DataTable<TData, TValue>({
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
               <TableRow
-                className='border-input'
+                style={{
+                  borderColor: config?.borderColor,
+                }}
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
               >
