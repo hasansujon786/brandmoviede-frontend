@@ -17,7 +17,7 @@ export default function Shop({ className, showPagination }: ShopProps) {
       >
         Sugo <span className="text-primary">Coin</span> Shop
       </SectionHeading>
-      <div className="mt-14 grid gap-4 outline md:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-14 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         <ShopCard />
         <ShopCard />
         <ShopCard />

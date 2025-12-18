@@ -28,8 +28,11 @@ export default function ShopCard() {
         <Button
           variant="primary"
           className="bg-primary-50 border-primary-50 text-body-200 hover:bg-primary hover:text-primary-foreground flex-1"
+          asChild
         >
-          Buy Coins
+          <Link href="/bundles/bundle-id">
+            Buy Coins
+          </Link>
         </Button>
       </div>
     </div>
