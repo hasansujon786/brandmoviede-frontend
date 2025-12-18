@@ -14,7 +14,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
     | "ghost"
     | "outline"
     | "link";
-  size?: "default" | "sm" | "lg" | "icon" | "icon-sm";
+  size?: "default" | "sm" | "lg" | "icon" | "icon-sm" | "icon-md";
 }
 
 const baseStyles =
@@ -24,11 +24,11 @@ const variants: Record<NonNullable<ButtonProps["variant"]>, string> = {
   default:
     "bg-white/20 border border-white text-[#4A4C56] hover:bg-white/60 focus-visible:outline-ring",
   primary:
-    "bg-primary text-white hover:bg-[#ff4d77]/90 focus-visible:outline-primary",
+    "bg-primary text-white border border-primary hover:bg-[#ff4d77]/90 hover:border-[#ff4d77]/90 focus-visible:outline-primary",
   ["primary-secondary"]:
     "bg-primary-50 border border-[#ff4d77]/90 text-forground hover:bg-[#ff4d77]/90 hover:text-primary-foreground focus-visible:outline-primary",
   ["primary-inverse"]:
-    "bg-card border border-[#ff4d77]/90 text-primary hover:bg-[#ff4d77]/90 hover:text-primary-foreground focus-visible:outline-primary",
+    "bg-card border border-[#F8C0CC] text-primary hover:bg-[#ff4d77]/90 hover:border-[#ff4d77]/90 hover:text-primary-foreground focus-visible:outline-primary",
   secondary:
     "bg-white text-gray-700 shadow hover:text-gray-900 focus-visible:outline-ring",
   ghost:
@@ -44,6 +44,7 @@ const sizes: Record<NonNullable<ButtonProps["size"]>, string> = {
   lg: "h-12 px-6 text-base",
   icon: "h-10 w-10 rounded-full text-heading-100 border border-[#4B463D]/80",
   "icon-sm": "h-8 w-8 rounded-full text-heading-100 border border-[#4B463D]/80",
+  "icon-md": "h-8 w-8 rounded",
 };
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(

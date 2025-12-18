@@ -2,7 +2,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
-import { DataTable } from "@/components/shared/DataTable/DataTable";
+import { DataTable, Pagenation } from "@/components/shared/DataTable/DataTable";
 import { ChevronDown } from "@/components/shared/icons/chevron";
 import { createGetVarient } from "@/lib/utils/varients";
 import { Button } from "@/components/ui/button";
@@ -157,20 +157,24 @@ export function getData() {
 export default function CoinBundleTable() {
   const data = getData();
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Coins Bundle</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <DataTable
-          columns={columns}
-          data={data}
-          config={{
-            borderColor: "#F8C0CC",
-            headerClass: "bg-primary hover:bg-primary",
-          }}
-        />
-      </CardContent>
-    </Card>
+    <section className="space-y-3">
+      <Card>
+        <CardHeader>
+          <CardTitle>Coins Bundle</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <DataTable
+            columns={columns}
+            data={data}
+            config={{
+              borderColor: "#F8C0CC",
+              headerClass: "bg-primary hover:bg-primary",
+            }}
+          />
+        </CardContent>
+      </Card>
+
+      <Pagenation />
+    </section>
   );
 }

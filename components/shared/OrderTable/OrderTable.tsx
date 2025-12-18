@@ -2,7 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
-import { DataTable } from "@/components/shared/DataTable/DataTable";
+import { DataTable, Pagenation } from "@/components/shared/DataTable/DataTable";
 
 export interface OrderItem {
   order_id: string;
@@ -117,15 +117,18 @@ export function getData() {
 }
 
 export default function OrderTable(props: {
+  shoPagination?: boolean;
   data: OrderItem[];
   title: string;
 }) {
+  const { shoPagination = true } = props;
   return (
-    <div className="">
-      <h3 className="text-heading-100 font-heading mb-4 text-3xl font-semibold">
+    <section className="space-y-3">
+      <h3 className="text-heading-100 font-heading text-3xl font-semibold">
         {props.title}
       </h3>
       <DataTable columns={columns} data={props.data} />
-    </div>
+      {shoPagination && <Pagenation />}
+    </section>
   );
 }

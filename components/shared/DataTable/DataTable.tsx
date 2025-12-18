@@ -16,6 +16,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { ChevronRight } from "../icons/chevron";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -102,4 +104,51 @@ export function DataTable<TData, TValue>({
   );
 }
 
-// TODO: add pagination
+interface PagenationProps {
+  ghoustBtn?: boolean;
+}
+
+export function Pagenation({ ghoustBtn = true }: PagenationProps) {
+  return (
+    <div className="flex gap-6">
+      <Button
+        variant={ghoustBtn ? "ghost" : "primary-inverse"}
+        className="text-body-200"
+        size="icon-md"
+      >
+        <ChevronRight className="rotate-180" />
+      </Button>
+
+      <div className="flex gap-0.5">
+        <Button variant="primary" size="icon-md">
+          1
+        </Button>
+        <Button variant="ghost" size="icon-md" className="hover:bg-gray-100">
+          2
+        </Button>
+        <Button variant="ghost" size="icon-md" className="hover:bg-gray-100">
+          3
+        </Button>
+        <Button
+          disabled
+          variant="ghost"
+          size="icon-md"
+          className="hover:bg-gray-100"
+        >
+          ...
+        </Button>
+        <Button variant="ghost" size="icon-md" className="hover:bg-gray-100">
+          10
+        </Button>
+      </div>
+
+      <Button
+        variant={ghoustBtn ? "ghost" : "primary-inverse"}
+        className="text-body-200"
+        size="icon-md"
+      >
+        <ChevronRight />
+      </Button>
+    </div>
+  );
+}

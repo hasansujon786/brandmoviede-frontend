@@ -5,5 +5,5 @@ import OrderTable, { getData } from "../../../../shared/OrderTable/OrderTable";
 export default function RecentOrders() {
   const data = getData();
 
-  return <OrderTable title="Recent Orders" data={data.slice(0, 3)} />;
+  return <OrderTable shoPagination={false} title="Recent Orders" data={data.slice(0, 3)} />;
 }

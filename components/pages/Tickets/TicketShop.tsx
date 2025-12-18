@@ -1,5 +1,6 @@
 import TicketCard from "@/components/shared/TicketCard/TicketCard";
 import SectionHeading from "@/components/shared/SectionHeading/SectionHeading";
+import { Pagenation } from "@/components/shared/DataTable/DataTable";
 
 const tickets = [
   {
@@ -91,6 +92,10 @@ export default function TicketShop() {
           <TicketCard key={index} {...item} />
         ))}
       </section>
+
+      <div className="custom-container mt-8">
+        <Pagenation />
+      </div>
     </div>
   );
 }

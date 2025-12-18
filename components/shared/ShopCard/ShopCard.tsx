@@ -5,7 +5,7 @@ import CounterButton from "../CounterButton/CounterButton";
 
 export default function ShopCard() {
   return (
-    <div className="bg-card rounded-[12px] p-2">
+    <div className="bg-card rounded-2lg p-2">
       <Link
         href="/bundles/bundle-id"
         className="outline-primary block aspect-[0.96010] w-full overflow-hidden rounded-xl bg-red-300 focus-visible:outline-2 focus-visible:outline-offset-4"
@@ -27,7 +27,7 @@ export default function ShopCard() {
 
         <Button
           variant="primary"
-          className="bg-primary-50 text-body-200 hover:bg-primary hover:text-primary-foreground flex-1"
+          className="bg-primary-50 border-primary-50 text-body-200 hover:bg-primary hover:text-primary-foreground flex-1"
         >
           Buy Coins
         </Button>

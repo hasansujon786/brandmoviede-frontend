@@ -34,9 +34,7 @@ export default function DashboardTicketsPage() {
       </TopActionBar>
       <DashboardInfoCardList data={infoCards} />
 
-      <section className="">
-        <EventTicketTable />
-      </section>
+      <EventTicketTable />
     </div>
   );
 }

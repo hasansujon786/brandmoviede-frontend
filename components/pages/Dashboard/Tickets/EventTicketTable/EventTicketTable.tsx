@@ -2,7 +2,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
-import { DataTable } from "@/components/shared/DataTable/DataTable";
+import { DataTable, Pagenation } from "@/components/shared/DataTable/DataTable";
 import { ChevronDown } from "@/components/shared/icons/chevron";
 import { createGetVarient } from "@/lib/utils/varients";
 import { Button } from "@/components/ui/button";
@@ -42,12 +42,12 @@ export const columns: ColumnDef<EventItem>[] = [
   {
     accessorKey: "revenue",
     header: "Revenue",
-    cell: ({row}) => `$${row.original.revenue}`
+    cell: ({ row }) => `$${row.original.revenue}`,
   },
   {
     accessorKey: "ticketPrice",
     header: "Ticket Price",
-    cell: ({row}) => `$${row.original.ticketPrice}`
+    cell: ({ row }) => `$${row.original.ticketPrice}`,
   },
   {
     accessorKey: "status",
@@ -172,20 +172,24 @@ export function getData() {
 export default function EventTicketTable() {
   const data = getData();
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Event Ticket</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <DataTable
-          columns={columns}
-          data={data}
-          config={{
-            borderColor: "#F8C0CC",
-            headerClass: "bg-primary hover:bg-primary",
-          }}
-        />
-      </CardContent>
-    </Card>
+    <section className="space-y-3">
+      <Card>
+        <CardHeader>
+          <CardTitle>Event Ticket</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <DataTable
+            columns={columns}
+            data={data}
+            config={{
+              borderColor: "#F8C0CC",
+              headerClass: "bg-primary hover:bg-primary",
+            }}
+          />
+        </CardContent>
+      </Card>
+
+      <Pagenation ghoustBtn />
+    </section>
   );
 }
