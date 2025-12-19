@@ -123,7 +123,6 @@ export function useCardRevealAnimation(scope: string) {
             // delay: (index % 3) * 0.12,
             // delay: index * 0.05,
             scrollTrigger: {
-              markers: true,
               trigger: card,
               start: "top 90%",
               once: true,
