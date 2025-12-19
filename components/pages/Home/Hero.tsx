@@ -1,5 +1,5 @@
 "use client";
-import { Dobies, useCardRevealAnimation } from "@/components/shared/Dobi/Dobi";
+import { Dobis, useCardRevealAnimation } from "@/components/shared/Dobi/Dobi";
 import SectionHeading from "@/components/shared/SectionHeading/SectionHeading";
 import { Button } from "@/components/ui/button";
 
@@ -14,7 +14,7 @@ export default function Hero() {
           "linear-gradient(180deg, #F8C0CC 3.26%, #D7B2F3 80.92%, var(--background) 100%)",
       }}
     >
-      <Dobies
+      <Dobis
         items={[
           { className: "top-40 left-40 rotate-35", varient: "music" },
           { className: "top-1/2 left-20 size-18 -rotate-45", varient: "kiss" },

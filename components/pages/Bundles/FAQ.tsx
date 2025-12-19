@@ -63,10 +63,10 @@ export function FAQ() {
       <Accordion
         type="single"
         collapsible
-        className="mt-12 grid w-full gap-3 md:gap-6"
+        className="mt-12 grid w-full gap-3 md:gap-6 slide-up"
       >
         {questions.map((item) => (
-          <AccordionItem className="slide-up" key={item.title} value={item.title}>
+          <AccordionItem className="" key={item.title} value={item.title}>
             <AccordionTrigger>{item.title}</AccordionTrigger>
             <AccordionContent className="flex flex-col gap-4 text-balance">
               {item.contents.map((content, index) => (

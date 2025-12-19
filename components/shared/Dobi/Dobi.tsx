@@ -1,3 +1,5 @@
+"use client";
+
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { useGSAP } from "@gsap/react";
@@ -27,16 +29,18 @@ export default function Dobi({ varient, className, ...props }: DobiProps) {
   );
 }
 
-export function Dobies({ items }: { items: DobiProps[] }) {
+export type DobisConfig = DobiProps[];
+
+export function Dobis({ items }: { items: DobisConfig }) {
   useDobiAnimation();
 
   return (
     <>
-      {items.map((dobi, index) => (
+      {items.map(({ className, ...conf }, index) => (
         <Dobi
+          className={cn("hidden xl:block absolute opacity-0 -z-10", className)}
           key={index}
-          {...dobi}
-          style={{ opacity: 0, position: "absolute", zIndex: "-10" }}
+          {...conf}
         />
       ))}
     </>
@@ -115,7 +119,8 @@ export function useCardRevealAnimation(scope: string) {
             scale: 1,
             duration: 0.7,
             ease: "power3.out",
-            delay: (index % 3) * 0.12,
+            delay: 0.12,
+            // delay: (index % 3) * 0.12,
             // delay: index * 0.05,
             scrollTrigger: {
               markers: true,
