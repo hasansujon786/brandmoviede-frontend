@@ -1,6 +1,9 @@
+"use client";
+
 import TicketCard from "@/components/shared/TicketCard/TicketCard";
 import SectionHeading from "@/components/shared/SectionHeading/SectionHeading";
 import { Pagenation } from "@/components/shared/DataTable/DataTable";
+import { useCardRevealAnimation } from "@/components/shared/Dobi/Dobi";
 
 const tickets = [
   {
@@ -78,8 +81,10 @@ const tickets = [
 ];
 
 export default function TicketShop() {
+  useCardRevealAnimation(".ticket-shop");
+
   return (
-    <div className="py-10 lg:py-20">
+    <div className="ticket-shop slide-scope py-10 lg:py-20">
       <SectionHeading
         h2
         eyebrow="SHOP"

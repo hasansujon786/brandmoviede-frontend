@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 export default function SupportMessageForm() {
   return (
     <div className="flex flex-col">
-      <h5 className="text-heading-200 font-heading text-3xl font-semibold">
+      <h5 className="text-heading-200 slide-up font-heading text-3xl font-semibold">
         Send Us a Message
       </h5>
       {/* <p className="mt-3 text-xl"> */}
@@ -16,7 +16,7 @@ export default function SupportMessageForm() {
       {/* </p> */}
       <form className="mt-4 flex flex-1 flex-col">
         <FieldSet>
-          <FieldGroup>
+          <FieldGroup className="slide-up">
             <Field>
               <FieldLabel htmlFor="name">Cardholder Name</FieldLabel>
               <Input
@@ -55,7 +55,7 @@ export default function SupportMessageForm() {
           </FieldGroup>
         </FieldSet>
 
-        <div className="mt-auto">
+        <div className="slide-up mt-auto">
           <Button variant="primary" className="mt-8 w-full">
             Send Message
           </Button>

@@ -1,3 +1,6 @@
+"use client";
+
+import { useCardRevealAnimation } from "@/components/shared/Dobi/Dobi";
 import SectionHeading from "@/components/shared/SectionHeading/SectionHeading";
 import Image from "next/image";
 const partners = [
@@ -7,9 +10,10 @@ const partners = [
 ];
 
 export default function OurPartner() {
+  useCardRevealAnimation(".out-partner");
   return (
     <section
-      className="bg-cover bg-bottom-right bg-no-repeat"
+      className="out-partner slide-scope bg-cover bg-bottom-right bg-no-repeat"
       style={{ backgroundImage: 'url("/images/home/bg-our-partner.png")' }}
     >
       <div className="custom-container flex flex-col items-center gap-6 py-10 sm:p-12 lg:py-20">
@@ -20,7 +24,7 @@ export default function OurPartner() {
         <div className="flex w-full max-w-5xl flex-col items-center justify-center gap-4 sm:flex-row sm:justify-between">
           {partners.map((item) => (
             <Image
-              className="h-12 object-contain sm:first:object-left sm:last:object-right"
+              className="slide-up h-12 object-contain sm:first:object-left sm:last:object-right"
               key={item}
               src={item}
               alt=""

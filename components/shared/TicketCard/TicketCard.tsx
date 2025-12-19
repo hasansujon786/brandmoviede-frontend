@@ -37,7 +37,7 @@ export default function TicketCard(props: TicketCardProps) {
   ];
 
   return (
-    <div className="bg-card @container relative rounded-2xl p-3 @xs:p-4">
+    <div className="slide-up bg-card @container relative rounded-2xl p-3 @xs:p-4">
       <TicketBadge status={props.type as TicketStatus} />
       <h3 className="text-heading-200 mt-4 text-2xl font-semibold @xs:text-3xl">
         {props.title}

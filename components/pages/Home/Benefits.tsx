@@ -1,7 +1,10 @@
+"use client";
+
 import CheckMark from "@/components/shared/icons/CheckMark";
 import Image from "next/image";
 import SectionHeading from "@/components/shared/SectionHeading/SectionHeading";
 import { Button } from "@/components/ui/button";
+import { useCardRevealAnimation } from "@/components/shared/Dobi/Dobi";
 
 const listItems = [
   "First and foremost, we only look at YOU as a person!",
@@ -10,16 +13,17 @@ const listItems = [
 ];
 
 export default function Benefits() {
+  useCardRevealAnimation(".benefits");
   return (
     <section
-      className="bg-cover bg-bottom-right bg-no-repeat py-20"
+      className="benefits slide-scope bg-cover bg-bottom-right bg-no-repeat py-20"
       style={{
         backgroundImage:
           'url("/images/home/benefit-agency/benefit-agency-bg.png")',
       }}
     >
       <div className="custom-container grid gap-4 lg:grid-cols-2">
-        <div className="flex items-start justify-center lg:justify-start">
+        <div className="slide-up flex items-start justify-center lg:justify-start">
           <Image
             src="/images/home/benefit-agency/mobile-with-coins.png"
             alt=""
@@ -43,7 +47,7 @@ started with streaming easier."
 
           <ul className="mt-4 space-y-2">
             {listItems.map((item) => (
-              <li key={item} className="text-body-200 flex text-base">
+              <li key={item} className="slide-up text-body-200 flex text-base">
                 <span className="mt-0.5 mr-2">
                   <CheckMark />
                 </span>
@@ -52,7 +56,7 @@ started with streaming easier."
             ))}
           </ul>
 
-          <Button className="mt-12 w-full sm:w-auto" variant="primary">
+          <Button className="slide-up mt-12 w-full sm:w-auto" variant="primary">
             Learn More
           </Button>
         </div>

@@ -78,7 +78,7 @@
   --ring: oklch(0.708 0 0);
   --chart-1: var(--primary);
   --chart-2: var(--color-primary-200);
-  --chart-3: #7D08D8;
+  --chart-3: #7d08d8;
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
   --sidebar: #ffffff;
@@ -177,4 +177,8 @@
 
 .recharts-tooltip-cursor {
   stroke: var(--primary) !important;
+}
+
+.slide-scope .slide-up {
+  opacity: 0;
 }

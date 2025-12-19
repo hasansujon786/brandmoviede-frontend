@@ -1,4 +1,7 @@
+"use client";
+
 import { Pagenation } from "@/components/shared/DataTable/DataTable";
+import { useCardRevealAnimation } from "@/components/shared/Dobi/Dobi";
 import SectionHeading from "@/components/shared/SectionHeading/SectionHeading";
 import ShopCard from "@/components/shared/ShopCard/ShopCard";
 import { cn } from "@/lib/utils";
@@ -8,12 +11,17 @@ interface ShopProps extends React.ComponentProps<"section"> {
 }
 
 export default function Shop({ className, showPagination }: ShopProps) {
+  useCardRevealAnimation(".shop");
+
   return (
-    <section className={cn("custom-container py-10 lg:py-20", className)}>
+    <section
+      className={cn("shop slide-scope custom-container py-10 lg:py-20", className)}
+    >
       <SectionHeading
         h2
         eyebrow="SHOP"
         description="Select the perfect bundle to enhance your Sugo Chat experience"
+        className="slide-up"
       >
         Sugo <span className="text-primary">Coin</span> Shop
       </SectionHeading>

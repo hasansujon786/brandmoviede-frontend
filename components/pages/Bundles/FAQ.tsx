@@ -1,3 +1,6 @@
+"use client";
+
+import { useCardRevealAnimation } from "@/components/shared/Dobi/Dobi";
 import SectionHeading from "@/components/shared/SectionHeading/SectionHeading";
 import {
   Accordion,
@@ -45,8 +48,10 @@ const questions = [
 ];
 
 export function FAQ() {
+  useCardRevealAnimation(".faq");
+
   return (
-    <section className="custom-container py-10 lg:py-20">
+    <section className="faq slide-scope custom-container py-10 lg:py-20">
       <SectionHeading
         h2
         eyebrow="Frequently Asked Questions"
@@ -61,7 +66,7 @@ export function FAQ() {
         className="mt-12 grid w-full gap-3 md:gap-6"
       >
         {questions.map((item) => (
-          <AccordionItem key={item.title} value={item.title}>
+          <AccordionItem className="slide-up" key={item.title} value={item.title}>
             <AccordionTrigger>{item.title}</AccordionTrigger>
             <AccordionContent className="flex flex-col gap-4 text-balance">
               {item.contents.map((content, index) => (

@@ -1,3 +1,6 @@
+"use client";
+
+import { useCardRevealAnimation } from "@/components/shared/Dobi/Dobi";
 import GiftboxIcon from "@/components/shared/icons/GiftboxIcon";
 import GlobeIcon from "@/components/shared/icons/GlobeIcon";
 import LightBlubIcon from "@/components/shared/icons/LightBlubIcon";
@@ -5,6 +8,7 @@ import SectionHeading from "@/components/shared/SectionHeading/SectionHeading";
 import { cn } from "@/lib/utils";
 
 export default function InsideLook() {
+  useCardRevealAnimation(".inside-look");
   const info = [
     {
       title: "Networking",
@@ -26,7 +30,7 @@ export default function InsideLook() {
     },
   ];
   return (
-    <section className="bg-card py-10 lg:py-20">
+    <section className="inside-look slide-scope bg-card py-10 lg:py-20">
       <div className="custom-container">
         <SectionHeading
           h2
@@ -44,7 +48,7 @@ export default function InsideLook() {
               key={item.title}
               style={{ backgroundImage: `url(${item.bg})` }}
               className={cn(
-                "relative overflow-hidden rounded-2xl bg-cover bg-bottom bg-no-repeat p-3 md:aspect-[1.11578] lg:aspect-[1.46206] lg:first:aspect-[2.01904] lg:last:aspect-[1.11578] xl:p-4",
+                "slide-up relative overflow-hidden rounded-2xl bg-cover bg-bottom bg-no-repeat p-3 md:aspect-[1.11578] lg:aspect-[1.46206] lg:first:aspect-[2.01904] lg:last:aspect-[1.11578] xl:p-4",
               )}
             >
               <div className="absolute inset-0 bg-[#FFCFDA]/40" />

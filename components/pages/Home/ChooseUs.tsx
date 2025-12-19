@@ -1,3 +1,6 @@
+"use client";
+
+import { useCardRevealAnimation } from "@/components/shared/Dobi/Dobi";
 import SectionHeading from "@/components/shared/SectionHeading/SectionHeading";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
@@ -21,8 +24,10 @@ const icons = [
 ];
 
 export default function ChooseUs() {
+  useCardRevealAnimation(".choose-us");
+
   return (
-    <section className="py-20">
+    <section className="choose-us slide-scope py-20">
       <div className="custom-container grid gap-12 lg:grid-cols-2">
         <div>
           <SectionHeading
@@ -31,16 +36,17 @@ export default function ChooseUs() {
             description="Secure instant access to a versatile digital asset engineered for seamless blockchain transactions, exclusive ecosystem utility, and empowering your position within the decentralized landscape your reliable gateway to digital asset liquidity and growth."
             descriptionClassName="mt-3 text-xl max-w-full"
             className="items-start text-left"
+            footer={
+              <Button className="mt-12 w-full sm:w-auto" variant="primary">
+                Learn More
+              </Button>
+            }
           >
             Why <span className="text-primary">Choose</span> Us?
           </SectionHeading>
-
-          <Button className="mt-12 w-full sm:w-auto" variant="primary">
-            Learn More
-          </Button>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-1">
+        <div className="grid slide-up gap-6 md:grid-cols-2 lg:grid-cols-1">
           {icons.map((item) => (
             <div
               key={item.title}
