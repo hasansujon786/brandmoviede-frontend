@@ -5,7 +5,6 @@ export default function CustomBundle() {
     <div>
       <input
         className="text-heading-100 bg-primary-100 outline-ring h-14 w-full rounded-xl px-4 text-lg focus-visible:outline-2"
-        value="$17"
         type="text"
       />
 
