@@ -37,7 +37,12 @@ export default function Navbar() {
     <header className="fixed top-0 z-100 flex w-full md:top-3 md:px-3 lg:top-4 lg:px-4">
       <div className="bg-primary-50 mx-auto flex w-full items-center justify-between px-4 py-3 text-sm shadow-xs backdrop-blur sm:px-6 md:rounded-xl">
         {/* Logo */}
-        <Image width={48} height={48} alt="" src="/images/logo-bl.png" />
+        <Link
+          className="focus-visible:outline-ring rounded-full focus-visible:outline-2 focus-visible:outline-offset-2"
+          href="/"
+        >
+          <Image width={48} height={48} alt="" src="/images/logo-bl.png" />
+        </Link>
 
         {/* Desktop nav */}
         <nav className="hidden items-center gap-1 md:flex">
@@ -74,7 +79,7 @@ export default function Navbar() {
               <Menu className="h-5 w-5" />
             </Button>
           </SheetTrigger>
-          <SheetContent className="bg-[#fff9fc] z-200">
+          <SheetContent className="z-200 bg-[#fff9fc]">
             <SheetHeader>
               <SheetTitle className="text-gray-900">
                 Navigate Sugo Coin

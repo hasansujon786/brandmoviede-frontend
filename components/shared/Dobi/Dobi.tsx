@@ -38,7 +38,7 @@ export function Dobis({ items }: { items: DobisConfig }) {
     <>
       {items.map(({ className, ...conf }, index) => (
         <Dobi
-          className={cn("hidden xl:block absolute opacity-0 -z-10", className)}
+          className={cn("absolute hidden opacity-0 xl:block", className)}
           key={index}
           {...conf}
         />

@@ -24,10 +24,7 @@ export default function SectionHeading({
 }: SectionHeadingProps) {
   return (
     <div
-      className={cn(
-        "flex flex-col items-center text-center",
-        className,
-      )}
+      className={cn("flex flex-col items-center text-center", className)}
       {...props}
     >
       {eyebrow && <Pill className="slide-up mb-2">{eyebrow}</Pill>}
@@ -54,7 +51,7 @@ export default function SectionHeading({
         </p>
       )}
 
-      <div className="slide-up">{footer ? footer : null}</div>
+      <div className="slide-up w-full">{footer ? footer : null}</div>
     </div>
   );
 }

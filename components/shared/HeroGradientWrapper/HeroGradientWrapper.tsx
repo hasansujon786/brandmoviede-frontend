@@ -12,7 +12,7 @@ export default function HeroGradientWrapper({
   return (
     <div
       className={cn(
-        "hero-gradient-wrapper slide-scope relative -z-20 flex min-h-[512px] flex-col items-center justify-center overflow-hidden bg-[linear-gradient(183deg,#F8C0CC_3.26%,#D7B2F3_90.92%)] pt-22",
+        "hero-gradient-wrapper slide-scope relative flex min-h-[512px] flex-col items-center justify-center overflow-hidden bg-[linear-gradient(183deg,#F8C0CC_3.26%,#D7B2F3_90.92%)] pt-22",
         className,
       )}
       {...props}
