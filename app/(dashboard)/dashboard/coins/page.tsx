@@ -1,3 +1,4 @@
+import CreateCoinBundleDialog from "@/components/dashboard/CreateCoinBundleDialog/CreateCoinBundleDialog";
 import DashboardInfoCardList from "@/components/dashboard/DashboardInfoCardList/DashboardInfoCardList";
 import TopActionBar from "@/components/dashboard/TopActionBar/TopActionBar";
 import CoinBundleTable from "@/components/pages/Dashboard/Coins/CoinBundleTable/CoinBundleTable";
@@ -27,9 +28,11 @@ export default function DashboardCoinsPage() {
     <div className="space-y-4 p-5">
       <TopActionBar>
         <div className="flex items-center gap-4">
-          <Button size="lg" variant="primary">
-            Add Coin Bundle
-          </Button>
+          <CreateCoinBundleDialog>
+            <Button size="lg" variant="primary">
+              Add Coin Bundle
+            </Button>
+          </CreateCoinBundleDialog>
         </div>
       </TopActionBar>
       <DashboardInfoCardList data={infoCards} />

@@ -10,6 +10,8 @@ import TopActionBar from "@/components/dashboard/TopActionBar/TopActionBar";
 import DashboardInfoCardList from "@/components/dashboard/DashboardInfoCardList/DashboardInfoCardList";
 import { TwoPeoplesIcon } from "@/components/shared/icons/PeoplesIcon";
 import { Button } from "@/components/ui/button";
+import CreateCoinBundleDialog from "@/components/dashboard/CreateCoinBundleDialog/CreateCoinBundleDialog";
+import CreateEventTicketDialog from "@/components/dashboard/CreateEventTicketDialog/CreateEventTicketDialog";
 
 export default function DashboardHomePage() {
   const infoCards = [
@@ -23,12 +25,17 @@ export default function DashboardHomePage() {
     <div className="space-y-4 p-5">
       <TopActionBar>
         <div className="flex items-center gap-4">
-          <Button size="lg" variant="primary-inverse">
-            Add Event
-          </Button>
-          <Button size="lg" variant="primary">
-            Add Coin Bundle
-          </Button>
+          <CreateEventTicketDialog>
+            <Button size="lg" variant="primary-inverse">
+              Add Event
+            </Button>
+          </CreateEventTicketDialog>
+
+          <CreateCoinBundleDialog>
+            <Button size="lg" variant="primary">
+              Add Coin Bundle
+            </Button>
+          </CreateCoinBundleDialog>
         </div>
       </TopActionBar>
       <DashboardInfoCardList data={infoCards} />

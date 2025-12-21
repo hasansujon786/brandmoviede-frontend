@@ -1,4 +1,5 @@
 import { TicketIcon } from "@/components/dashboard/AppSidebar/AppSidebarIcons";
+import CreateEventTicketDialog from "@/components/dashboard/CreateEventTicketDialog/CreateEventTicketDialog";
 import DashboardInfoCardList from "@/components/dashboard/DashboardInfoCardList/DashboardInfoCardList";
 import TopActionBar from "@/components/dashboard/TopActionBar/TopActionBar";
 import EventTicketTable from "@/components/pages/Dashboard/Tickets/EventTicketTable/EventTicketTable";
@@ -27,9 +28,11 @@ export default function DashboardTicketsPage() {
     <div className="space-y-4 p-5">
       <TopActionBar>
         <div className="flex items-center gap-4">
-          <Button size="lg" variant="primary">
-            Add Event Ticket
-          </Button>
+          <CreateEventTicketDialog>
+            <Button size="lg" variant="primary">
+              Add Event Ticket
+            </Button>
+          </CreateEventTicketDialog>
         </div>
       </TopActionBar>
       <DashboardInfoCardList data={infoCards} />

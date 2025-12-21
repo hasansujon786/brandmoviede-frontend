@@ -1,15 +1,13 @@
-import SaleDistributionChart from "@/components/pages/Dashboard/Analytics/SaleDistributionChart/SaleDistributionChart";
-import TopActionBar from "@/components/dashboard/TopActionBar/TopActionBar";
 import DashboardInfoCardList from "@/components/dashboard/DashboardInfoCardList/DashboardInfoCardList";
+import MonthlyRevenueChart from "@/components/pages/Dashboard/Analytics/MonthlyRevenueChart/MonthlyRevenueChart";
+import SaleDistributionChart from "@/components/pages/Dashboard/Analytics/SaleDistributionChart/SaleDistributionChart";
+import TopPerformingEvents from "@/components/pages/Dashboard/Analytics/TopPerformingEvents/TopPerformingEvents";
 import {
-  PeopleWithCirclIcon,
-  TwoPeoplesIcon,
+    PeopleWithCirclIcon,
+    TwoPeoplesIcon,
 } from "@/components/shared/icons/PeoplesIcon";
 import { PercentageIcon } from "@/components/shared/icons/PercentageIcon";
 import { TrafficIcon } from "@/components/shared/icons/TrafficIcon";
-import { Button } from "@/components/ui/button";
-import MonthlyRevenueChart from "@/components/pages/Dashboard/Analytics/MonthlyRevenueChart/MonthlyRevenueChart";
-import TopPerformingEvents from "@/components/pages/Dashboard/Analytics/TopPerformingEvents/TopPerformingEvents";
 
 export default function DashboardAnalyticsPage() {
   const infoCards = [
@@ -25,16 +23,6 @@ export default function DashboardAnalyticsPage() {
 
   return (
     <div className="space-y-4 p-5">
-      <TopActionBar>
-        <div className="flex items-center gap-4">
-          <Button size="lg" variant="primary-inverse">
-            Add Event
-          </Button>
-          <Button size="lg" variant="primary">
-            Add Coin Bundle
-          </Button>
-        </div>
-      </TopActionBar>
       <DashboardInfoCardList data={infoCards} />
 
       <section>
