@@ -5,7 +5,6 @@ import CalenderIcon from "../icons/CalenderIcon";
 import LocationPinIcon from "../icons/LocationPinIcon";
 import PeoplesIcon from "../icons/PeoplesIcon";
 import { TicketBadge, TicketStatus } from "../Pill/Pill";
-import { ContainerSize } from "@/components/ui/tw-utils";
 
 interface TicketCardProps {
   id: string;
