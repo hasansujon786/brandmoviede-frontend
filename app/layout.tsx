@@ -3,6 +3,8 @@ import { Inter_Tight, Bricolage_Grotesque } from "next/font/google";
 import "./globals.css";
 
 import { TwScreenSize } from "@/components/ui/tw-utils";
+import { Provider } from "react-redux";
+import { store } from "@/redux/store";
 
 const interTight = Inter_Tight({
   variable: "--font-inter-tight-sans",
@@ -30,7 +32,7 @@ export default function RootLayout({
       <body
         className={`${interTight.className} ${bricolageGrotesque.variable} antialiased`}
       >
-        {children}
+        <Provider store={store}>{children}</Provider>
         <TwScreenSize />
       </body>
     </html>

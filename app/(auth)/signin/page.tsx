@@ -12,12 +12,43 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+// import { useLoginMutation } from "@/redux/features/auth/authApi";
+// import { setCredentials } from "@/redux/features/auth/authSlice";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 
 export default function SignInPage() {
+  // const dispatch = useDispatch();
+  // const [login, { isLoading: isLoginLoading }] = useLoginMutation();
+  //
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      // const userData = await login({
+      //   email: "admin1@gmail.com",
+      //   password: "Admin123",
+      // }).unwrap();
+      // dispatch(setCredentials({ ...userData }));
+      //navigate("/welcome");
+    } catch (err) {
+      console.error("errrr", err);
+      // if (!err?.originalStatus) {
+      //   // isLoading: true until timeout occurs
+      //   setErrMsg("No Server Response");
+      // } else if (err.originalStatus === 400) {
+      //   setErrMsg("Missing Username or Password");
+      // } else if (err.originalStatus === 401) {
+      //   setErrMsg("Unauthorized");
+      // } else {
+      //   setErrMsg("Login Failed");
+      // }
+    }
+  };
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
@@ -57,6 +88,15 @@ export default function SignInPage() {
               Welcome back! Please sign in to continue
             </CardDescription>
           </CardHeader>
+
+          <Button
+            disabled={isLoginLoading}
+            variant="primary"
+            className="w-full"
+            onClick={handleFormSubmit}
+          >
+            {isLoginLoading ? "Signing In..." : "Sign In"}
+          </Button>
 
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
