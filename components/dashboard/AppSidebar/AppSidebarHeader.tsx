@@ -18,7 +18,7 @@ import { Button } from "@/components/ui/button";
 
 export default function AppSidebarHeader() {
   return (
-    <header className="border-sidebar-border flex h-20 items-center justify-between border-b bg-white px-4">
+    <header className="border-sidebar-border sticky top-0 z-100 flex h-20 items-center justify-between border-b bg-white px-4">
       <div className="text-heading-100 flex items-center gap-2">
         <SidebarTrigger />
         <h3 className="font-heading text-2xl font-medium">Dashboard</h3>
@@ -56,7 +56,7 @@ export default function AppSidebarHeader() {
               <ChevronDown className="text-heading-100 size-6" />
             </div>
           </DropdownMenuTrigger>
-          <DropdownMenuContent>
+          <DropdownMenuContent className="relative z-100">
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>Profile</DropdownMenuItem>
