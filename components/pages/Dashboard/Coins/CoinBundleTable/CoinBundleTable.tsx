@@ -1,95 +1,26 @@
 "use client";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ColumnDef } from "@tanstack/react-table";
-import { Badge } from "@/components/ui/badge";
-import { DataTable, Pagenation } from "@/components/shared/DataTable/DataTable";
-import { ChevronDown } from "@/components/shared/icons/chevron";
-import { createGetVarient } from "@/lib/utils/varients";
-import { Button } from "@/components/ui/button";
-import { TrushIcon } from "@/components/shared/icons/TrushIcon";
-import { PenIcon } from "@/components/shared/icons/PenIcon";
-import { EyeIcon } from "@/components/shared/icons/EyeIcon";
+import TimeRangeSelector from "@/components/shared/TimeRangeSelector/TimeRangeSelector";
+import { CardHeader, CardTitle } from "@/components/ui/card";
+import { useState } from "react";
+import CoinManagementTable, { PackageItem } from "./CoinManagementTable";
 
-export const statusVariantMap = {
-  Active: "info",
-  Inactive: "brown",
-} as const;
-const getStatusVariant = createGetVarient(statusVariantMap, "info");
+export default function CoinBundleTable() {
+  const data = getData();
+  const [timeRange, setTimeRange] = useState("90d");
 
-export type PackageStatus = keyof typeof statusVariantMap;
-export interface PackageItem {
-  packageName: number;
-  coinsAmount: string;
-  price: number;
-  totalSales: number;
-  status: PackageStatus;
+  return (
+    <CoinManagementTable
+      header={
+        <CardHeader className="flex items-center gap-2">
+          <CardTitle>Coins Bundle</CardTitle>
+
+          <TimeRangeSelector value={timeRange} onValueChange={setTimeRange} />
+        </CardHeader>
+      }
+      data={data}
+    />
+  );
 }
-
-export const columns: ColumnDef<PackageItem>[] = [
-  {
-    accessorKey: "packageName",
-    header: "Package Name",
-  },
-  {
-    accessorKey: "coinsAmount",
-    header: "Coins Amount",
-  },
-  {
-    accessorKey: "price",
-    header: "Price",
-  },
-  {
-    accessorKey: "totalSales",
-    header: "Total Sales",
-  },
-  {
-    accessorKey: "status",
-    header: "Status",
-    cell: ({ row }) => {
-      const status = row?.original?.status;
-      const varient = getStatusVariant(status);
-
-      return (
-        <Badge variant={varient}>
-          <span>{status}</span>
-          <ChevronDown />
-        </Badge>
-      );
-    },
-  },
-  {
-    header: "Actions",
-    cell: () => {
-      return (
-        <div className="flex gap-2">
-          <Button
-            className="border-primary-200 text-primary-400 hover:border-primary-400 rounded-md"
-            variant="primary-secondary"
-            size="icon-sm"
-          >
-            <EyeIcon className="size-4" />
-          </Button>
-
-          <Button
-            className="border-primary-200 text-primary-400 hover:border-primary-400 rounded-md"
-            variant="primary-secondary"
-            size="icon-sm"
-          >
-            <PenIcon className="size-4" />
-          </Button>
-
-          <Button
-            className="border-primary-200 text-primary-400 hover:border-primary-400 rounded-md"
-            variant="primary-secondary"
-            size="icon-sm"
-          >
-            <TrushIcon className="size-4" />
-          </Button>
-        </div>
-      );
-    },
-  },
-];
 
 export function getData() {
   const packages: PackageItem[] = [
@@ -152,29 +83,4 @@ export function getData() {
   ];
 
   return packages;
-}
-
-export default function CoinBundleTable() {
-  const data = getData();
-  return (
-    <section className="space-y-3">
-      <Card>
-        <CardHeader>
-          <CardTitle>Coins Bundle</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <DataTable
-            columns={columns}
-            data={data}
-            config={{
-              borderColor: "#F8C0CC",
-              headerClass: "bg-primary hover:bg-primary",
-            }}
-          />
-        </CardContent>
-      </Card>
-
-      <Pagenation />
-    </section>
-  );
 }

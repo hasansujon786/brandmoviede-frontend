@@ -1,9 +1,11 @@
 "use client";
 import { DataTable, Pagenation } from "@/components/shared/DataTable/DataTable";
+import TimeRangeSelector from "@/components/shared/TimeRangeSelector/TimeRangeSelector";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { createGetVarient } from "@/lib/utils/varients";
 import { ColumnDef } from "@tanstack/react-table";
+import { useState } from "react";
 
 export const statusVariantMap = {
   Active: "info",
@@ -129,11 +131,14 @@ export function getData() {
 
 export default function AllCoinPurchaseTable() {
   const data = getData();
+  const [timeRange, setTimeRange] = useState("90d");
+
   return (
     <section className="space-y-3">
       <Card>
-        <CardHeader>
+        <CardHeader className="flex items-center gap-2">
           <CardTitle>All Coin Purchase</CardTitle>
+          <TimeRangeSelector value={timeRange} onValueChange={setTimeRange} />
         </CardHeader>
         <CardContent>
           <DataTable

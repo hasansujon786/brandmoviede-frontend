@@ -1,10 +1,18 @@
 "use client";
 
 import { DataTable, Pagenation } from "@/components/shared/DataTable/DataTable";
+import TimeRangeSelector from "@/components/shared/TimeRangeSelector/TimeRangeSelector";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  InputGroup,
+  InputGroupInput,
+  InputGroupAddon,
+} from "@/components/ui/input-group";
 import { createGetVarient } from "@/lib/utils/varients";
 import { ColumnDef } from "@tanstack/react-table";
+import { SearchIcon } from "lucide-react";
+import { useState } from "react";
 
 export const statusVariantMap = {
   Active: "info",
@@ -132,12 +140,28 @@ export function getData() {
 
 export default function EventTicketPurchaseTable() {
   const data = getData();
+  const [timeRange, setTimeRange] = useState("90d");
+
   return (
     <section className="space-y-3">
       <Card>
-        <CardHeader>
-          <CardTitle>Event Ticket</CardTitle>
+        <CardHeader className="flex items-center justify-between gap-2">
+          <CardTitle>Event Ticket Purchase</CardTitle>
+
+          <div className="flex items-center gap-4">
+            <InputGroup className="h-12 w-60 rounded-2xl border-[#FFEBF8] bg-white">
+              <InputGroupInput
+                placeholder="Search..."
+                className="placeholder:text-[#D2D2D5]"
+              />
+              <InputGroupAddon>
+                <SearchIcon className="text-[#A5A5AB]" />
+              </InputGroupAddon>
+            </InputGroup>
+            <TimeRangeSelector value={timeRange} onValueChange={setTimeRange} />
+          </div>
         </CardHeader>
+
         <CardContent>
           <DataTable
             columns={columns}

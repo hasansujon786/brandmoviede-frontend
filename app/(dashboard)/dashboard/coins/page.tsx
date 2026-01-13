@@ -3,6 +3,7 @@ import DashboardInfoCardList from "@/components/dashboard/DashboardInfoCardList/
 import TopActionBar from "@/components/dashboard/TopActionBar/TopActionBar";
 import AllCoinPurchaseTable from "@/components/pages/Dashboard/Coins/AllCoinPurchaseTable/AllCoinPurchaseTable";
 import CoinBundleTable from "@/components/pages/Dashboard/Coins/CoinBundleTable/CoinBundleTable";
+import SingleCoinTable from "@/components/pages/Dashboard/Coins/CoinBundleTable/SingleCoinTable";
 import { CoinExchangeIcon } from "@/components/shared/icons/CoinIcon";
 import { CreditCardExchangeIcon } from "@/components/shared/icons/CreditCardIcon";
 import FireIcon from "@/components/shared/icons/FireIcon";
@@ -47,6 +48,8 @@ export default function DashboardCoinsPage() {
       <DashboardInfoCardList data={infoCards} />
 
       <section className="space-y-8">
+        <SingleCoinTable />
+
         <CoinBundleTable />
 
         <AllCoinPurchaseTable />
