@@ -2,6 +2,7 @@ import { TicketIcon } from "@/components/dashboard/AppSidebar/AppSidebarIcons";
 import CreateEventTicketDialog from "@/components/dashboard/CreateEventTicketDialog/CreateEventTicketDialog";
 import DashboardInfoCardList from "@/components/dashboard/DashboardInfoCardList/DashboardInfoCardList";
 import TopActionBar from "@/components/dashboard/TopActionBar/TopActionBar";
+import EventTicketPurchaseTable from "@/components/pages/Dashboard/Tickets/EventTicketPurchaseTable/EventTicketPurchaseTable";
 import EventTicketTable from "@/components/pages/Dashboard/Tickets/EventTicketTable/EventTicketTable";
 import { CreditCardExchangeIcon } from "@/components/shared/icons/CreditCardIcon";
 import { MessageWitPipeIcon } from "@/components/shared/icons/MessageIcon";
@@ -37,7 +38,10 @@ export default function DashboardTicketsPage() {
       </TopActionBar>
       <DashboardInfoCardList data={infoCards} />
 
-      <EventTicketTable />
+      <section className="space-y-8">
+        <EventTicketTable />
+        <EventTicketPurchaseTable />
+      </section>
     </div>
   );
 }
