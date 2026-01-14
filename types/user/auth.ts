@@ -6,9 +6,9 @@ export interface ILoginParams {
 export interface ILoginPayload {
   success: boolean;
   message: string;
-  type: string; // User Role
+  type: string; // User Role: admin | user
   authorization: {
-    type: string;
+    type: string; // auth type such as: bearer
     access_token: string;
     refresh_token: string;
   };
@@ -16,7 +16,13 @@ export interface ILoginPayload {
 
 export interface IAuthUser {
   id: string;
-  email: string;
   name: string;
-  role: string;
+  email: string;
+  avatar: string | null;
+  address: string | null;
+  phone_number: string | null;
+  type: "user" | "admin"; // User Role
+  gender: "male" | "female" | "other" | null;
+  date_of_birth: string | null; // ISO date string
+  created_at: string; // ISO datetime string
 }

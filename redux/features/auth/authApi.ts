@@ -1,16 +1,16 @@
-import { apiSlice } from "@/redux/api/baseApi";
-import { ILoginParams, ILoginPayload } from "@/types/user/auth";
+import { baseApi } from "@/redux/api/baseApi";
+import type { IAuthUser, WithStatus } from "@/types";
 
-export const authApiSlice = apiSlice.injectEndpoints({
+const webhookApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    login: builder.mutation<ILoginPayload, ILoginParams>({
-      query: (credentials) => ({
-        url: "/auth/login",
-        method: "POST",
-        body: { ...credentials },
-      }),
+    getMe: builder.query<IAuthUser, void>({
+      query: () => `/auth/me`,
+      providesTags: ["Auth"] as const,
+      transformResponse: (response: WithStatus<IAuthUser>) => response.data,
     }),
   }),
+  overrideExisting: false,
 });
 
-export const { useLoginMutation } = authApiSlice;
+export const { useGetMeQuery } = webhookApi;
+export default webhookApi;

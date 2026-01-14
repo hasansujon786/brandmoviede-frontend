@@ -1,12 +1,20 @@
-import { BaseQueryFn, createApi, FetchArgs, fetchBaseQuery, FetchBaseQueryError } from "@reduxjs/toolkit/query/react";
+import {
+  BaseQueryFn,
+  createApi,
+  FetchArgs,
+  fetchBaseQuery,
+  FetchBaseQueryError,
+} from "@reduxjs/toolkit/query/react";
 import { logOut, setCredentials } from "../features/auth/authSlice";
 import constants from "@/constant";
+import { ILoginPayload, ILoginParams } from "@/types/user/auth";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: constants.baseApiUrl,
-  credentials: "include",
+  // credentials: "include",
   prepareHeaders: (headers, { getState }) => {
-    const token = getState().auth.token;
+    // Setting header on every API call
+    const token = getState()?.auth?.token;
     // const token = (getState() as { auth: AuthState }).auth.token;
     if (token) {
       headers.set("authorization", `Bearer ${token}`);
@@ -15,10 +23,14 @@ const baseQuery = fetchBaseQuery({
   },
 });
 
-const baseQueryWithReauth: BaseQueryFn<string|FetchArgs,unknown,FetchBaseQueryError> = async (args, api, extraOptions) => {
+const baseQueryWithReauth: BaseQueryFn<
+  string | FetchArgs,
+  unknown,
+  FetchBaseQueryError
+> = async (args, api, extraOptions) => {
   let result = await baseQuery(args, api, extraOptions);
 
-  if (result?.error?.originalStatus === 403) {
+  if (result?.error?.originalStatus === 403 || result?.error?.status === 403) {
     console.log("sending refresh token");
     // send refresh token to get new access token
     const refreshResult = await baseQuery("/refresh", api, extraOptions);
@@ -37,7 +49,28 @@ const baseQueryWithReauth: BaseQueryFn<string|FetchArgs,unknown,FetchBaseQueryEr
   return result;
 };
 
-export const apiSlice = createApi({
+export const baseApi = createApi({
+  reducerPath: "baseApi",
   baseQuery: baseQueryWithReauth,
-  endpoints: (builder) => ({}),
+  tagTypes: ["Auth"] as const,
+  endpoints: (builder) => ({
+    login: builder.mutation<ILoginPayload, ILoginParams>({
+      query: (credentialParams) => ({
+        url: "/auth/login",
+        method: "POST",
+        body: credentialParams,
+      }),
+      onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
+        try {
+          const { data } = await queryFulfilled;
+          const token = data?.authorization?.access_token;
+          dispatch(setCredentials({ token }));
+        } catch (error) {
+          console.error("Login mutation error:", error);
+        }
+      },
+    }),
+  }),
 });
+
+export const { useLoginMutation } = baseApi;

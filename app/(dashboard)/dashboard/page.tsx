@@ -3,15 +3,15 @@ import {
   DoubleCoinIcon,
   TicketIcon,
 } from "@/components/dashboard/AppSidebar/AppSidebarIcons";
-import SalesAnalyticsChart from "@/components/pages/Dashboard/Home/SalesAnalyticsChart/SalesAnalyticsChart";
-import RecentOrderList from "@/components/pages/Dashboard/Home/RecentOrderList/RecentOrderList";
-import UserActivityChart from "@/components/pages/Dashboard/Home/UserActivityChart/UserActivityChart";
-import TopActionBar from "@/components/dashboard/TopActionBar/TopActionBar";
-import DashboardInfoCardList from "@/components/dashboard/DashboardInfoCardList/DashboardInfoCardList";
-import { TwoPeoplesIcon } from "@/components/shared/icons/PeoplesIcon";
-import { Button } from "@/components/ui/button";
 import CreateCoinBundleDialog from "@/components/dashboard/CreateCoinBundleDialog/CreateCoinBundleDialog";
 import CreateEventTicketDialog from "@/components/dashboard/CreateEventTicketDialog/CreateEventTicketDialog";
+import DashboardInfoCardList from "@/components/dashboard/DashboardInfoCardList/DashboardInfoCardList";
+import TopActionBar from "@/components/dashboard/TopActionBar/TopActionBar";
+import RecentOrderList from "@/components/pages/Dashboard/Home/RecentOrderList/RecentOrderList";
+import SalesAnalyticsChart from "@/components/pages/Dashboard/Home/SalesAnalyticsChart/SalesAnalyticsChart";
+import UserActivityChart from "@/components/pages/Dashboard/Home/UserActivityChart/UserActivityChart";
+import { TwoPeoplesIcon } from "@/components/shared/icons/PeoplesIcon";
+import { Button } from "@/components/ui/button";
 
 export default function DashboardHomePage() {
   const infoCards = [

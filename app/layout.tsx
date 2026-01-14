@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { Inter_Tight, Bricolage_Grotesque } from "next/font/google";
+import { Bricolage_Grotesque, Inter_Tight } from "next/font/google";
 import "./globals.css";
 
 import { TwScreenSize } from "@/components/ui/tw-utils";
-import { Provider } from "react-redux";
-import { store } from "@/redux/store";
+import StoreProvider from "@/redux/StoreProvider";
+import AuthProvider from "@/redux/features/auth/AuthProvider";
 
 const interTight = Inter_Tight({
   variable: "--font-inter-tight-sans",
@@ -32,7 +32,9 @@ export default function RootLayout({
       <body
         className={`${interTight.className} ${bricolageGrotesque.variable} antialiased`}
       >
-        <Provider store={store}>{children}</Provider>
+        <StoreProvider>
+          <AuthProvider>{children}</AuthProvider>
+        </StoreProvider>
         <TwScreenSize />
       </body>
     </html>

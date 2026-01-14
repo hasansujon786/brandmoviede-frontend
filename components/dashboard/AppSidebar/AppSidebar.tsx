@@ -11,8 +11,10 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { useAuth } from "@/redux/features/auth/hooks";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   AnalyticsIcon,
   DashboardIcon,
@@ -21,7 +23,6 @@ import {
   SignOutIcon,
   TicketIcon,
 } from "./AppSidebarIcons";
-import { usePathname } from "next/navigation";
 
 const links = [
   { title: "Dashboard", icon: DashboardIcon, url: "/dashboard" },
@@ -45,6 +46,7 @@ const links = [
 
 export function AppSidebar() {
   const pathname = usePathname();
+  const { logOut } = useAuth();
 
   return (
     <Sidebar>
@@ -95,7 +97,7 @@ export function AppSidebar() {
           size="lg"
           asChild
         >
-          <Link href="#">
+          <Link onClick={logOut} href="#">
             <span>
               <SignOutIcon className="size-6" />
             </span>
