@@ -1,18 +1,21 @@
+"use client";
+
+import Avatar from "@/components/shared/Avatar/Avatar";
 import { Button } from "@/components/ui/button";
 import { Field, FieldGroup, FieldLabel, FieldSet } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { User } from "lucide-react";
+import { useGetMeQuery } from "@/redux/features/auth/authApi";
 
 export default function ProfileSettings() {
+  const { data } = useGetMeQuery();
+
   return (
     <div className="bg-card rounded-2xl px-4 py-4 lg:py-8">
       <div className="flex items-center gap-6">
-        <div className="bg-primary-50 text-primary flex size-16 items-center justify-center rounded-full">
-          <User className="size-8" />
-        </div>
+        <Avatar avatar={data?.avatar} />
         <div className="space-y-1">
-          <p className="text-heading-100 text-base font-medium">John Doe</p>
-          <p className="text-sm text-[#717182]">john.doe@example.com</p>
+          <p className="text-heading-100 text-base font-medium">{data?.name}</p>
+          <p className="text-sm text-[#717182]">{data?.email}</p>
         </div>
       </div>
 

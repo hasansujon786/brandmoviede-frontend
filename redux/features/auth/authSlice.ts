@@ -1,9 +1,7 @@
-import { RootState, useAppDispatch, useAppSelector } from "@/redux/store";
-import { IAuthUser, ILoginPayload } from "@/types/user/auth";
+import { RootState } from "@/redux/store";
+import { IAuthUser } from "@/types/user/auth";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import Cookies from "js-cookie";
-import { useEffect } from "react";
-import { useSelector } from "react-redux";
 
 interface AuthState {
   user: IAuthUser | null;

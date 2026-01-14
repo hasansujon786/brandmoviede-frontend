@@ -11,7 +11,7 @@ import { ILoginPayload, ILoginParams } from "@/types/user/auth";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: constants.baseApiUrl,
-  // credentials: "include",
+  credentials: "include",
   prepareHeaders: (headers, { getState }) => {
     // Setting header on every API call
     const token = getState()?.auth?.token;
@@ -52,7 +52,7 @@ const baseQueryWithReauth: BaseQueryFn<
 export const baseApi = createApi({
   reducerPath: "baseApi",
   baseQuery: baseQueryWithReauth,
-  tagTypes: ["Auth"] as const,
+  tagTypes: ["Auth", "Coin"] as const,
   endpoints: (builder) => ({
     login: builder.mutation<ILoginPayload, ILoginParams>({
       query: (credentialParams) => ({

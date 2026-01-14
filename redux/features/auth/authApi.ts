@@ -1,7 +1,7 @@
 import { baseApi } from "@/redux/api/baseApi";
 import type { IAuthUser, WithStatus } from "@/types";
 
-const webhookApi = baseApi.injectEndpoints({
+const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getMe: builder.query<IAuthUser, void>({
       query: () => `/auth/me`,
@@ -12,5 +12,5 @@ const webhookApi = baseApi.injectEndpoints({
   overrideExisting: false,
 });
 
-export const { useGetMeQuery } = webhookApi;
-export default webhookApi;
+export const { useGetMeQuery } = authApi;
+export default authApi;

@@ -8,7 +8,7 @@ export default function HomePage() {
   return (
     <div>
       <Hero />
-      <Shop  />
+      <Shop />
       <OurPartner />
       <ChooseUs />
       <Benefits />

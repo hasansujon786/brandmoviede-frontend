@@ -1,21 +1,27 @@
 "use client";
 
 import { Pagenation } from "@/components/shared/DataTable/DataTable";
-import { useCardRevealAnimation } from "@/components/shared/Dobi/Dobi";
 import SectionHeading from "@/components/shared/SectionHeading/SectionHeading";
-import ShopCard from "@/components/shared/ShopCard/ShopCard";
+import ShopCard, {
+  ShopCardSkeleton,
+} from "@/components/shared/ShopCard/ShopCard";
 import { cn } from "@/lib/utils";
+import { useGetAllCoinBundlesQuery } from "@/redux/features/coin/appCoinApis";
 
 interface ShopProps extends React.ComponentProps<"section"> {
   showPagination?: boolean;
 }
 
 export default function Shop({ className, showPagination }: ShopProps) {
-  useCardRevealAnimation(".shop");
+  // useCardRevealAnimation(".shop");
+  const { data: coinBundles, isLoading } = useGetAllCoinBundlesQuery();
 
   return (
     <section
-      className={cn("shop slide-scope custom-container py-10 lg:py-20", className)}
+      className={cn(
+        "shop _slide-scope custom-container py-10 lg:py-20",
+        className,
+      )}
     >
       <SectionHeading
         h2
@@ -26,12 +32,15 @@ export default function Shop({ className, showPagination }: ShopProps) {
         Sugo <span className="text-primary">Coin</span> Shop
       </SectionHeading>
       <div className="mt-14 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        <ShopCard />
-        <ShopCard />
-        <ShopCard />
-        <ShopCard />
-        <ShopCard />
-        <ShopCard />
+        {isLoading
+          ? Array.from({ length: 6 }).map((_, index) => (
+              <ShopCardSkeleton key={index} />
+            ))
+          : Array.isArray(coinBundles)
+            ? coinBundles?.map((coinBundle) => (
+                <ShopCard coin={coinBundle} key={coinBundle.id} />
+              ))
+            : null}
       </div>
 
       {showPagination && (
