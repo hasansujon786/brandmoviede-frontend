@@ -1,24 +1,24 @@
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { config } from "@/constant";
+import { ICoin } from "@/types/coin/coin";
 import Image from "next/image";
 import Link from "next/link";
 import CounterButton from "../CounterButton/CounterButton";
-import { ICoin } from "@/types/coin/coin";
 
 export default function ShopCard({ coin }: { coin: ICoin }) {
   return (
     <div className="bg-card rounded-2lg slide-up p-2">
       <Link
-        href="/bundles/bundle-id"
-        className="outline-primary block aspect-[0.96010] w-full overflow-hidden rounded-md bg-red-300 focus-visible:outline-2 focus-visible:outline-offset-4"
+        href={`/bundles/${coin?.id}`}
+        className="outline-primary block aspect-[0.96010] w-full overflow-hidden rounded-md focus-visible:outline-2 focus-visible:outline-offset-4"
       >
         <Image
-          // src={coin.thumbnail_url}
-          src="http://192.168.7.42:4008/public/storage/coin/mjtodpshannie-spratt-vI-uFNolpLA-unsplash.jpg"
+          src={coin.thumbnail_url}
           width={360}
           height={360}
           alt=""
-          unoptimized
+          unoptimized={config.imageUnoptimized}
           className="border-card h-full w-full bg-gray-100 object-cover"
         />
       </Link>
