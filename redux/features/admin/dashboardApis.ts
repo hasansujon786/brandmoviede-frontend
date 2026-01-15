@@ -1,7 +1,11 @@
 import { createQueryParams } from "@/lib/utils/formatters";
 import { baseApi } from "@/redux/api/baseApi";
 import type { IPaginationParams, WithStatus } from "@/types";
-import { IOrderItem, IOverviewStats } from "@/types/admin/dashboard";
+import {
+  IOrderItem,
+  IOverviewStats,
+  ISalesAnalyticsChartData,
+} from "@/types/admin/dashboard";
 
 const dashboardApis = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -20,10 +24,19 @@ const dashboardApis = baseApi.injectEndpoints({
       transformResponse: (response: WithStatus<IOverviewStats>) =>
         response.data,
     }),
+    getSalesAnalyticsChartData: builder.query<ISalesAnalyticsChartData, void>({
+      query: () => `/admin/overview/sales-analytics?period=lastMonth`,
+      providesTags: ["Dashboard"] as const,
+      transformResponse: (response: WithStatus<ISalesAnalyticsChartData>) =>
+        response.data,
+    }),
   }),
   overrideExisting: false,
 });
 
-export const { useGetRecentOrdersQuery, useGetOverviewStatsQuery } =
-  dashboardApis;
+export const {
+  useGetRecentOrdersQuery,
+  useGetOverviewStatsQuery,
+  useGetSalesAnalyticsChartDataQuery,
+} = dashboardApis;
 export default dashboardApis;

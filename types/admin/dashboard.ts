@@ -16,3 +16,9 @@ export interface IOverviewStats {
   total_ticket_sold: number;
   total_revenue: number;
 }
+
+export type ISalesAnalyticsChartData = ISalesAnalyticsChartItem[];
+export interface ISalesAnalyticsChartItem {
+  label: string;
+  value: number;
+}

@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/select";
 import { TrendingUp } from "lucide-react";
 import TimeRangeSelector from "@/components/shared/TimeRangeSelector/TimeRangeSelector";
+import { useGetSalesAnalyticsChartDataQuery } from "@/redux/api";
 
 export const description = "An interactive area chart";
 
@@ -53,6 +54,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export default function SalesAnalyticsChart() {
+  const { data, isLoading } = useGetSalesAnalyticsChartDataQuery();
   const [timeRange, setTimeRange] = React.useState("90d");
 
   const filteredData = chartData.filter((item) => {
