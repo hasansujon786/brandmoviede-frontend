@@ -52,7 +52,7 @@ const baseQueryWithReauth: BaseQueryFn<
 export const baseApi = createApi({
   reducerPath: "baseApi",
   baseQuery: baseQueryWithReauth,
-  tagTypes: ["Auth", "Coin"] as const,
+  tagTypes: ["Auth", "Coin", "Dashboard"] as const,
   endpoints: (builder) => ({
     login: builder.mutation<ILoginPayload, ILoginParams>({
       query: (credentialParams) => ({
