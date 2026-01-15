@@ -1,8 +1,8 @@
 "use client";
 
-import Link from "next/link";
-import { Menu, ShoppingCart, UserRound } from "lucide-react";
 import ConditionalWrapper from "@/components/shared/ConditionalWrapper/ConditionalWrapper";
+import { Menu, ShoppingCart, UserRound } from "lucide-react";
+import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -15,9 +15,10 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { usePathname } from "next/navigation";
-import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/redux/features/auth/hooks";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -26,13 +27,9 @@ const navLinks = [
   { label: "Support", href: "/support" },
 ];
 
-const actionLinks = [
-  { label: "Profile", href: "/profile", icon: UserRound },
-  { label: "Cart", href: "/cart", icon: ShoppingCart },
-];
-
 export default function Navbar() {
   const pathname = usePathname();
+
   return (
     <header className="fixed top-0 z-100 flex w-full md:top-3 md:px-3 lg:top-4 lg:px-4">
       <div className="bg-primary-50 mx-auto flex w-full items-center justify-between px-4 py-3 text-sm shadow-xs backdrop-blur sm:px-6 md:rounded-xl">
@@ -147,6 +144,15 @@ function ActionIcon({
 
 function ActionIcons(props: { isMobile: boolean }) {
   const pathname = usePathname();
+
+  const { isAuthenticated } = useAuth();
+
+  const actionLinks = [
+    ...(isAuthenticated
+      ? [{ label: "Profile", href: "/profile", icon: UserRound }]
+      : []),
+    { label: "Cart", href: "/cart", icon: ShoppingCart },
+  ];
 
   return (
     <>

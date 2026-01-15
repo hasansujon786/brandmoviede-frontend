@@ -1,3 +1,5 @@
+"use client";
+
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import {
   InputGroup,
@@ -15,6 +17,8 @@ import {
 import { Bell, SearchIcon } from "lucide-react";
 import { ChevronDown } from "@/components/shared/icons/chevron";
 import { Button } from "@/components/ui/button";
+import { useGetMeQuery } from "@/redux/api";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function AppSidebarHeader() {
   return (
@@ -47,12 +51,7 @@ export default function AppSidebarHeader() {
         <DropdownMenu>
           <DropdownMenuTrigger>
             <div className="flex items-center gap-2">
-              <div className="flex flex-col text-left whitespace-nowrap">
-                <span className="text-heading-100 text-base font-medium">
-                  James Wilson
-                </span>
-                <span className="text-xs">Agency Manager</span>
-              </div>
+              <UserInfo />
               <ChevronDown className="text-heading-100 size-6" />
             </div>
           </DropdownMenuTrigger>
@@ -69,3 +68,25 @@ export default function AppSidebarHeader() {
     </header>
   );
 }
+
+const UserInfo = () => {
+  const { data, isLoading } = useGetMeQuery();
+
+  if (isLoading) {
+    return (
+      <div className="space-y-2">
+        <Skeleton className="h-3 w-[100px]" />
+        <Skeleton className="h-2 w-20" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col text-left whitespace-nowrap">
+      <span className="text-heading-100 text-base font-medium">
+        {data?.name}
+      </span>
+      <span className="text-xs capitalize">{data?.type}</span>
+    </div>
+  );
+};
