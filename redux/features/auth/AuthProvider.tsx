@@ -5,6 +5,7 @@ import Cookies from "js-cookie";
 import { PropsWithChildren, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { selectCurrentToken, setCredentials } from "./authSlice";
+import { IAuthUserRole } from "@/types";
 
 function useInitiateAuthState() {
   const dispatch = useAppDispatch();
@@ -12,7 +13,9 @@ function useInitiateAuthState() {
   const isAppLoading = token === false;
 
   useEffect(() => {
-    const [savedToken] = ["token"].map((key) => Cookies.get(key));
+    const [savedToken, savedRole] = ["token", "role"].map((key) =>
+      Cookies.get(key),
+    );
 
     // TODO: get authuer here
     // let initialUser: IAuthUser | null = null;
@@ -24,7 +27,12 @@ function useInitiateAuthState() {
     //   }
     // }
 
-    dispatch(setCredentials({ token: savedToken || null }));
+    dispatch(
+      setCredentials({
+        token: savedToken || null,
+        role: (savedRole as IAuthUserRole) || null,
+      }),
+    );
   }, [dispatch]);
 
   return { isAppLoading };

@@ -1,12 +1,17 @@
 import { useLoginMutation } from "@/redux/api/baseApi";
 import { useAppDispatch } from "@/redux/store";
-import { logOut as redusLogout, selectCurrentToken } from "./authSlice";
+import {
+  logOut as redusLogout,
+  selectCurrentRole,
+  selectCurrentToken,
+} from "./authSlice";
 import { useSelector } from "react-redux";
 
 export function useAuth() {
   const dispatch = useAppDispatch();
   const [logIn, ctx] = useLoginMutation();
   const token = useSelector(selectCurrentToken);
+  const role = useSelector(selectCurrentRole);
 
   function logOut() {
     dispatch(redusLogout());
@@ -35,6 +40,7 @@ export function useAuth() {
 
   return {
     token,
+    role,
     isAuthenticated: !!token,
     logIn,
     logOut,

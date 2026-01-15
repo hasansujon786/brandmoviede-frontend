@@ -64,7 +64,9 @@ export const baseApi = createApi({
         try {
           const { data } = await queryFulfilled;
           const token = data?.authorization?.access_token;
-          dispatch(setCredentials({ token }));
+          const role = data?.type;
+
+          dispatch(setCredentials({ token, role }));
         } catch (error) {
           console.error("Login mutation error:", error);
         }

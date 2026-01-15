@@ -3,10 +3,25 @@ export interface ILoginParams {
   password: string;
 }
 
+export type IAuthUserRole = "user" | "admin";
+export const RoleUtils = {
+  isAdmin: (role?: IAuthUserRole | null) => role === "admin",
+  isUser: (role?: IAuthUserRole | null) => role === "user",
+  isPublic: (role?: IAuthUserRole | null) => role == null,
+
+  hasRole: (
+    role: IAuthUserRole | null | undefined,
+    allowedRoles: IAuthUserRole[],
+  ): boolean => {
+    if (!role) return false;
+    return allowedRoles.includes(role);
+  },
+};
+
 export interface ILoginPayload {
   success: boolean;
   message: string;
-  type: string; // User Role: admin | user
+  type: IAuthUserRole; // User Role: admin | user
   authorization: {
     type: string; // auth type such as: bearer
     access_token: string;

@@ -1,8 +1,13 @@
+"use client";
+
+import { SignOutIcon } from "@/components/dashboard/AppSidebar/AppSidebarIcons";
+import ActiveTicket from "@/components/pages/Profile/Dashboard/ActiveTicket/ActiveTicket";
+import RecentOrders from "@/components/pages/Profile/Dashboard/RecentOrders/RecentOrders";
+import { TodoListChecked } from "@/components/shared/icons/CheckMark";
 import HeadsetIcon from "@/components/shared/icons/HeadsetIcon";
 import InfoCard from "@/components/shared/InfoCard/InfoCard";
-import { TodoListChecked } from "@/components/shared/icons/CheckMark";
-import RecentOrders from "@/components/pages/Profile/Dashboard/RecentOrders/RecentOrders";
-import ActiveTicket from "@/components/pages/Profile/Dashboard/ActiveTicket/ActiveTicket";
+import { Button } from "@/components/ui/button";
+import { useAuth } from "@/redux/features/auth/hooks";
 
 const infoCards = [
   {
@@ -18,8 +23,15 @@ const infoCards = [
 ];
 
 export default function ProfileDashboardPage() {
+  const { logOut } = useAuth();
+
   return (
     <div className="space-y-8">
+      <Button onClick={logOut}>
+        <SignOutIcon className="size-6" />
+        Log Out
+      </Button>
+
       <section className="@container">
         <div className="grid gap-4 lg:gap-6 @xs:grid-cols-2">
           {infoCards.map((item) => (

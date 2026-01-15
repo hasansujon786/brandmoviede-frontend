@@ -1,11 +1,11 @@
-import { SidebarProvider } from "@/components/ui/sidebar";
+import AdminRoute from "@/components/auth/AdminRoute";
 import { AppSidebar } from "@/components/dashboard/AppSidebar/AppSidebar";
 import AppSidebarHeader from "@/components/dashboard/AppSidebar/AppSidebarHeader";
-import ProtectedRoute from "@/components/auth/ProtectedRoute";
+import { SidebarProvider } from "@/components/ui/sidebar";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <ProtectedRoute>
+    <AdminRoute>
       <SidebarProvider>
         <AppSidebar />
         <main className="bg-background-2 w-full">
@@ -13,6 +13,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           {children}
         </main>
       </SidebarProvider>
-    </ProtectedRoute>
+    </AdminRoute>
   );
 }
