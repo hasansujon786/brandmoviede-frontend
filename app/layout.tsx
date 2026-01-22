@@ -5,6 +5,7 @@ import "./globals.css";
 import { TwScreenSize } from "@/components/ui/tw-utils";
 import StoreProvider from "@/redux/StoreProvider";
 import AuthProvider from "@/redux/features/auth/AuthProvider";
+import { Toaster } from "sonner";
 
 const interTight = Inter_Tight({
   variable: "--font-inter-tight-sans",
@@ -36,6 +37,7 @@ export default function RootLayout({
           <AuthProvider>{children}</AuthProvider>
         </StoreProvider>
         <TwScreenSize />
+        <Toaster />
       </body>
     </html>
   );

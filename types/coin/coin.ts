@@ -13,3 +13,9 @@ export interface ICoin {
   coin_amount: number;
   thumbnail_url: string;
 }
+
+export interface ICreateCoinParams {
+  price: number;
+  thumbnail: File;
+  coin_amount: number;
+}
