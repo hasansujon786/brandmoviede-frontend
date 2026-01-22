@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { createGetVarient } from "@/lib/utils/varients";
+import { IAdminCoinBundle } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
 import { ReactNode } from "react";
 
@@ -18,6 +19,8 @@ export const statusVariantMap = {
 const getStatusVariant = createGetVarient(statusVariantMap, "info");
 
 export type PackageStatus = keyof typeof statusVariantMap;
+
+// TODO: remove this pseudo type
 export interface PackageItem {
   packageName: number;
   coinsAmount: string;
@@ -26,13 +29,13 @@ export interface PackageItem {
   status: PackageStatus;
 }
 
-export const columns: ColumnDef<PackageItem>[] = [
+export const columns: ColumnDef<IAdminCoinBundle>[] = [
   {
-    accessorKey: "packageName",
+    accessorKey: "name",
     header: "Package Name",
   },
   {
-    accessorKey: "coinsAmount",
+    accessorKey: "coin_amount",
     header: "Coins Amount",
   },
   {
@@ -40,8 +43,9 @@ export const columns: ColumnDef<PackageItem>[] = [
     header: "Price",
   },
   {
-    accessorKey: "totalSales",
+    accessorKey: "total_sold",
     header: "Total Sales",
+    cell: ({ row }) => row?.original?.total_sold ?? 0,
   },
   {
     accessorKey: "status",
@@ -50,6 +54,7 @@ export const columns: ColumnDef<PackageItem>[] = [
       const status = row?.original?.status;
       const varient = getStatusVariant(status);
 
+      // TODO: Add select here
       return (
         <Badge variant={varient}>
           <span>{status}</span>
@@ -93,7 +98,7 @@ export const columns: ColumnDef<PackageItem>[] = [
 ];
 
 interface CoinBundleTableProps {
-  data: PackageItem[];
+  data: IAdminCoinBundle[];
   header: ReactNode;
 }
 

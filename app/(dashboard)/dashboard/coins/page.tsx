@@ -36,6 +36,7 @@ export default function DashboardCoinsPage() {
 
   return (
     <div className="space-y-4 p-5">
+      {/* // TODO: implement search inputs */}
       <TopActionBar>
         <div className="flex items-center gap-4">
           <CreateCoinBundleDialog>
@@ -45,7 +46,7 @@ export default function DashboardCoinsPage() {
           </CreateCoinBundleDialog>
         </div>
       </TopActionBar>
-      <DashboardInfoCardList data={infoCards} />
+      {/* <DashboardInfoCardList data={infoCards} /> */}
 
       <section className="space-y-8">
         <SingleCoinTable />

@@ -14,6 +14,17 @@ export interface ICoin {
   thumbnail_url: string;
 }
 
+export interface IAdminCoinBundle {
+  id: string;
+  name: string;
+  price: number;
+  coin_amount: number;
+  total_sold?: number;
+  status: string;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface ICreateCoinParams {
   price: number;
   thumbnail: File;
