@@ -32,9 +32,7 @@ export default function DashboardHomePage() {
         <div className="flex-1">
           <SalesAnalyticsChart />
         </div>
-        <div>
-          <RecentOrderList />
-        </div>
+        <RecentOrderList />
       </section>
 
       <section className="">

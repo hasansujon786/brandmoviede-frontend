@@ -22,3 +22,8 @@ export interface ISalesAnalyticsChartItem {
   label: string;
   value: number;
 }
+export type ISalesAnalyticsChartParams =
+  | "lastYear"
+  | "lastThreeMonth"
+  | "lastMonth"
+  | "lastSevenDay";

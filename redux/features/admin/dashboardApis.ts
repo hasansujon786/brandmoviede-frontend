@@ -5,7 +5,10 @@ import {
   IOrderItem,
   IOverviewStats,
   ISalesAnalyticsChartData,
+  ISalesAnalyticsChartParams,
 } from "@/types/admin/dashboard";
+
+import mock from "./mock.json";
 
 const dashboardApis = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -24,9 +27,14 @@ const dashboardApis = baseApi.injectEndpoints({
       transformResponse: (response: WithStatus<IOverviewStats>) =>
         response.data,
     }),
-    getSalesAnalyticsChartData: builder.query<ISalesAnalyticsChartData, void>({
-      query: () => `/admin/overview/sales-analytics?period=lastMonth`,
+    getSalesAnalyticsChartData: builder.query<
+      ISalesAnalyticsChartData,
+      { filtrBy: ISalesAnalyticsChartParams }
+    >({
+      query: ({ filtrBy }) =>
+        `/admin/overview/sales-analytics${createQueryParams({ period: filtrBy })}`,
       providesTags: ["Dashboard"] as const,
+      // mock["sales-analytics"].data,
       transformResponse: (response: WithStatus<ISalesAnalyticsChartData>) =>
         response.data,
     }),

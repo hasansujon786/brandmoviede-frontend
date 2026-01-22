@@ -3,48 +3,19 @@
 import * as React from "react";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import TimeRangeSelector from "@/components/shared/TimeRangeSelector/TimeRangeSelector";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   ChartContainer,
-  ChartLegend,
-  ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { TrendingUp } from "lucide-react";
-import TimeRangeSelector from "@/components/shared/TimeRangeSelector/TimeRangeSelector";
 import { useGetSalesAnalyticsChartDataQuery } from "@/redux/api";
+import { TrendingUp } from "lucide-react";
+import { ISalesAnalyticsChartParams } from "@/types/admin/dashboard";
 
 export const description = "An interactive area chart";
-
-const chartData = [
-  { date: "2024-04-01", month: "Jan", income: 520 },
-  { date: "2024-04-02", month: "Feb", income: 480 },
-  { date: "2024-04-02", month: "Mar", income: 610 },
-  { date: "2024-04-03", month: "Apr", income: 560 },
-  { date: "2024-04-04", month: "May", income: 720 },
-  { date: "2024-04-05", month: "Jun", income: 980 },
-  { date: "2024-04-05", month: "Jul", income: 760 },
-  { date: "2024-04-06", month: "Aug", income: 690 },
-  { date: "2024-04-07", month: "Sep", income: 820 },
-  { date: "2024-04-08", month: "Oct", income: 540 },
-  { date: "2024-04-09", month: "Nov", income: 460 },
-  { date: "2024-04-09", month: "Dec", income: 580 },
-];
 
 const chartConfig = {
   income: {
@@ -54,22 +25,12 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export default function SalesAnalyticsChart() {
-  const { data, isLoading } = useGetSalesAnalyticsChartDataQuery();
-  const [timeRange, setTimeRange] = React.useState("90d");
-
-  const filteredData = chartData.filter((item) => {
-    const date = new Date(item.date);
-    const referenceDate = new Date("2024-06-30");
-    let daysToSubtract = 90;
-    if (timeRange === "30d") {
-      daysToSubtract = 30;
-    } else if (timeRange === "7d") {
-      daysToSubtract = 7;
-    }
-    const startDate = new Date(referenceDate);
-    startDate.setDate(startDate.getDate() - daysToSubtract);
-    return date >= startDate;
+  const [timeRange, setTimeRange] =
+    React.useState<ISalesAnalyticsChartParams>("lastSevenDay");
+  const { data, isLoading } = useGetSalesAnalyticsChartDataQuery({
+    filtrBy: timeRange,
   });
+  // TODO: update x axis date depending on the timeRange selector
 
   return (
     <Card className="h-full">
@@ -84,7 +45,7 @@ export default function SalesAnalyticsChart() {
           config={chartConfig}
           className="aspect-auto h-[250px] w-full"
         >
-          <AreaChart data={filteredData}>
+          <AreaChart data={data}>
             <defs>
               <linearGradient id="fillIncome" x1="0" y1="0" x2="0" y2="1">
                 <stop
@@ -123,7 +84,7 @@ export default function SalesAnalyticsChart() {
               tickMargin={8}
             />
             <XAxis
-              dataKey="date"
+              dataKey="label"
               tickLine={false}
               axisLine={false}
               tickMargin={8}
@@ -175,7 +136,7 @@ export default function SalesAnalyticsChart() {
             {/*   stackId="a" */}
             {/* /> */}
             <Area
-              dataKey="income"
+              dataKey="value"
               type="natural"
               fill="url(#fillIncome)"
               stroke="var(--color-income)"

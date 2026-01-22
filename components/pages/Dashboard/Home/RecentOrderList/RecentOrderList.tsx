@@ -1,8 +1,15 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGetRecentOrdersQuery } from "@/redux/api";
+import { IOrderItem } from "@/types/admin/dashboard";
 import { formatDistanceToNow } from "date-fns";
 
 export default function RecentOrderList() {
@@ -13,34 +20,41 @@ export default function RecentOrderList() {
       <CardHeader className="flex items-center gap-2 space-y-0 sm:flex-row">
         <CardTitle>Recent Orders</CardTitle>
       </CardHeader>
-      <CardContent className="max-h-[340px] space-y-3 overflow-y-scroll">
-        {isLoading
-          ? Array.from({ length: 4 }).map((_, index) => (
-              <RecentOrderItemSkeleton key={index} />
-            ))
-          : Array.isArray(data)
-            ? data?.map((item, index) => (
-                <div
-                  key={index}
-                  className="rounded-2lg space-y-2 bg-[#F8FAFB] p-3"
-                >
-                  <div className="font-heading text-heading-100 flex items-center justify-between text-base font-medium">
-                    <h6>{item.user_name}</h6>
-                    <h6>{item.amount}</h6>
-                  </div>
-                  <div className="text-body-200 flex items-center justify-between text-sm">
-                    <h6>{item.type}</h6>
-                    <h6>
-                      {formatDistanceToNow(new Date(item.created_at), {
-                        addSuffix: true,
-                      })}
-                    </h6>
-                  </div>
-                </div>
-              ))
-            : null}
+      <CardContent className="h-full max-h-[340px] space-y-3 overflow-y-scroll">
+        {isLoading ? (
+          Array.from({ length: 4 }).map((_, index) => (
+            <RecentOrderItemSkeleton key={index} />
+          ))
+        ) : Array.isArray(data) && data.length ? (
+          data?.map((item) => <RecentOrderListItem {...item} key={item.id} />)
+        ) : (
+          <div className="grid h-full place-items-center">
+            <p className="text-muted-foreground -mt-12 text-center text-sm">
+              There are no recent orders to display
+            </p>
+          </div>
+        )}
       </CardContent>
     </Card>
+  );
+}
+
+function RecentOrderListItem(props: IOrderItem) {
+  return (
+    <div className="rounded-2lg space-y-2 bg-[#F8FAFB] p-3">
+      <div className="font-heading text-heading-100 flex items-center justify-between text-base font-medium">
+        <h6>{props.user_name}</h6>
+        <h6>{props.amount}</h6>
+      </div>
+      <div className="text-body-200 flex items-center justify-between text-sm">
+        <h6>{props.type}</h6>
+        <h6>
+          {formatDistanceToNow(new Date(props.created_at), {
+            addSuffix: true,
+          })}
+        </h6>
+      </div>
+    </div>
   );
 }
 
