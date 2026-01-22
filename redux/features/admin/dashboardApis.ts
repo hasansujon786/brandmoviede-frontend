@@ -6,6 +6,7 @@ import {
   IOverviewStats,
   ISalesAnalyticsChartData,
   ISalesAnalyticsChartParams,
+  IUserActivityItem,
 } from "@/types/admin/dashboard";
 
 import mock from "./mock.json";
@@ -38,6 +39,12 @@ const dashboardApis = baseApi.injectEndpoints({
       transformResponse: (response: WithStatus<ISalesAnalyticsChartData>) =>
         response.data,
     }),
+    getUserActivityChartData: builder.query<IUserActivityItem[], void>({
+      query: () => `/admin/overview/user-activity`,
+      providesTags: ["Dashboard"] as const,
+      transformResponse: (response: WithStatus<IUserActivityItem[]>) =>
+        response.data,
+    }),
   }),
   overrideExisting: false,
 });
@@ -46,5 +53,6 @@ export const {
   useGetRecentOrdersQuery,
   useGetOverviewStatsQuery,
   useGetSalesAnalyticsChartDataQuery,
+  useGetUserActivityChartDataQuery
 } = dashboardApis;
 export default dashboardApis;

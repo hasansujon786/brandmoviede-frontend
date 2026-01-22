@@ -27,3 +27,10 @@ export type ISalesAnalyticsChartParams =
   | "lastThreeMonth"
   | "lastMonth"
   | "lastSevenDay";
+
+
+export interface IUserActivityItem {
+  month: string
+  active: number
+  inactive: number
+}

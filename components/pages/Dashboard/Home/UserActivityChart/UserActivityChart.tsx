@@ -9,23 +9,9 @@ import {
   CustomLegend,
   type ChartConfig,
 } from "@/components/ui/chart";
+import { useGetUserActivityChartDataQuery } from "@/redux/api";
 
 export const description = "A multiple bar chart";
-
-const chartData = [
-  { month: "January", inactiveUser: 80, activeUser: 186 },
-  { month: "February", inactiveUser: 305, activeUser: 200 },
-  { month: "March", inactiveUser: 237, activeUser: 120 },
-  { month: "April", inactiveUser: 73, activeUser: 190 },
-  { month: "May", inactiveUser: 209, activeUser: 130 },
-  { month: "June", inactiveUser: 214, activeUser: 140 },
-  { month: "July", inactiveUser: 214, activeUser: 140 },
-  { month: "August", inactiveUser: 214, activeUser: 140 },
-  { month: "Septermber", inactiveUser: 214, activeUser: 140 },
-  { month: "October", inactiveUser: 214, activeUser: 140 },
-  { month: "November", inactiveUser: 214, activeUser: 140 },
-  { month: "December", inactiveUser: 214, activeUser: 140 },
-];
 
 const chartConfig: ChartConfig = {
   inactiveUser: {
@@ -39,6 +25,8 @@ const chartConfig: ChartConfig = {
 };
 
 export default function UserActivityChart() {
+  const { data } = useGetUserActivityChartDataQuery();
+
   return (
     <Card className="overflow-x-hidden">
       <CardHeader className="flex items-center justify-between">
@@ -50,9 +38,11 @@ export default function UserActivityChart() {
           <ChartContainer
             config={chartConfig}
             className="h-[200px] w-full"
-            style={{ minWidth: chartData.length * 100 }}
+            style={{
+              minWidth: (Array.isArray(data) && data.length * 100) || 0,
+            }}
           >
-            <BarChart accessibilityLayer data={chartData}>
+            <BarChart accessibilityLayer data={data}>
               <CartesianGrid
                 stroke="var(--sidebar-border)"
                 strokeDasharray="4 4"
@@ -70,15 +60,11 @@ export default function UserActivityChart() {
                 content={<ChartTooltipContent indicator="dot" />}
               />
               <Bar
-                dataKey="inactiveUser"
+                dataKey="inactive"
                 fill="var(--color-inactiveUser)"
                 radius={4}
               />
-              <Bar
-                dataKey="activeUser"
-                fill="var(--color-activeUser)"
-                radius={4}
-              />
+              <Bar dataKey="active" fill="var(--color-activeUser)" radius={4} />
             </BarChart>
           </ChartContainer>
         </div>
