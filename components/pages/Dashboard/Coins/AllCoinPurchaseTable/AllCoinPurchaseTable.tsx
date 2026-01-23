@@ -1,5 +1,6 @@
 "use client";
 import { DataTable, Pagenation } from "@/components/shared/DataTable/DataTable";
+import { PaginationPageProvider } from "@/components/shared/DataTable/PaginationPageProvider";
 import TimeRangeSelector from "@/components/shared/TimeRangeSelector/TimeRangeSelector";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -130,6 +131,14 @@ export function getData() {
 }
 
 export default function AllCoinPurchaseTable() {
+  return (
+    <PaginationPageProvider>
+      <AllCoinPurchaseTableConotent />
+    </PaginationPageProvider>
+  );
+}
+
+function AllCoinPurchaseTableConotent() {
   const data = getData();
   const [timeRange, setTimeRange] = useState("90d");
 

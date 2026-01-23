@@ -5,10 +5,10 @@ import {
   usePaginatedQuery,
   usePaginationPage,
 } from "@/components/shared/DataTable/PaginationPageProvider";
-import TimeRangeSelector from "@/components/shared/TimeRangeSelector/TimeRangeSelector";
+import TableSearchInput from "@/components/shared/DataTable/TableSearchInput";
 import { CardHeader, CardTitle } from "@/components/ui/card";
+import { isArrayEmpty } from "@/lib/utils";
 import { useGetAllCoinBundlesAdminQuery } from "@/redux/features/admin/coinApis";
-import { useState } from "react";
 import CoinManagementTable from "./CoinManagementTable";
 
 export default function CoinBundleTable() {
@@ -20,20 +20,20 @@ export default function CoinBundleTable() {
 }
 
 function CoinBundleTableContent() {
-  const { page } = usePaginationPage();
-  const { data } = useGetAllCoinBundlesAdminQuery({ page: page });
+  const { page, searchedId } = usePaginationPage();
+  const { data } = useGetAllCoinBundlesAdminQuery({
+    page: page,
+    search: searchedId,
+  });
   usePaginatedQuery(data);
-
-  const [timeRange, setTimeRange] = useState("90d");
 
   return (
     <CoinManagementTable
       data={data?.data || []}
       header={
-        <CardHeader className="flex items-center gap-2">
+        <CardHeader className="flex items-center justify-between gap-2">
           <CardTitle>Coins Bundle</CardTitle>
-
-          <TimeRangeSelector value={timeRange} onValueChange={setTimeRange} />
+          <TableSearchInput shouldResetOnBlur={isArrayEmpty(data?.data)} />
         </CardHeader>
       }
     />

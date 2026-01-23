@@ -1,32 +1,42 @@
 "use client";
-import { CardHeader, CardTitle } from "@/components/ui/card";
-import CoinManagementTable, { PackageItem } from "./CoinManagementTable";
 import { PaginationPageProvider } from "@/components/shared/DataTable/PaginationPageProvider";
+import { CardHeader, CardTitle } from "@/components/ui/card";
+import { IAdminCoinBundle } from "@/types";
+import CoinManagementTable from "./CoinManagementTable";
 
 export default function SingleCoinTable() {
-  const data = getData();
   return (
     <PaginationPageProvider>
-      <CoinManagementTable
-        header={
-          <CardHeader>
-            <CardTitle>Single Coint</CardTitle>
-          </CardHeader>
-        }
-        data={data}
-      />
+      <SingleCoinTableContent />
     </PaginationPageProvider>
   );
 }
 
+function SingleCoinTableContent() {
+  const data = getData();
+  return (
+    <CoinManagementTable
+      data={data}
+      header={
+        <CardHeader>
+          <CardTitle>Single Coint</CardTitle>
+        </CardHeader>
+      }
+    />
+  );
+}
+
 export function getData() {
-  const packages: PackageItem[] = [
+  const packages: IAdminCoinBundle[] = [
     {
-      packageName: 41352,
-      coinsAmount: "1 Sugo",
-      price: 10.99,
-      totalSales: 1232,
+      id: "cmkpcgma20002qgm0e84tb0jp",
+      name: "MKPCGM9Y",
+      price: 234,
+      coin_amount: 234,
+      total_sold: 123,
       status: "Active",
+      created_at: "2026-01-22T11:04:01.994Z",
+      updated_at: "2026-01-22T11:04:01.994Z",
     },
   ];
 

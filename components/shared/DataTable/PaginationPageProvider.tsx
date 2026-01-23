@@ -1,7 +1,9 @@
 "use client";
 
 import { IPaginationMetaData } from "@/types";
+import { useForm } from "@tanstack/react-form";
 import { createContext, useContext, useEffect, useState } from "react";
+import z from "zod";
 
 type PaginationPageContextType = {
   page: number;
@@ -14,6 +16,9 @@ type PaginationPageContextType = {
   totalPages: number;
 
   setMeta: (meta: { total: number; limit: number }) => void;
+  form: ReturnType<typeof useForm>;
+  searchedId: string | undefined;
+  clearSearch: () => void;
 };
 
 const PaginationPageContext = createContext<PaginationPageContextType | null>(
@@ -42,6 +47,20 @@ export function PaginationPageProvider({
     setLimit(limit);
   };
 
+  // Search form
+  const form = useForm({
+    defaultValues: { search: "" },
+    validators: { onSubmit: searchCoinSchema },
+    onSubmit: async ({ value }) => {
+      setSearchedId(value.search);
+    },
+  });
+  const [searchedId, setSearchedId] = useState<string | undefined>();
+  const clearSearch = () => {
+    form.reset();
+    setSearchedId(undefined);
+  };
+
   return (
     <PaginationPageContext.Provider
       value={{
@@ -53,6 +72,9 @@ export function PaginationPageProvider({
         limit,
         totalPages,
         setMeta,
+        form,
+        searchedId,
+        clearSearch,
       }}
     >
       {children}
@@ -83,3 +105,8 @@ export function usePaginatedQuery<
     }
   }, [queryResult?.meta_data, setMeta]);
 }
+
+export const searchCoinSchema = z.object({
+  search: z.string().min(8).max(16),
+});
+export type SearchCoinFormValues = z.infer<typeof searchCoinSchema>;
