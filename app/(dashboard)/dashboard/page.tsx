@@ -18,7 +18,7 @@ export default function DashboardHomePage() {
             </Button>
           </CreateEventTicketDialog>
 
-          <CreateCoinBundleDialog>
+          <CreateCoinBundleDialog mode="create">
             <Button size="lg" variant="primary">
               Add Coin Bundle
             </Button>

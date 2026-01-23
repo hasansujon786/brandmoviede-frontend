@@ -20,6 +20,7 @@ export interface IAdminCoinBundle {
   price: number;
   coin_amount: number;
   total_sold?: number;
+  thumbnail?: string;
   status: ICoinBundleStatus;
   created_at: string;
   updated_at: string;

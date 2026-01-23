@@ -1,4 +1,5 @@
 "use client";
+import CreateCoinBundleDialog from "@/components/dashboard/CreateCoinBundleDialog/CreateCoinBundleDialog";
 import { DataTable, Pagenation } from "@/components/shared/DataTable/DataTable";
 import { EyeIcon } from "@/components/shared/icons/EyeIcon";
 import { PenIcon } from "@/components/shared/icons/PenIcon";
@@ -56,7 +57,7 @@ export const columns: ColumnDef<IAdminCoinBundle>[] = [
   },
   {
     header: "Actions",
-    cell: ({ row }) => <TableActionCell id={row.original.id} />,
+    cell: ({ row }) => <TableActionCell {...row.original} />,
   },
 ];
 
@@ -90,7 +91,7 @@ export default function CoinManagementTable({
   );
 }
 
-function TableActionCell(props: { id: string }) {
+function TableActionCell(props: IAdminCoinBundle) {
   const [deleteCoin, { isLoading: isDeleting }] = useAdminDeleteCoinMutation();
 
   const handleDelete = async (id: string) => {
@@ -113,13 +114,23 @@ function TableActionCell(props: { id: string }) {
         <EyeIcon className="size-4" />
       </Button>
 
-      <Button
-        className="border-primary-200 text-primary-400 hover:border-primary-400 rounded-md"
-        variant="primary-secondary"
-        size="icon-sm"
+      <CreateCoinBundleDialog
+        mode="edit"
+        initialValues={{
+          id: props.id,
+          coin_amount: props.coin_amount,
+          price: props.price,
+          is_active: props.status === "Active",
+        }}
       >
-        <PenIcon className="size-4" />
-      </Button>
+        <Button
+          className="border-primary-200 text-primary-400 hover:border-primary-400 rounded-md"
+          variant="primary-secondary"
+          size="icon-sm"
+        >
+          <PenIcon className="size-4" />
+        </Button>
+      </CreateCoinBundleDialog>
 
       <Button
         disabled={isDeleting}
@@ -155,10 +166,10 @@ function TableActiveStatusCell({ status, id }: IAdminCoinBundle) {
       onValueChange={handleStatusChange}
     >
       <SelectTrigger
-        className={cn(
-          "w-28 border-transparent bg-current/10",
-          { "text-[#007BFF]": is_active, "text-[#CF5C56]": !is_active },
-        )}
+        className={cn("w-28 border-transparent bg-current/10", {
+          "text-[#007BFF]": is_active,
+          "text-[#CF5C56]": !is_active,
+        })}
         aria-label={status}
       >
         <SelectValue className="" placeholder="Select Status" />

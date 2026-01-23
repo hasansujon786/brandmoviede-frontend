@@ -1,10 +1,12 @@
 import { createQueryParams } from "@/lib/utils/formatters";
 import { baseApi } from "@/redux/api/baseApi";
 import {
+  IAdminCoinBundle,
   IAdminCoinBundleDataPayload,
   ICreateCoinParams,
   IPaginationParams,
   IUpdateCoinParams,
+  WithStatus,
 } from "@/types";
 
 const coinApis = baseApi.injectEndpoints({
@@ -15,6 +17,12 @@ const coinApis = baseApi.injectEndpoints({
     >({
       query: (params) => `/admin/coin/all${createQueryParams(params)}`,
       providesTags: ["Coin"] as const,
+    }),
+    getAdminCoinBundleById: builder.query<IAdminCoinBundle, string>({
+      query: (id) => `/admin/coin/${id}`,
+      providesTags: (_result, _error, id) => [{ type: "Coin", id }],
+      transformResponse: (response: WithStatus<IAdminCoinBundle>) =>
+        response.data,
     }),
     createCoin: builder.mutation<void, ICreateCoinParams>({
       invalidatesTags: ["Coin"] as const, // update all coins query
@@ -79,6 +87,7 @@ const coinApis = baseApi.injectEndpoints({
 
 export const {
   useCreateCoinMutation,
+  useGetAdminCoinBundleByIdQuery,
   useGetAllCoinBundlesAdminQuery,
   useAdminUpdateCoinMutation,
   useAdminDeleteCoinMutation,

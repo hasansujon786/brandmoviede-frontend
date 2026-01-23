@@ -16,91 +16,138 @@ import { Field, FieldError } from "@/components/ui/field";
 import { FileInput } from "@/components/ui/file-input";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useCreateCoinMutation } from "@/redux/features/admin/coinApis";
+import { cn } from "@/lib/utils";
+import Image from "next/image";
+import {
+  useAdminUpdateCoinMutation,
+  useCreateCoinMutation,
+  useGetAdminCoinBundleByIdQuery,
+} from "@/redux/features/admin/coinApis";
+import { skipToken } from "@reduxjs/toolkit/query";
 import { useForm } from "@tanstack/react-form";
-import { useState } from "react";
+import React, { useState } from "react";
 import { toast } from "sonner";
 import * as z from "zod";
 
-const ZodSchema = z.object({
+/* ---------------------------------- */
+/* Zod Schemas */
+/* ---------------------------------- */
+
+const baseSchema = {
   is_active: z.boolean(),
-  coin_amount: z.coerce
-    .number<string>()
-    .positive("Coin amount must be greater than 0"),
-  price: z.coerce.number<string>().positive("Price must be greater than 0"),
+  coin_amount: z.coerce.number<string>().positive("Coin amount must be > 0"),
+  price: z.coerce.number<string>().positive("Price must be > 0"),
+};
+
+const createSchema = z.object({
+  ...baseSchema,
   thumbnail: z
-    .custom<File | undefined>()
+    .custom<File>()
     .refine((file) => file instanceof File, {
       message: "Thumbnail is required",
     })
-    .refine((file) => !file || file.type.startsWith("image/"), {
+    .refine((file) => file.type.startsWith("image/"), {
       message: "Thumbnail must be an image",
-    })
-    .refine((file) => !file || file.size <= 2 * 1024 * 1024, {
-      message: "Thumbnail must be smaller than 2MB",
     }),
 });
 
+const updateSchema = z.object({
+  ...baseSchema,
+  thumbnail: z.custom<File | undefined>().optional(),
+});
+
+interface CoinBundleDialogProps extends React.PropsWithChildren {
+  mode: "create" | "edit";
+  initialValues?: {
+    id: string;
+    coin_amount: number;
+    price: number;
+    is_active: boolean;
+    thumbnail_url?: string;
+  };
+}
+
 export default function CreateCoinBundleDialog({
   children,
-}: React.PropsWithChildren) {
-  const [createCoin, { isLoading }] = useCreateCoinMutation();
+  mode = "create",
+  initialValues,
+}: CoinBundleDialogProps) {
+  const [open, setOpen] = useState(false);
+
+  const coinId = open ? initialValues?.id : undefined;
+  const { data: editModeCoinData, isLoading: gettingEditModeInitialData } =
+    useGetAdminCoinBundleByIdQuery(coinId ?? skipToken);
+
+  const [createCoin, { isLoading: creating }] = useCreateCoinMutation();
+  const [updateCoin, { isLoading: updating }] = useAdminUpdateCoinMutation();
 
   const form = useForm({
     defaultValues: {
-      coin_amount: "",
-      price: "",
+      coin_amount: initialValues?.coin_amount?.toString() ?? "",
+      price: initialValues?.price?.toString() ?? "",
       thumbnail: undefined as File | undefined,
-      is_active: true, // checkbox default
+      is_active: initialValues?.is_active ?? true,
     },
     validators: {
-      onSubmit: ZodSchema,
+      onSubmit: mode === "create" ? createSchema : updateSchema,
     },
     onSubmit: async ({ value }) => {
-      if (!value.thumbnail || value.thumbnail === undefined) {
-        toast.error("Please select a thumbnail file!");
-        return;
-      }
-
       try {
-        await createCoin({
-          ...value,
-          coin_amount: Number(value.coin_amount),
-          price: Number(value.price),
-          thumbnail: value.thumbnail as File,
-          is_active: value?.is_active,
-        }).unwrap();
+        if (mode === "create") {
+          await createCoin({
+            coin_amount: Number(value.coin_amount),
+            price: Number(value.price),
+            thumbnail: value.thumbnail!,
+            is_active: value.is_active,
+          }).unwrap();
 
-        toast.success("Coin bundle created successfully!");
+          toast.success("Coin bundle created successfully");
+        } else {
+          console.log(value, initialValues!.id);
+          await updateCoin({
+            id: initialValues!.id,
+            coin_amount: Number(value.coin_amount),
+            price: Number(value.price),
+            thumbnail: value.thumbnail,
+            is_active: value.is_active,
+          }).unwrap();
+
+          toast.success("Coin bundle updated successfully");
+        }
+
         form.reset();
-        setIsOpen(false);
-      } catch (err) {
-        toast.error("Failed to create coin bundle try again.");
-        console.error(err);
+        setOpen(false);
+      } catch {
+        toast.error(
+          mode === "create"
+            ? "Failed to create coin bundle"
+            : "Failed to update coin bundle",
+        );
       }
     },
   });
 
-  const isSubmitting = form.state.isSubmitting || isLoading;
-
-  const [isOpen, setIsOpen] = useState(false);
+  const isSubmitting = form.state.isSubmitting || creating || updating;
 
   return (
     <Dialog
-      open={isOpen}
-      onOpenChange={(open) => {
-        setIsOpen(open);
-        // reset when dialog closes
-        if (!open) form.reset();
+      open={open}
+      onOpenChange={(v) => {
+        setOpen(v);
+        if (!v) form.reset();
       }}
     >
       <DialogTrigger asChild>{children}</DialogTrigger>
 
       <DialogContent className="bg-card sm:max-w-2xl">
         <DialogHeader>
-          <DialogTitle>Create Coin Bundle</DialogTitle>
+          <DialogTitle>
+            {mode === "create" ? "Create Coin Bundle" : "Update Coin Bundle"}
+          </DialogTitle>
           <DialogDescription>
-            Create a new coin bundle for the store.
+            {mode === "create"
+              ? "Create a new coin bundle"
+              : "Update coin bundle details"}
           </DialogDescription>
         </DialogHeader>
 
@@ -111,110 +158,122 @@ export default function CreateCoinBundleDialog({
             form.handleSubmit();
           }}
         >
-          {/* Coins */}
+          {/* Coin Amount + Price */}
           <div className="grid grid-cols-2 gap-4">
             <form.Field name="coin_amount">
-              {(field) => {
-                const isInvalid =
-                  field.state.meta.isTouched && !field.state.meta.isValid;
-
-                return (
-                  <Field data-invalid={isInvalid}>
-                    <Label htmlFor={field.name}>Coin Amount</Label>
-                    <Input
-                      type="number"
-                      id={field.name}
-                      value={field.state.value}
-                      onBlur={field.handleBlur}
-                      onChange={(e) => field.handleChange(e.target.value)}
-                      placeholder="Enter coin amount"
-                    />
-                    {isInvalid && (
-                      <FieldError errors={field.state.meta.errors} />
-                    )}
-                  </Field>
-                );
-              }}
+              {(field) => (
+                <Field
+                  data-invalid={
+                    field.state.meta.isTouched && !field.state.meta.isValid
+                  }
+                >
+                  <Label htmlFor={field.name}>Coin Amount</Label>
+                  <Input
+                    type="number"
+                    id={field.name}
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                  />
+                  <FieldError errors={field.state.meta.errors} />
+                </Field>
+              )}
             </form.Field>
 
             <form.Field name="price">
-              {(field) => {
-                const isInvalid =
-                  field.state.meta.isTouched && !field.state.meta.isValid;
-
-                return (
-                  <Field data-invalid={isInvalid}>
-                    <Label htmlFor={field.name}>Coin Price</Label>
-                    <Input
-                      type="number"
-                      id={field.name}
-                      value={field.state.value}
-                      onBlur={field.handleBlur}
-                      onChange={(e) => field.handleChange(e.target.value)}
-                      placeholder="Enter a name price for Coin Bundle"
-                    />
-                    {isInvalid && (
-                      <FieldError errors={field.state.meta.errors} />
-                    )}
-                  </Field>
-                );
-              }}
+              {(field) => (
+                <Field
+                  data-invalid={
+                    field.state.meta.isTouched && !field.state.meta.isValid
+                  }
+                >
+                  <Label htmlFor={field.name}>Price</Label>
+                  <Input
+                    id={field.name}
+                    type="number"
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                  />
+                  <FieldError errors={field.state.meta.errors} />
+                </Field>
+              )}
             </form.Field>
           </div>
 
+          {/* Thumbnail */}
           <form.Field name="thumbnail">
-            {(field) => {
-              const isInvalid =
-                field.state.meta.isTouched && !field.state.meta.isValid;
+            {(field) => (
+              <Field
+                data-invalid={
+                  field.state.meta.isTouched && !field.state.meta.isValid
+                }
+              >
+                <Label htmlFor={field.name}>Thumbnail</Label>
+                <FileInput
+                  id={field.name}
+                  multiple={false}
+                  accept="image/*"
+                  onBlur={field.handleBlur}
+                  onChange={(files) => field.handleChange(files[0])}
+                />
 
-              return (
-                <Field data-invalid={isInvalid}>
-                  <Label htmlFor={field.name}>Bundle Thumbnail</Label>
-                  <FileInput
-                    multiple={false}
-                    id={field.name}
-                    accept="image/*"
-                    onBlur={field.handleBlur}
-                    onChange={(files) =>
-                      field.handleChange(files[0] ?? undefined)
-                    }
-                    placeholder="Coint thumbnail"
-                  />
-                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
-                </Field>
-              );
-            }}
+                {/* Existing image preview (edit mode) */}
+                {gettingEditModeInitialData ||
+                (!field.state.value && editModeCoinData?.thumbnail) ? (
+                  <>
+                    <h3 className="font-body mt-4 mb-1 text-sm">
+                      Current thumbnail
+                    </h3>
+                    <div className="bg-accent-light-gray border-border flex items-center justify-between space-x-4 rounded-lg border p-3">
+                      <Image
+                        unoptimized
+                        width={64}
+                        height={64}
+                        src={editModeCoinData?.thumbnail as string}
+                        alt=""
+                        className="size-16 rounded border bg-muted object-cover"
+                      />
+                    </div>
+                  </>
+                ) : null}
+
+                <FieldError errors={field.state.meta.errors} />
+              </Field>
+            )}
           </form.Field>
 
-          {/* Status */}
+          {/* Active Checkbox */}
           <form.Field name="is_active">
             {(field) => (
               <div className="flex items-center gap-3">
                 <Checkbox
-                  id="status"
+                  id={field.name}
                   checked={field.state.value}
-                  onCheckedChange={(checked) =>
-                    field.handleChange(Boolean(checked))
-                  }
+                  onCheckedChange={(v) => field.handleChange(Boolean(v))}
                 />
-                <Label htmlFor="status">Active bundle</Label>
+                <Label htmlFor={field.name}>Active bundle</Label>
               </div>
             )}
           </form.Field>
 
           <DialogFooter>
             <DialogClose asChild>
-              <Button size="lg" variant="primary-inverse">
-                Cancel
-              </Button>
+              <Button variant="primary-inverse">Cancel</Button>
             </DialogClose>
             <Button
               size="lg"
               variant="primary"
-              type="submit"
               disabled={isSubmitting}
+              type="submit"
             >
-              {isSubmitting ? "Creating..." : "Create Bundle"}
+              {isSubmitting
+                ? mode === "create"
+                  ? "Creating..."
+                  : "Updating..."
+                : mode === "create"
+                  ? "Create Bundle"
+                  : "Update Bundle"}
             </Button>
           </DialogFooter>
         </form>
