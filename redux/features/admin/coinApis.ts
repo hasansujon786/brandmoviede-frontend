@@ -11,20 +11,20 @@ import {
 
 const coinApis = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getAllCoinBundlesAdmin: builder.query<
+    adminGetAllCoinBundles: builder.query<
       IAdminCoinBundleDataPayload,
       IPaginationParams | void
     >({
       query: (params) => `/admin/coin/all${createQueryParams(params)}`,
       providesTags: ["Coin"] as const,
     }),
-    getAdminCoinBundleById: builder.query<IAdminCoinBundle, string>({
+    adminGetCoinBundleById: builder.query<IAdminCoinBundle, string>({
       query: (id) => `/admin/coin/${id}`,
       providesTags: (_result, _error, id) => [{ type: "Coin", id }],
       transformResponse: (response: WithStatus<IAdminCoinBundle>) =>
         response.data,
     }),
-    createCoin: builder.mutation<void, ICreateCoinParams>({
+    adminCreateCoin: builder.mutation<void, ICreateCoinParams>({
       invalidatesTags: ["Coin"] as const, // update all coins query
       query: ({ price, thumbnail, coin_amount, is_active }) => {
         const formData = new FormData();
@@ -86,9 +86,9 @@ const coinApis = baseApi.injectEndpoints({
 });
 
 export const {
-  useCreateCoinMutation,
-  useGetAdminCoinBundleByIdQuery,
-  useGetAllCoinBundlesAdminQuery,
+  useAdminCreateCoinMutation,
+  useAdminGetCoinBundleByIdQuery,
+  useAdminGetAllCoinBundlesQuery,
   useAdminUpdateCoinMutation,
   useAdminDeleteCoinMutation,
 } = coinApis;

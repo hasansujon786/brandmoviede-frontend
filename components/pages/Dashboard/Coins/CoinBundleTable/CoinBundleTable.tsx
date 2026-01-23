@@ -6,13 +6,9 @@ import {
   usePaginationPage,
 } from "@/components/shared/DataTable/PaginationPageProvider";
 import TableSearchInput from "@/components/shared/DataTable/TableSearchInput";
-import { Button } from "@/components/ui/button";
 import { CardHeader, CardTitle } from "@/components/ui/card";
 import { isArrayEmpty } from "@/lib/utils";
-import {
-  useAdminUpdateCoinMutation,
-  useGetAllCoinBundlesAdminQuery,
-} from "@/redux/features/admin/coinApis";
+import { useAdminGetAllCoinBundlesQuery } from "@/redux/features/admin/coinApis";
 import CoinManagementTable from "./CoinManagementTable";
 
 export default function CoinBundleTable() {
@@ -25,26 +21,11 @@ export default function CoinBundleTable() {
 
 function CoinBundleTableContent() {
   const { page, searchedId } = usePaginationPage();
-  const { data } = useGetAllCoinBundlesAdminQuery({
+  const { data } = useAdminGetAllCoinBundlesQuery({
     page: page,
     search: searchedId,
   });
   usePaginatedQuery(data);
-
-  const [updateCoin, { isLoading }] = useAdminUpdateCoinMutation();
-
-  // const onSubmit = async (value: FormValues) => {
-  //   if (!value.thumbnail) return;
-  //
-  //   await updateCoin({
-  //     id: selectedCoinId,
-  //     price: Number(value.price),
-  //     coin_amount: Number(value.coin_amount),
-  //     thumbnail: value.thumbnail,
-  //   }).unwrap();
-  //
-  //   toast.success("Coin updated successfully");
-  // };
 
   return (
     <CoinManagementTable

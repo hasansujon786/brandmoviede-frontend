@@ -20,6 +20,7 @@ import {
 } from "@/redux/features/admin/coinApis";
 import { IAdminCoinBundle } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
+import Link from "next/link";
 import { ReactNode } from "react";
 import { toast } from "sonner";
 
@@ -110,8 +111,11 @@ function TableActionCell(props: IAdminCoinBundle) {
         className="border-primary-200 text-primary-400 hover:border-primary-400 rounded-md"
         variant="primary-secondary"
         size="icon-sm"
+        asChild
       >
-        <EyeIcon className="size-4" />
+        <Link href={`/bundles/${props?.id}`}>
+          <EyeIcon className="size-4" />
+        </Link>
       </Button>
 
       <CreateCoinBundleDialog

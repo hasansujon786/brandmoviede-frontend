@@ -40,7 +40,7 @@ export default function DashboardTicketsPage() {
 
       <section className="space-y-8">
         <EventTicketTable />
-        <EventTicketPurchaseTable />
+        {/* <EventTicketPurchaseTable /> */}
       </section>
     </div>
   );

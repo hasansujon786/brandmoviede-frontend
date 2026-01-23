@@ -16,15 +16,14 @@ import { Field, FieldError } from "@/components/ui/field";
 import { FileInput } from "@/components/ui/file-input";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { cn } from "@/lib/utils";
-import Image from "next/image";
 import {
+  useAdminGetCoinBundleByIdQuery,
   useAdminUpdateCoinMutation,
-  useCreateCoinMutation,
-  useGetAdminCoinBundleByIdQuery,
+  useAdminCreateCoinMutation,
 } from "@/redux/features/admin/coinApis";
 import { skipToken } from "@reduxjs/toolkit/query";
 import { useForm } from "@tanstack/react-form";
+import Image from "next/image";
 import React, { useState } from "react";
 import { toast } from "sonner";
 import * as z from "zod";
@@ -32,7 +31,6 @@ import * as z from "zod";
 /* ---------------------------------- */
 /* Zod Schemas */
 /* ---------------------------------- */
-
 const baseSchema = {
   is_active: z.boolean(),
   coin_amount: z.coerce.number<string>().positive("Coin amount must be > 0"),
@@ -76,9 +74,9 @@ export default function CreateCoinBundleDialog({
 
   const coinId = open ? initialValues?.id : undefined;
   const { data: editModeCoinData, isLoading: gettingEditModeInitialData } =
-    useGetAdminCoinBundleByIdQuery(coinId ?? skipToken);
+    useAdminGetCoinBundleByIdQuery(coinId ?? skipToken);
 
-  const [createCoin, { isLoading: creating }] = useCreateCoinMutation();
+  const [createCoin, { isLoading: creating }] = useAdminCreateCoinMutation();
   const [updateCoin, { isLoading: updating }] = useAdminUpdateCoinMutation();
 
   const form = useForm({
@@ -232,7 +230,7 @@ export default function CreateCoinBundleDialog({
                         height={64}
                         src={editModeCoinData?.thumbnail as string}
                         alt=""
-                        className="size-16 rounded border bg-muted object-cover"
+                        className="bg-muted size-16 rounded border object-cover"
                       />
                     </div>
                   </>
