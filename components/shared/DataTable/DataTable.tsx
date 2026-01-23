@@ -18,6 +18,7 @@ import {
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ChevronRight } from "../icons/chevron";
+import { usePaginationPage } from "./PaginationPageProvider";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -104,47 +105,102 @@ export function DataTable<TData, TValue>({
   );
 }
 
-interface PagenationProps {
-  ghoustBtn?: boolean;
+interface PaginationProps {
+  ghostBtn?: boolean;
+  maxVisible?: number; // how many page buttons to show
 }
 
-export function Pagenation({ ghoustBtn = true }: PagenationProps) {
+export function Pagenation({
+  ghostBtn = true,
+  maxVisible = 4,
+}: PaginationProps) {
+  const { page, totalPages, nextPage, prevPage, setPage } = usePaginationPage();
+
+  const canGoPrev = page > 1;
+  const canGoNext = page < totalPages;
+
+  // Calculate visible pages
+  const getPages = () => {
+    const pages: number[] = [];
+
+    const half = Math.floor(maxVisible / 2);
+    let start = Math.max(1, page - half);
+    const end = Math.min(totalPages, start + maxVisible - 1);
+
+    if (end - start < maxVisible - 1) {
+      start = Math.max(1, end - maxVisible + 1);
+    }
+
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+
+    return pages;
+  };
+
+  const pages = getPages();
+
   return (
-    <div className="flex gap-6">
+    <div className="flex items-center gap-6">
       <Button
-        variant={ghoustBtn ? "ghost" : "primary-inverse"}
-        className="text-body-200"
+        onClick={prevPage}
+        disabled={!canGoPrev}
+        variant={ghostBtn ? "ghost" : "primary-inverse"}
         size="icon-md"
       >
         <ChevronRight className="rotate-180" />
       </Button>
 
       <div className="flex gap-0.5">
-        <Button variant="primary" size="icon-md">
-          1
-        </Button>
-        <Button variant="ghost" size="icon-md" className="hover:bg-gray-100">
-          2
-        </Button>
-        <Button variant="ghost" size="icon-md" className="hover:bg-gray-100">
-          3
-        </Button>
-        <Button
-          disabled
-          variant="ghost"
-          size="icon-md"
-          className="hover:bg-gray-100"
-        >
-          ...
-        </Button>
-        <Button variant="ghost" size="icon-md" className="hover:bg-gray-100">
-          10
-        </Button>
+        {/* First page shortcut */}
+        {pages[0] > 1 && (
+          <>
+            <Button
+              size="icon-md"
+              variant={page === 1 ? "primary" : "ghost"}
+              onClick={() => setPage(1)}
+            >
+              1
+            </Button>
+            <Button size="icon-md" variant="ghost" disabled>
+              …
+            </Button>
+          </>
+        )}
+
+        {pages.map((p) => (
+          <Button
+            key={p}
+            size="icon-md"
+            variant={p === page ? "primary" : "ghost"}
+            onClick={() => setPage(p)}
+          >
+            {p}
+          </Button>
+        ))}
+
+        {/* Last page shortcut */}
+        {pages[pages.length - 1] < totalPages && (
+          <>
+            <Button size="icon-md" variant="ghost" disabled>
+              …
+            </Button>
+            <Button
+              size="icon-md"
+              variant={page === totalPages ? "primary" : "ghost"}
+              onClick={() => setPage(totalPages)}
+            >
+              {totalPages}
+            </Button>
+          </>
+        )}
       </div>
 
+      {/* Next */}
       <Button
-        variant={ghoustBtn ? "ghost" : "primary-inverse"}
-        className="text-body-200"
+        onClick={nextPage}
+        disabled={!canGoNext}
+        variant={ghostBtn ? "ghost" : "primary-inverse"}
         size="icon-md"
       >
         <ChevronRight />

@@ -1,18 +1,21 @@
 "use client";
 import { CardHeader, CardTitle } from "@/components/ui/card";
 import CoinManagementTable, { PackageItem } from "./CoinManagementTable";
+import { PaginationPageProvider } from "@/components/shared/DataTable/PaginationPageProvider";
 
 export default function SingleCoinTable() {
   const data = getData();
   return (
-    <CoinManagementTable
-      header={
-        <CardHeader>
-          <CardTitle>Single Coint</CardTitle>
-        </CardHeader>
-      }
-      data={data}
-    />
+    <PaginationPageProvider>
+      <CoinManagementTable
+        header={
+          <CardHeader>
+            <CardTitle>Single Coint</CardTitle>
+          </CardHeader>
+        }
+        data={data}
+      />
+    </PaginationPageProvider>
   );
 }
 

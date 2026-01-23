@@ -99,7 +99,7 @@ export default function TicketShop() {
       </section>
 
       <div className="custom-container mt-8">
-        <Pagenation />
+        {/* <Pagenation /> */}
       </div>
     </div>
   );

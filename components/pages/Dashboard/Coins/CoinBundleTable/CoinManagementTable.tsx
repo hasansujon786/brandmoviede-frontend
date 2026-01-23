@@ -32,7 +32,7 @@ export interface PackageItem {
 export const columns: ColumnDef<IAdminCoinBundle>[] = [
   {
     accessorKey: "name",
-    header: "Package Name",
+    header: "Package Name/ID",
   },
   {
     accessorKey: "coin_amount",

@@ -1,8 +1,7 @@
-import { IPaginationMetaData } from "../shared";
+import { IPaginationMetaData, WithPaginationAndStatus } from "../shared";
 
-export interface ICoins {
+export interface ICoins extends IPaginationMetaData {
   data: ICoin[];
-  meta_data: IPaginationMetaData;
 }
 
 export interface ICoin {
@@ -24,6 +23,10 @@ export interface IAdminCoinBundle {
   created_at: string;
   updated_at: string;
 }
+
+export type IAdminCoinBundleDataPayload = WithPaginationAndStatus<
+  IAdminCoinBundle[]
+>;
 
 export interface ICreateCoinParams {
   price: number;

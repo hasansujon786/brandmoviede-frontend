@@ -45,7 +45,7 @@ export default function Shop({ className, showPagination }: ShopProps) {
 
       {showPagination && (
         <div className="mt-8">
-          <Pagenation />
+          {/* <Pagenation /> */}
         </div>
       )}
     </section>

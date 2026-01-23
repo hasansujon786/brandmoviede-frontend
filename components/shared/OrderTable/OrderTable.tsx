@@ -128,7 +128,7 @@ export default function OrderTable(props: {
         {props.title}
       </h3>
       <DataTable columns={columns} data={props.data} />
-      {shoPagination && <Pagenation />}
+      {/* {shoPagination && <Pagenation />} */}
     </section>
   );
 }

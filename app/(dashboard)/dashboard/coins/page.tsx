@@ -49,11 +49,11 @@ export default function DashboardCoinsPage() {
       {/* <DashboardInfoCardList data={infoCards} /> */}
 
       <section className="space-y-8">
-        <SingleCoinTable />
+        {/* <SingleCoinTable /> */}
 
         <CoinBundleTable />
 
-        <AllCoinPurchaseTable />
+        {/* <AllCoinPurchaseTable /> */}
       </section>
     </div>
   );

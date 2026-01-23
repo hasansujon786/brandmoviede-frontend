@@ -152,7 +152,7 @@ export default function AllCoinPurchaseTable() {
         </CardContent>
       </Card>
 
-      <Pagenation />
+      {/* <Pagenation /> */}
     </section>
   );
 }
