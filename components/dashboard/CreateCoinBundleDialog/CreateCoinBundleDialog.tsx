@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
   DialogClose,
@@ -22,6 +23,7 @@ import { toast } from "sonner";
 import * as z from "zod";
 
 const ZodSchema = z.object({
+  is_active: z.boolean(),
   coin_amount: z.coerce
     .number<string>()
     .positive("Coin amount must be greater than 0"),
@@ -49,6 +51,7 @@ export default function CreateCoinBundleDialog({
       coin_amount: "",
       price: "",
       thumbnail: undefined as File | undefined,
+      is_active: true, // checkbox default
     },
     validators: {
       onSubmit: ZodSchema,
@@ -65,6 +68,7 @@ export default function CreateCoinBundleDialog({
           coin_amount: Number(value.coin_amount),
           price: Number(value.price),
           thumbnail: value.thumbnail as File,
+          is_active: value?.is_active,
         }).unwrap();
 
         toast.success("Coin bundle created successfully!");
@@ -180,6 +184,22 @@ export default function CreateCoinBundleDialog({
                 </Field>
               );
             }}
+          </form.Field>
+
+          {/* Status */}
+          <form.Field name="is_active">
+            {(field) => (
+              <div className="flex items-center gap-3">
+                <Checkbox
+                  id="status"
+                  checked={field.state.value}
+                  onCheckedChange={(checked) =>
+                    field.handleChange(Boolean(checked))
+                  }
+                />
+                <Label htmlFor="status">Active bundle</Label>
+              </div>
+            )}
           </form.Field>
 
           <DialogFooter>

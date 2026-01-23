@@ -37,7 +37,7 @@ export default function RootLayout({
           <AuthProvider>{children}</AuthProvider>
         </StoreProvider>
         <TwScreenSize />
-        <Toaster />
+        <Toaster position="top-right" richColors />
       </body>
     </html>
   );
