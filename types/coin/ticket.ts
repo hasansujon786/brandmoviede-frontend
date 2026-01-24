@@ -1,3 +1,4 @@
+import * as z from "zod";
 import { WithPaginationAndStatus } from "../shared";
 
 export interface ITicket {
@@ -32,3 +33,33 @@ export interface ITicketListItem {
 export type IAdminTicketListDataPayload = WithPaginationAndStatus<
   ITicketListItem[]
 >;
+
+export const TicketStatusEnum = z.enum(["General", "VIP"]);
+export type ITicketStatus = z.infer<typeof TicketStatusEnum>;
+
+export interface IAdminCreateTicketParams {
+  title: string;
+  description: string;
+  about: string;
+  included: string[];
+  ticket_price: number;
+  sold_limit: number;
+  event_date: string; // ISO string
+  location: string;
+  ticket_status: ITicketStatus;
+  thumbnail: File;
+}
+
+export interface IAdminCreateTicketPayload {
+  id: string;
+  title: string;
+  description: string;
+  about: string;
+  included: string[];
+  ticket_price: number;
+  status: string;
+  sold_limit: number;
+  event_date: string;
+  location: string;
+  thumbnail: string;
+}

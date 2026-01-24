@@ -1,6 +1,11 @@
 import { createQueryParams } from "@/lib/utils/formatters";
 import { baseApi } from "@/redux/api/baseApi";
-import { IPaginationParams, IAdminTicketListDataPayload } from "@/types";
+import {
+  IPaginationParams,
+  IAdminTicketListDataPayload,
+  IAdminCreateTicketParams,
+  IAdminCreateTicketPayload,
+} from "@/types";
 
 const ticketApis = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -17,22 +22,47 @@ const ticketApis = baseApi.injectEndpoints({
     //   transformResponse: (response: WithStatus<IAdminCoinBundle>) =>
     //     response.data,
     // }),
-    // adminCreateCoin: builder.mutation<void, ICreateCoinParams>({
-    //   invalidatesTags: ["Coin"] as const, // update all coins query
-    //   query: ({ price, thumbnail, coin_amount, is_active }) => {
-    //     const formData = new FormData();
-    //     formData.append("coin_amount", coin_amount.toString());
-    //     formData.append("price", price.toString());
-    //     formData.append("thumbnail", thumbnail);
-    //     formData.append("is_active", String(is_active));
-    //
-    //     return {
-    //       url: "/admin/coin",
-    //       method: "POST",
-    //       body: formData,
-    //     };
-    //   },
-    // }),
+    adminCreateTicket: builder.mutation<
+      IAdminCreateTicketPayload,
+      IAdminCreateTicketParams
+    >({
+      invalidatesTags: ["Ticket"],
+      query: (params) => {
+        const formData = new FormData();
+        const {
+          title,
+          description,
+          about,
+          included,
+          ticket_price,
+          sold_limit,
+          event_date,
+          location,
+          ticket_status,
+          thumbnail,
+        } = params;
+
+        formData.append("title", title);
+        formData.append("description", description);
+        formData.append("about", about);
+        formData.append("ticket_price", ticket_price.toString());
+        formData.append("sold_limit", sold_limit.toString());
+        formData.append("event_date", new Date(event_date).toISOString());
+        formData.append("location", location);
+        formData.append("ticket_status", ticket_status);
+        formData.append("thumbnail", thumbnail);
+
+        included.forEach((item) => {
+          formData.append("included[]", item);
+        });
+
+        return {
+          url: "/admin/ticket",
+          method: "POST",
+          body: formData,
+        };
+      },
+    }),
     // adminUpdateCoin: builder.mutation<void, IUpdateCoinParams>({
     //   invalidatesTags: (_result, _error, arg) => [
     //     { type: "Coin", id: arg.id },
@@ -78,6 +108,10 @@ const ticketApis = baseApi.injectEndpoints({
   overrideExisting: false,
 });
 
-export const { useAdminGetAllTicketsQuery, useAdminDeleteTicketByIdMutation } = ticketApis;
+export const {
+  useAdminGetAllTicketsQuery,
+  useAdminDeleteTicketByIdMutation,
+  useAdminCreateTicketMutation,
+} = ticketApis;
 
 export default ticketApis;

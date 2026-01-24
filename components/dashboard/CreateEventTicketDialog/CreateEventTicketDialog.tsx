@@ -1,4 +1,7 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
   DialogClose,
@@ -9,9 +12,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Field, FieldError } from "@/components/ui/field";
+import { FileInput } from "@/components/ui/file-input";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select,
   SelectContent,
@@ -19,16 +23,103 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Field } from "@/components/ui/field";
+import { useAdminCreateTicketMutation } from "@/redux/features/admin/ticketApis";
+import { useForm } from "@tanstack/react-form";
+
+import { Textarea } from "@/components/ui/textarea";
+import { ITicketStatus, TicketStatusEnum } from "@/types";
+import { useState } from "react";
+import { toast } from "sonner";
+import * as z from "zod";
+
+const CreateTicketSchema = z.object({
+  title: z.string().min(3),
+  description: z.string().min(10),
+  event_date: z
+    .string()
+    .refine((val) => !Number.isNaN(Date.parse(val)), "Invalid event date")
+    .refine(
+      (val) => new Date(val) >= new Date(new Date().toDateString()),
+      "Event date cannot be in the past",
+    ),
+  location: z.string().min(3),
+  about: z.string().min(10),
+  ticket_price: z.coerce.number().positive(),
+  sold_limit: z.coerce.number().positive(),
+  ticket_status: TicketStatusEnum,
+  included: z
+    .string()
+    .min(3, { error: "Please include at least one benefit or feature" }),
+  is_active: z.boolean(),
+  thumbnail: z
+    .custom<File>()
+    .refine((file) => file instanceof File, "Thumbnail is required"),
+});
 
 export default function CreateEventTicketDialog({
   children,
 }: React.PropsWithChildren) {
+  const [open, setOpen] = useState(false);
+  const [createTicket, { isLoading: creating }] =
+    useAdminCreateTicketMutation();
+
+  const form = useForm({
+    defaultValues: {
+      title: "",
+      description: "",
+      about: "",
+      ticket_price: "",
+      sold_limit: "",
+      event_date: "",
+      location: "",
+      ticket_status: "General" as ITicketStatus,
+      included: "",
+      is_active: true,
+      thumbnail: undefined as File | undefined,
+    },
+    validators: {
+      onSubmit: CreateTicketSchema,
+    },
+    onSubmit: async ({ value }) => {
+      if (value.thumbnail === undefined) {
+        return;
+      }
+
+      const includedArray = (value.included || "")
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean);
+
+      try {
+        await createTicket({
+          ...value,
+          ticket_price: Number(value.ticket_price),
+          sold_limit: Number(value.sold_limit),
+          thumbnail: value.thumbnail!,
+          included: includedArray,
+        }).unwrap();
+
+        toast.success("Ticket created successfully");
+        form.reset();
+        setOpen(false);
+      } catch (err) {
+        console.log(err);
+        toast.error("Failed to create ticket");
+      }
+    },
+  });
+
   return (
-    <Dialog>
+    <Dialog
+      open={open}
+      onOpenChange={(v) => {
+        setOpen(v);
+        if (!v) form.reset();
+      }}
+    >
       <DialogTrigger asChild>{children}</DialogTrigger>
 
-      <DialogContent className="bg-card sm:max-w-2xl">
+      <DialogContent className="bg-card sm:max-w-4xl">
         <DialogHeader>
           <DialogTitle>Create Event Ticket</DialogTitle>
           <DialogDescription>
@@ -36,116 +127,274 @@ export default function CreateEventTicketDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <form className="grid gap-5">
-          {/* Event Info */}
-          <Field>
-            <Label htmlFor="title">Event Title</Label>
-            <Input id="title" name="title" placeholder="Enter a title" />
-          </Field>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            form.handleSubmit();
+          }}
+          className="grid gap-5"
+        >
+          <form.Field name="title">
+            {(field) => (
+              <Field
+                data-invalid={
+                  field.state.meta.isTouched && !field.state.meta.isValid
+                }
+              >
+                <Label htmlFor={field.name}>Event Title</Label>
+                <Input
+                  placeholder="Enter a title"
+                  id={field.name}
+                  name={field.name}
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                />
+                <FieldError errors={field.state.meta.errors} />
+              </Field>
+            )}
+          </form.Field>
 
-          <Field>
-            <Label htmlFor="description">Short Description</Label>
-            <Input
-              id="description"
-              name="description"
-              placeholder="Enter a description"
-            />
-          </Field>
+          <form.Field name="description">
+            {(field) => (
+              <Field
+                data-invalid={
+                  field.state.meta.isTouched && !field.state.meta.isValid
+                }
+              >
+                <Label htmlFor={field.name}>Short Description</Label>
+                <Input
+                  placeholder="Enter a description"
+                  id={field.name}
+                  name={field.name}
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                />
+                <FieldError errors={field.state.meta.errors} />
+              </Field>
+            )}
+          </form.Field>
 
-          <Field>
-            <Label htmlFor="image">Event Image URL</Label>
-            <Input id="image" name="image" placeholder="https://..." />
-          </Field>
+          <form.Field name="about">
+            {(field) => (
+              <Field
+                data-invalid={
+                  field.state.meta.isTouched && !field.state.meta.isValid
+                }
+              >
+                <Label htmlFor={field.name}>About</Label>
+                <Textarea
+                  className="min-h-30"
+                  placeholder="Write about the event"
+                  id={field.name}
+                  name={field.name}
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                />
+                <FieldError errors={field.state.meta.errors} />
+              </Field>
+            )}
+          </form.Field>
+
+          {/* Thumbnail */}
+          <form.Field name="thumbnail">
+            {(field) => (
+              <Field
+                data-invalid={
+                  field.state.meta.isTouched && !field.state.meta.isValid
+                }
+              >
+                <Label htmlFor={field.name}>Event Ticke Thumbnail</Label>
+                <FileInput
+                  id={field.name}
+                  multiple={false}
+                  accept="image/*"
+                  onBlur={field.handleBlur}
+                  onChange={(files) => field.handleChange(files[0])}
+                />
+
+                {/* Existing image preview (edit mode) */}
+                {/* {gettingEditModeInitialData || */}
+                {/* (!field.state.value && editModeCoinData?.thumbnail) ? ( */}
+                {/*   <> */}
+                {/*     <h3 className="font-body mt-4 mb-1 text-sm"> */}
+                {/*       Current thumbnail */}
+                {/*     </h3> */}
+                {/*     <div className="bg-accent-light-gray border-border flex items-center justify-between space-x-4 rounded-lg border p-3"> */}
+                {/*       <Image */}
+                {/*         unoptimized */}
+                {/*         width={64} */}
+                {/*         height={64} */}
+                {/*         src={editModeCoinData?.thumbnail as string} */}
+                {/*         alt="" */}
+                {/*         className="bg-muted size-16 rounded border object-cover" */}
+                {/*       /> */}
+                {/*     </div> */}
+                {/*   </> */}
+                {/* ) : null} */}
+
+                <FieldError errors={field.state.meta.errors} />
+              </Field>
+            )}
+          </form.Field>
 
           {/* Date & Location */}
           <div className="grid grid-cols-2 gap-4">
-            <Field>
-              <Label htmlFor="startDate">Start Date</Label>
-              <Input id="startDate" name="startDate" type="date" />
-            </Field>
+            <form.Field name="location">
+              {(field) => (
+                <Field
+                  data-invalid={
+                    field.state.meta.isTouched && !field.state.meta.isValid
+                  }
+                >
+                  <Label htmlFor={field.name}>Location</Label>
+                  <Input
+                    placeholder="Ex: San Francisco, CA"
+                    id={field.name}
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                  />
+                  <FieldError errors={field.state.meta.errors} />
+                </Field>
+              )}
+            </form.Field>
 
-            <Field>
-              <Label htmlFor="endDate">End Date</Label>
-              <Input id="endDate" name="endDate" type="date" />
-            </Field>
+            <form.Field name="event_date">
+              {(field) => (
+                <Field
+                  data-invalid={
+                    field.state.meta.isTouched && !field.state.meta.isValid
+                  }
+                >
+                  <Label htmlFor={field.name}>Event Date</Label>
+                  <Input
+                    id={field.name}
+                    type="date"
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                  />
+                  <FieldError errors={field.state.meta.errors} />
+                </Field>
+              )}
+            </form.Field>
           </div>
-
-          <Field>
-            <Label htmlFor="location">Location</Label>
-            <Input
-              id="location"
-              name="location"
-              placeholder="Ex: San Francisco, CA"
-            />
-          </Field>
 
           {/* Ticketing */}
           <div className="grid grid-cols-2 gap-4">
-            <Field>
-              <Label htmlFor="price">Ticket Price</Label>
-              <Input
-                id="price"
-                name="price"
-                type="number"
-                placeholder="Enter ticket price"
-              />
-            </Field>
+            <form.Field name="ticket_price">
+              {(field) => (
+                <Field
+                  data-invalid={
+                    field.state.meta.isTouched && !field.state.meta.isValid
+                  }
+                >
+                  <Label htmlFor={field.name}>Ticket Price</Label>
+                  <Input
+                    placeholder="Enter ticket price"
+                    type="number"
+                    id={field.name}
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                  />
+                  <FieldError errors={field.state.meta.errors} />
+                </Field>
+              )}
+            </form.Field>
 
-            <Field>
-              <Label htmlFor="currency">Currency</Label>
-              <Select name="currency" defaultValue="EUR">
-                <SelectTrigger className="h-14! w-full">
-                  <SelectValue placeholder="Select currency" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="EUR">EUR (€)</SelectItem>
-                  <SelectItem value="USD">USD ($)</SelectItem>
-                </SelectContent>
-              </Select>
-            </Field>
-          </div>
+            <form.Field name="sold_limit">
+              {(field) => (
+                <Field
+                  data-invalid={
+                    field.state.meta.isTouched && !field.state.meta.isValid
+                  }
+                >
+                  <Label htmlFor={field.name}>Total Capacity</Label>
+                  <Input
+                    placeholder="Ex: 500"
+                    type="number"
+                    id={field.name}
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                  />
+                  <FieldError errors={field.state.meta.errors} />
+                </Field>
+              )}
+            </form.Field>
 
-          <div className="grid grid-cols-2 gap-4">
-            <Field>
-              <Label htmlFor="capacity">Total Capacity</Label>
-              <Input
-                id="capacity"
-                name="capacity"
-                type="number"
-                placeholder="Ex: 500"
-              />
-            </Field>
+            <form.Field name="ticket_status">
+              {(field) => (
+                <Field>
+                  <Label>Ticket Status</Label>
+                  <Select
+                    value={field.state.value}
+                    onValueChange={(v: ITicketStatus) => field.handleChange(v)}
+                  >
+                    <SelectTrigger className="h-14!">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="General">General</SelectItem>
+                      <SelectItem value="VIP">VIP</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </Field>
+              )}
+            </form.Field>
 
-            <Field>
-              <Label htmlFor="badge">Ticket Badge</Label>
-              <Select name="badge" defaultValue="regular">
-                <SelectTrigger className="h-14! w-full">
-                  <SelectValue placeholder="Select badge" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="popular">Most Popular</SelectItem>
-                  <SelectItem value="regular">Regular</SelectItem>
-                  <SelectItem value="new">New</SelectItem>
-                </SelectContent>
-              </Select>
-            </Field>
+            <form.Field name="included">
+              {(field) => (
+                <Field
+                  data-invalid={
+                    field.state.meta.isTouched && !field.state.meta.isValid
+                  }
+                >
+                  <Label>Included features</Label>
+                  <Input
+                    placeholder="3 day event, All keynote sessions, Workshop participation"
+                    value={field.state.value}
+                    id={field.name}
+                    onBlur={field.handleBlur}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                  />
+
+                  <FieldError errors={field.state.meta.errors} />
+                </Field>
+              )}
+            </form.Field>
           </div>
 
           {/* Visibility */}
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2">
-              <Checkbox id="active" name="active" defaultChecked />
-              <Label htmlFor="active">Active</Label>
-            </div>
-          </div>
+          <form.Field name="is_active">
+            {(field) => (
+              <div className="flex items-center gap-3">
+                <Checkbox
+                  id={field.name}
+                  checked={field.state.value}
+                  onCheckedChange={(v) => field.handleChange(Boolean(v))}
+                />
+                <Label htmlFor={field.name}>Active bundle</Label>
+              </div>
+            )}
+          </form.Field>
 
           <DialogFooter>
             <DialogClose asChild>
-              <Button size="lg" variant="primary-inverse">
+              <Button type="button" size="lg" variant="primary-inverse">
                 Cancel
               </Button>
             </DialogClose>
-            <Button size="lg" variant="primary" type="submit">
+            <Button
+              size="lg"
+              variant="primary"
+              type="submit"
+              disabled={creating}
+            >
               Create Event
             </Button>
           </DialogFooter>
