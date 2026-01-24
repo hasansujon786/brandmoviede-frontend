@@ -4,7 +4,7 @@ export interface ICoins extends IPaginationMetaData {
   data: ICoin[];
 }
 
-export type ICoinBundleStatus = "Active" | "Inactive";
+export type IActiveStatus = "Active" | "Inactive";
 export interface ICoin {
   id: string;
   name: string;
@@ -21,7 +21,7 @@ export interface IAdminCoinBundle {
   coin_amount: number;
   total_sold?: number;
   thumbnail?: string;
-  status: ICoinBundleStatus;
+  status: IActiveStatus;
   created_at: string;
   updated_at: string;
 }

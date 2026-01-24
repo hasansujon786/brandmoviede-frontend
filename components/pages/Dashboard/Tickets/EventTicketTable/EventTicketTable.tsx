@@ -1,4 +1,5 @@
 "use client";
+import CreateEventTicketDialog from "@/components/dashboard/CreateEventTicketDialog/CreateEventTicketDialog";
 import { DataTable, Pagenation } from "@/components/shared/DataTable/DataTable";
 import {
   PaginationPageProvider,
@@ -54,6 +55,7 @@ export const columns: ColumnDef<ITicketListItem>[] = [
       const status = row?.original?.status;
       const varient = getStatusVariant(status);
 
+      // TODO: add update status
       return (
         <Badge variant={varient}>
           <span>{status}</span>
@@ -132,13 +134,15 @@ function TableActionCell(props: ITicketListItem) {
         <EyeIcon className="size-4" />
       </Button>
 
-      <Button
-        className="border-primary-200 text-primary-400 hover:border-primary-400 rounded-md"
-        variant="primary-secondary"
-        size="icon-sm"
-      >
-        <PenIcon className="size-4" />
-      </Button>
+      <CreateEventTicketDialog mode="edit" initialValues={props}>
+        <Button
+          className="border-primary-200 text-primary-400 hover:border-primary-400 rounded-md"
+          variant="primary-secondary"
+          size="icon-sm"
+        >
+          <PenIcon className="size-4" />
+        </Button>
+      </CreateEventTicketDialog>
 
       <Button
         disabled={isDeleting}

@@ -5,6 +5,8 @@ import {
   IAdminTicketListDataPayload,
   IAdminCreateTicketParams,
   IAdminCreateTicketPayload,
+  IAdminSingleTicket,
+  WithStatus,
 } from "@/types";
 
 const ticketApis = baseApi.injectEndpoints({
@@ -16,12 +18,12 @@ const ticketApis = baseApi.injectEndpoints({
       query: (params) => `/admin/ticket/all${createQueryParams(params)}`,
       providesTags: ["Ticket"] as const,
     }),
-    // adminGetCoinBundleById: builder.query<IAdminCoinBundle, string>({
-    //   query: (id) => `/admin/coin/${id}`,
-    //   providesTags: (_result, _error, id) => [{ type: "Coin", id }],
-    //   transformResponse: (response: WithStatus<IAdminCoinBundle>) =>
-    //     response.data,
-    // }),
+    adminGetTicketById: builder.query<IAdminSingleTicket, string>({
+      query: (id) => `/admin/ticket/${id}`,
+      providesTags: (_result, _error, id) => [{ type: "Ticket", id }],
+      transformResponse: (response: WithStatus<IAdminSingleTicket>) =>
+        response.data,
+    }),
     adminCreateTicket: builder.mutation<
       IAdminCreateTicketPayload,
       IAdminCreateTicketParams
@@ -40,8 +42,9 @@ const ticketApis = baseApi.injectEndpoints({
           location,
           ticket_status,
           thumbnail,
+          is_active,
         } = params;
-
+        formData.append("is_active", String(is_active));
         formData.append("title", title);
         formData.append("description", description);
         formData.append("about", about);
@@ -63,37 +66,54 @@ const ticketApis = baseApi.injectEndpoints({
         };
       },
     }),
-    // adminUpdateCoin: builder.mutation<void, IUpdateCoinParams>({
-    //   invalidatesTags: (_result, _error, arg) => [
-    //     { type: "Coin", id: arg.id },
-    //     "Coin",
-    //   ],
-    //   query: ({ id, price, coin_amount, thumbnail, is_active }) => {
-    //     const formData = new FormData();
-    //
-    //     if (coin_amount !== undefined) {
-    //       formData.append("coin_amount", coin_amount.toString());
-    //     }
-    //
-    //     if (price !== undefined) {
-    //       formData.append("price", price.toString());
-    //     }
-    //
-    //     if (thumbnail) {
-    //       formData.append("thumbnail", thumbnail);
-    //     }
-    //
-    //     if (typeof is_active === "boolean") {
-    //       formData.append("is_active", String(is_active));
-    //     }
-    //
-    //     return {
-    //       url: `/admin/coin/${id}`,
-    //       method: "PATCH",
-    //       body: formData,
-    //     };
-    //   },
-    // }),
+    adminUpdateTicket: builder.mutation<
+      IAdminCreateTicketPayload,
+      Partial<IAdminCreateTicketParams> & { id: string } // all fields optional except id
+    >({
+      invalidatesTags: (_result, _error, arg) => [
+        { type: "Ticket", id: arg.id },
+        "Ticket",
+      ],
+      query: (params) => {
+        const { id, included, thumbnail, ...rest } = params;
+
+        const formData = new FormData();
+
+        // Append only defined fields
+        Object.entries(rest).forEach(([key, value]) => {
+          if (value !== undefined && value !== null) {
+            if (key === "ticket_price" || key === "sold_limit") {
+              formData.append(key, value.toString());
+            } else if (key === "event_date") {
+              formData.append(
+                key,
+                new Date(value as string | Date).toISOString(),
+              );
+            } else {
+              formData.append(key, value as string);
+            }
+          }
+        });
+
+        // Append included array if exists
+        if (included && Array.isArray(included)) {
+          included.forEach((item) => {
+            formData.append("included[]", item);
+          });
+        }
+
+        // Append thumbnail if exists
+        if (thumbnail) {
+          formData.append("thumbnail", thumbnail);
+        }
+
+        return {
+          url: `/admin/ticket/${id}`,
+          method: "PATCH",
+          body: formData,
+        };
+      },
+    }),
     adminDeleteTicketById: builder.mutation<void, { id: string }>({
       invalidatesTags: (_result, _error, arg) => [
         { type: "Ticket", id: arg.id },
@@ -110,8 +130,10 @@ const ticketApis = baseApi.injectEndpoints({
 
 export const {
   useAdminGetAllTicketsQuery,
+  useAdminGetTicketByIdQuery,
   useAdminDeleteTicketByIdMutation,
   useAdminCreateTicketMutation,
+  useAdminUpdateTicketMutation,
 } = ticketApis;
 
 export default ticketApis;

@@ -1,5 +1,6 @@
 import * as z from "zod";
 import { WithPaginationAndStatus } from "../shared";
+import { IActiveStatus } from "./coin";
 
 export interface ITicket {
   id: string;
@@ -18,18 +19,35 @@ export interface ITicket {
   created_at: string;
 }
 
+export interface IAdminSingleTicket {
+  id: string;
+  title: string;
+  description: string;
+  about: string;
+  included: string[];
+  ticket_price: number;
+  status: IActiveStatus;
+  ticket_status: ITicketStatus;
+  sold_limit: number;
+  event_date: string;
+  location: string;
+  thumbnail: string;
+  revenue: number;
+  total_sold: number;
+  created_at: string;
+}
+
 export interface ITicketListItem {
   id: string;
   title: string;
   ticket_price: number;
-  status: string;
+  status: IActiveStatus;
   sold_limit: number;
   event_date: string;
   revenue: number;
   total_sold: number;
   created_at: string;
 }
-
 export type IAdminTicketListDataPayload = WithPaginationAndStatus<
   ITicketListItem[]
 >;
@@ -40,6 +58,7 @@ export type ITicketStatus = z.infer<typeof TicketStatusEnum>;
 export interface IAdminCreateTicketParams {
   title: string;
   description: string;
+  is_active: boolean;
   about: string;
   included: string[];
   ticket_price: number;

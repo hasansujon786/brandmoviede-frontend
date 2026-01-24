@@ -23,24 +23,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  useAdminGetTicketByIdQuery,
-  useAdminCreateTicketMutation,
-  useAdminUpdateTicketMutation,
-} from "@/redux/features/admin/ticketApis";
-import { skipToken } from "@reduxjs/toolkit/query";
+import { useAdminCreateTicketMutation, useAdminUpdateTicketMutation } from "@/redux/features/admin/ticketApis";
 import { useForm } from "@tanstack/react-form";
-import Image from "next/image";
-import { IAdminSingleTicket, ITicketStatus, TicketStatusEnum } from "@/types";
+
+import { Textarea } from "@/components/ui/textarea";
+import { ITicketStatus, TicketStatusEnum } from "@/types";
 import { useState } from "react";
 import { toast } from "sonner";
 import * as z from "zod";
 
-/* ---------------------------------- */
-/* Zod Schemas */
-/* ---------------------------------- */
-const baseSchema = {
+const CreateTicketSchema = z.object({
   title: z.string().min(3),
   description: z.string().min(10),
   event_date: z
@@ -55,145 +47,73 @@ const baseSchema = {
   ticket_price: z.coerce.number().positive(),
   sold_limit: z.coerce.number().positive(),
   ticket_status: TicketStatusEnum,
-  included: z.string().min(3, "Please include at least one benefit or feature"),
+  included: z
+    .string()
+    .min(3, { error: "Please include at least one benefit or feature" }),
   is_active: z.boolean(),
-};
-
-const createSchema = z.object({
-  ...baseSchema,
   thumbnail: z
     .custom<File>()
-    .refine((file) => file instanceof File, {
-      message: "Thumbnail is required",
-    })
-    .refine((file) => file && file.type.startsWith("image/"), {
-      message: "Thumbnail must be an image",
-    }),
+    .refine((file) => file instanceof File, "Thumbnail is required"),
 });
-
-const updateSchema = z.object({
-  ...baseSchema,
-  thumbnail: z
-    .custom<File | undefined>()
-    .optional()
-    .refine((file) => !file || file.type.startsWith("image/"), {
-      message: "Thumbnail must be an image",
-    }),
-});
-
-interface EventTicketDialogProps extends React.PropsWithChildren {
-  mode: "create" | "edit";
-  initialValues?: Partial<IAdminSingleTicket>;
-}
 
 export default function CreateEventTicketDialog({
   children,
-  mode = "create",
-  initialValues,
-}: EventTicketDialogProps) {
+}: React.PropsWithChildren) {
   const [open, setOpen] = useState(false);
-
-  const ticketId = open ? initialValues?.id : undefined;
-  const { data: editModeTicketData, isLoading: gettingEditModeInitialData } =
-    useAdminGetTicketByIdQuery(ticketId ?? skipToken);
-
   const [createTicket, { isLoading: creating }] =
     useAdminCreateTicketMutation();
-  const [updateTicket, { isLoading: updating }] =
-    useAdminUpdateTicketMutation();
-
-  const getFormDefaultValues = () => {
-    const data = editModeTicketData ?? initialValues;
-
-    // Format date from ISO string (2026-01-30T00:00:00.000Z) to YYYY-MM-DD
-    const formatDateForInput = (dateString?: string) => {
-      if (!dateString) return "";
-      return dateString.split("T")[0];
-    };
-
-    return {
-      title: data?.title ?? "",
-      description: data?.description ?? "",
-      about: data?.about ?? "",
-      ticket_price: data?.ticket_price?.toString() ?? "",
-      sold_limit: data?.sold_limit?.toString() ?? "",
-      event_date: formatDateForInput(data?.event_date),
-      location: data?.location ?? "",
-      ticket_status: (data?.ticket_status ?? "General") as ITicketStatus,
-      included: data?.included?.join(", ") ?? "",
-      is_active: data?.status == "Inactive" ? false : true,
-      thumbnail: undefined as File | undefined,
-    };
-  };
+  const [updateTicket, { isLoading: updating }] = useAdminUpdateTicketMutation();
 
   const form = useForm({
-    defaultValues: getFormDefaultValues(),
+    defaultValues: {
+      title: "",
+      description: "",
+      about: "",
+      ticket_price: "",
+      sold_limit: "",
+      event_date: "",
+      location: "",
+      ticket_status: "General" as ITicketStatus,
+      included: "",
+      is_active: true,
+      thumbnail: undefined as File | undefined,
+    },
     validators: {
-      onSubmit: mode === "create" ? createSchema : updateSchema,
+      onSubmit: CreateTicketSchema,
     },
     onSubmit: async ({ value }) => {
+      if (value.thumbnail === undefined) {
+        return;
+      }
+
       const includedArray = (value.included || "")
         .split(",")
         .map((item) => item.trim())
         .filter(Boolean);
 
       try {
-        if (mode === "create") {
-          await createTicket({
-            title: value.title,
-            description: value.description,
-            about: value.about,
-            ticket_price: Number(value.ticket_price),
-            sold_limit: Number(value.sold_limit),
-            event_date: value.event_date,
-            location: value.location,
-            ticket_status: value.ticket_status,
-            included: includedArray,
-            is_active: value.is_active,
-            thumbnail: value.thumbnail!,
-          }).unwrap();
+        // await createTicket({
+        //   ...value,
+        //   ticket_price: Number(value.ticket_price),
+        //   sold_limit: Number(value.sold_limit),
+        //   thumbnail: value.thumbnail!,
+        //   included: includedArray,
+        // }).unwrap();
 
-          toast.success("Event ticket created successfully");
-        } else {
-          if (!ticketId) {
-            throw new Error("Ticket Id not found");
-          }
-          await updateTicket({
-            id: ticketId,
-            title: value.title,
-            description: value.description,
-            about: value.about,
-            ticket_price: Number(value.ticket_price),
-            sold_limit: Number(value.sold_limit),
-            event_date: value.event_date,
-            location: value.location,
-            ticket_status: value.ticket_status,
-            included: includedArray,
-            is_active: value.is_active,
-            thumbnail: value.thumbnail,
-          }).unwrap();
+        await updateTicket({
+          id: "cmks2a7l30008ism0lnupkavg",
+          title: "updated title",
+        }).unwrap();
 
-          toast.success("Event ticket updated successfully");
-        }
-
+        toast.success("Ticket created successfully");
         form.reset();
         setOpen(false);
       } catch (err) {
         console.log(err);
-        toast.error(
-          mode === "create"
-            ? "Failed to create event ticket"
-            : "Failed to update event ticket",
-        );
+        toast.error("Failed to create ticket");
       }
     },
   });
-
-  const isSubmitting =
-    form.state.isSubmitting ||
-    creating ||
-    updating ||
-    gettingEditModeInitialData;
 
   return (
     <Dialog
@@ -205,15 +125,11 @@ export default function CreateEventTicketDialog({
     >
       <DialogTrigger asChild>{children}</DialogTrigger>
 
-      <DialogContent className="bg-card custom-scrollbar grid max-h-[calc(100svh-40px)] gap-5 overflow-y-scroll sm:max-w-4xl">
+      <DialogContent className="bg-card sm:max-w-4xl">
         <DialogHeader>
-          <DialogTitle>
-            {mode === "create" ? "Create Event Ticket" : "Update Event Ticket"}
-          </DialogTitle>
+          <DialogTitle>Create Event Ticket</DialogTitle>
           <DialogDescription>
-            {mode === "create"
-              ? "Create and publish a new event ticket"
-              : "Update event ticket details"}
+            Create and publish a new event ticket.
           </DialogDescription>
         </DialogHeader>
 
@@ -296,7 +212,7 @@ export default function CreateEventTicketDialog({
                   field.state.meta.isTouched && !field.state.meta.isValid
                 }
               >
-                <Label htmlFor={field.name}>Event Ticket Thumbnail</Label>
+                <Label htmlFor={field.name}>Event Ticke Thumbnail</Label>
                 <FileInput
                   id={field.name}
                   multiple={false}
@@ -306,24 +222,24 @@ export default function CreateEventTicketDialog({
                 />
 
                 {/* Existing image preview (edit mode) */}
-                {gettingEditModeInitialData ||
-                (!field.state.value && editModeTicketData?.thumbnail) ? (
-                  <>
-                    <h3 className="font-body mt-4 mb-1 text-sm">
-                      Current thumbnail
-                    </h3>
-                    <div className="bg-accent-light-gray border-border flex items-center justify-between space-x-4 rounded-lg border p-3">
-                      <Image
-                        unoptimized
-                        width={64}
-                        height={64}
-                        src={editModeTicketData?.thumbnail as string}
-                        alt=""
-                        className="bg-muted size-16 rounded border object-cover"
-                      />
-                    </div>
-                  </>
-                ) : null}
+                {/* {gettingEditModeInitialData || */}
+                {/* (!field.state.value && editModeCoinData?.thumbnail) ? ( */}
+                {/*   <> */}
+                {/*     <h3 className="font-body mt-4 mb-1 text-sm"> */}
+                {/*       Current thumbnail */}
+                {/*     </h3> */}
+                {/*     <div className="bg-accent-light-gray border-border flex items-center justify-between space-x-4 rounded-lg border p-3"> */}
+                {/*       <Image */}
+                {/*         unoptimized */}
+                {/*         width={64} */}
+                {/*         height={64} */}
+                {/*         src={editModeCoinData?.thumbnail as string} */}
+                {/*         alt="" */}
+                {/*         className="bg-muted size-16 rounded border object-cover" */}
+                {/*       /> */}
+                {/*     </div> */}
+                {/*   </> */}
+                {/* ) : null} */}
 
                 <FieldError errors={field.state.meta.errors} />
               </Field>
@@ -452,6 +368,7 @@ export default function CreateEventTicketDialog({
                     onBlur={field.handleBlur}
                     onChange={(e) => field.handleChange(e.target.value)}
                   />
+
                   <FieldError errors={field.state.meta.errors} />
                 </Field>
               )}
@@ -467,7 +384,7 @@ export default function CreateEventTicketDialog({
                   checked={field.state.value}
                   onCheckedChange={(v) => field.handleChange(Boolean(v))}
                 />
-                <Label htmlFor={field.name}>Active ticket</Label>
+                <Label htmlFor={field.name}>Active bundle</Label>
               </div>
             )}
           </form.Field>
@@ -482,17 +399,9 @@ export default function CreateEventTicketDialog({
               size="lg"
               variant="primary"
               type="submit"
-              disabled={isSubmitting}
+              disabled={creating}
             >
-              {isSubmitting
-                ? mode === "create"
-                  ? "Creating..."
-                  : gettingEditModeInitialData
-                    ? "Fetcing data.."
-                    : "Updating..."
-                : mode === "create"
-                  ? "Create Event"
-                  : "Update Event"}
+              Create Event
             </Button>
           </DialogFooter>
         </form>

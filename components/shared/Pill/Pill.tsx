@@ -66,6 +66,7 @@ export function getPillClass(s?: string) {
   return state[s as keyof typeof state];
 }
 
+// TODO: update ticker status
 export type TicketStatus = keyof typeof state;
 
 interface TicketBadgeProps {

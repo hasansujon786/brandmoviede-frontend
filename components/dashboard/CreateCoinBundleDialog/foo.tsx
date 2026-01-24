@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -17,20 +18,18 @@ import { FileInput } from "@/components/ui/file-input";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
-  useAdminGetCoinBundleByIdQuery,
   useAdminUpdateCoinMutation,
-  useAdminCreateCoinMutation,
+  useCreateCoinMutation,
 } from "@/redux/features/admin/coinApis";
-import { skipToken } from "@reduxjs/toolkit/query";
 import { useForm } from "@tanstack/react-form";
-import Image from "next/image";
-import React, { useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import * as z from "zod";
 
 /* ---------------------------------- */
 /* Zod Schemas */
 /* ---------------------------------- */
+
 const baseSchema = {
   is_active: z.boolean(),
   coin_amount: z.coerce.number<string>().positive("Coin amount must be > 0"),
@@ -54,30 +53,35 @@ const updateSchema = z.object({
   thumbnail: z.custom<File | undefined>().optional(),
 });
 
-interface CoinBundleDialogProps extends React.PropsWithChildren {
+/* ---------------------------------- */
+/* Types */
+/* ---------------------------------- */
+
+type CoinBundleDialogProps = {
   mode: "create" | "edit";
   initialValues?: {
     id: string;
     coin_amount: number;
     price: number;
     is_active: boolean;
-    thumbnail_url?: string;
   };
-}
+  children: React.ReactNode;
+};
 
-export default function CreateCoinBundleDialog({
-  children,
-  mode = "create",
+/* ---------------------------------- */
+/* Component */
+/* ---------------------------------- */
+
+export function CoinBundleDialog({
+  mode,
   initialValues,
+  children,
 }: CoinBundleDialogProps) {
   const [open, setOpen] = useState(false);
 
-  const coinId = open ? initialValues?.id : undefined;
-  const { data: editModeCoinData, isLoading: gettingEditModeInitialData } =
-    useAdminGetCoinBundleByIdQuery(coinId ?? skipToken);
-
-  const [createCoin, { isLoading: creating }] = useAdminCreateCoinMutation();
-  const [updateCoin, { isLoading: updating }] = useAdminUpdateCoinMutation();
+  const [createCoin, { isLoading: creating }] = useCreateCoinMutation();
+  const [updateCoin, { isLoading: updating }] =
+    useAdminUpdateCoinMutation();
 
   const form = useForm({
     defaultValues: {
@@ -101,7 +105,6 @@ export default function CreateCoinBundleDialog({
 
           toast.success("Coin bundle created successfully");
         } else {
-          console.log(value, initialValues!.id);
           await updateCoin({
             id: initialValues!.id,
             coin_amount: Number(value.coin_amount),
@@ -126,10 +129,7 @@ export default function CreateCoinBundleDialog({
   });
 
   const isSubmitting =
-    form.state.isSubmitting ||
-    creating ||
-    updating ||
-    gettingEditModeInitialData;
+    form.state.isSubmitting || creating || updating;
 
   return (
     <Dialog
@@ -144,7 +144,9 @@ export default function CreateCoinBundleDialog({
       <DialogContent className="bg-card sm:max-w-2xl">
         <DialogHeader>
           <DialogTitle>
-            {mode === "create" ? "Create Coin Bundle" : "Update Coin Bundle"}
+            {mode === "create"
+              ? "Create Coin Bundle"
+              : "Update Coin Bundle"}
           </DialogTitle>
           <DialogDescription>
             {mode === "create"
@@ -166,16 +168,18 @@ export default function CreateCoinBundleDialog({
               {(field) => (
                 <Field
                   data-invalid={
-                    field.state.meta.isTouched && !field.state.meta.isValid
+                    field.state.meta.isTouched &&
+                    !field.state.meta.isValid
                   }
                 >
-                  <Label htmlFor={field.name}>Coin Amount</Label>
+                  <Label>Coin Amount</Label>
                   <Input
                     type="number"
-                    id={field.name}
                     value={field.state.value}
                     onBlur={field.handleBlur}
-                    onChange={(e) => field.handleChange(e.target.value)}
+                    onChange={(e) =>
+                      field.handleChange(e.target.value)
+                    }
                   />
                   <FieldError errors={field.state.meta.errors} />
                 </Field>
@@ -186,16 +190,18 @@ export default function CreateCoinBundleDialog({
               {(field) => (
                 <Field
                   data-invalid={
-                    field.state.meta.isTouched && !field.state.meta.isValid
+                    field.state.meta.isTouched &&
+                    !field.state.meta.isValid
                   }
                 >
-                  <Label htmlFor={field.name}>Price</Label>
+                  <Label>Price</Label>
                   <Input
-                    id={field.name}
                     type="number"
                     value={field.state.value}
                     onBlur={field.handleBlur}
-                    onChange={(e) => field.handleChange(e.target.value)}
+                    onChange={(e) =>
+                      field.handleChange(e.target.value)
+                    }
                   />
                   <FieldError errors={field.state.meta.errors} />
                 </Field>
@@ -208,38 +214,19 @@ export default function CreateCoinBundleDialog({
             {(field) => (
               <Field
                 data-invalid={
-                  field.state.meta.isTouched && !field.state.meta.isValid
+                  field.state.meta.isTouched &&
+                  !field.state.meta.isValid
                 }
               >
-                <Label htmlFor={field.name}>Thumbnail</Label>
+                <Label>Thumbnail</Label>
                 <FileInput
-                  id={field.name}
                   multiple={false}
                   accept="image/*"
                   onBlur={field.handleBlur}
-                  onChange={(files) => field.handleChange(files[0])}
+                  onChange={(files) =>
+                    field.handleChange(files[0])
+                  }
                 />
-
-                {/* Existing image preview (edit mode) */}
-                {gettingEditModeInitialData ||
-                (!field.state.value && editModeCoinData?.thumbnail) ? (
-                  <>
-                    <h3 className="font-body mt-4 mb-1 text-sm">
-                      Current thumbnail
-                    </h3>
-                    <div className="bg-accent-light-gray border-border flex items-center justify-between space-x-4 rounded-lg border p-3">
-                      <Image
-                        unoptimized
-                        width={64}
-                        height={64}
-                        src={editModeCoinData?.thumbnail as string}
-                        alt=""
-                        className="bg-muted size-16 rounded border object-cover"
-                      />
-                    </div>
-                  </>
-                ) : null}
-
                 <FieldError errors={field.state.meta.errors} />
               </Field>
             )}
@@ -250,11 +237,12 @@ export default function CreateCoinBundleDialog({
             {(field) => (
               <div className="flex items-center gap-3">
                 <Checkbox
-                  id={field.name}
                   checked={field.state.value}
-                  onCheckedChange={(v) => field.handleChange(Boolean(v))}
+                  onCheckedChange={(v) =>
+                    field.handleChange(Boolean(v))
+                  }
                 />
-                <Label htmlFor={field.name}>Active bundle</Label>
+                <Label>Active bundle</Label>
               </div>
             )}
           </form.Field>
@@ -263,21 +251,14 @@ export default function CreateCoinBundleDialog({
             <DialogClose asChild>
               <Button variant="primary-inverse">Cancel</Button>
             </DialogClose>
-            <Button
-              size="lg"
-              variant="primary"
-              disabled={isSubmitting}
-              type="submit"
-            >
+            <Button disabled={isSubmitting} type="submit">
               {isSubmitting
                 ? mode === "create"
                   ? "Creating..."
-                  : gettingEditModeInitialData
-                    ? "Fetcing data.."
-                    : "Updating..."
+                  : "Updating..."
                 : mode === "create"
-                  ? "Create Bundle"
-                  : "Update Bundle"}
+                ? "Create Bundle"
+                : "Update Bundle"}
             </Button>
           </DialogFooter>
         </form>

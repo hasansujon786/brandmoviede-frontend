@@ -12,7 +12,7 @@ export default function DashboardHomePage() {
     <div className="space-y-4 p-5">
       <TopActionBar>
         <div className="flex items-center gap-4">
-          <CreateEventTicketDialog>
+          <CreateEventTicketDialog mode="create">
             <Button size="lg" variant="primary-inverse">
               Add Event
             </Button>
