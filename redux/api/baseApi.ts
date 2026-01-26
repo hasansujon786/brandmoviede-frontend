@@ -7,7 +7,7 @@ import {
 } from "@reduxjs/toolkit/query/react";
 import { logOut, setCredentials } from "../features/auth/authSlice";
 import constants from "@/constant";
-import { ILoginPayload, ILoginParams } from "@/types/user/auth";
+import { ILoginPayload, ILoginParams } from "@/types";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: constants.baseApiUrl,

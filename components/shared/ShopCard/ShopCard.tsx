@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { config } from "@/constant";
-import { ICoin } from "@/types/coin/coin";
+import { ICoin } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
 import CounterButton from "../CounterButton/CounterButton";

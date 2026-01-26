@@ -1,15 +1,14 @@
 import { createQueryParams } from "@/lib/utils/formatters";
 import { baseApi } from "@/redux/api/baseApi";
-import type { IPaginationParams, WithStatus } from "@/types";
-import {
+import type {
   IOrderItem,
   IOverviewStats,
   ISalesAnalyticsChartData,
   ISalesAnalyticsChartParams,
   IUserActivityItem,
-} from "@/types/admin/dashboard";
-
-import mock from "./mock.json";
+  IPaginationParams,
+  WithStatus,
+} from "@/types";
 
 const dashboardApis = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -53,6 +52,6 @@ export const {
   useGetRecentOrdersQuery,
   useGetOverviewStatsQuery,
   useGetSalesAnalyticsChartDataQuery,
-  useGetUserActivityChartDataQuery
+  useGetUserActivityChartDataQuery,
 } = dashboardApis;
 export default dashboardApis;

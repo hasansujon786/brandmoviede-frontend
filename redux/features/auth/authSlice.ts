@@ -1,5 +1,5 @@
 import { RootState } from "@/redux/store";
-import { IAuthUser, IAuthUserRole } from "@/types/user/auth";
+import { IAuthUser, IAuthUserRole } from "@/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import Cookies from "js-cookie";
 

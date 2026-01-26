@@ -5,7 +5,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ISalesAnalyticsChartParams } from "@/types/admin/dashboard";
+import { ISalesAnalyticsChartParams } from "@/types";
 import React from "react";
 
 type TimeRangeSelectorProps = {

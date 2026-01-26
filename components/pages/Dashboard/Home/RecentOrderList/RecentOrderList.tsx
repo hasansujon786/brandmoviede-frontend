@@ -1,15 +1,9 @@
 "use client";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGetRecentOrdersQuery } from "@/redux/api";
-import { IOrderItem } from "@/types/admin/dashboard";
+import { IOrderItem } from "@/types";
 import { formatDistanceToNow } from "date-fns";
 
 export default function RecentOrderList() {

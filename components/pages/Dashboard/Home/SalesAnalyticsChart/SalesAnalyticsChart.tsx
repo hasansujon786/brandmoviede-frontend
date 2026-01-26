@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/chart";
 import { useGetSalesAnalyticsChartDataQuery } from "@/redux/api";
 import { TrendingUp } from "lucide-react";
-import { ISalesAnalyticsChartParams } from "@/types/admin/dashboard";
+import { ISalesAnalyticsChartParams } from "@/types";
 
 export const description = "An interactive area chart";
 
