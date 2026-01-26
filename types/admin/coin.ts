@@ -1,5 +1,13 @@
 import { IPaginationMetaData, WithPaginationAndStatus } from "../shared";
 
+export interface IAdminCoinStats {
+  total_coin_bundles: number;
+  total_active_coin_bundles: number;
+  total_inactive_coin_bundles: number;
+  total_coin_sold: number;
+  total_revenue: number;
+}
+
 export interface ICoins extends IPaginationMetaData {
   data: ICoin[];
 }

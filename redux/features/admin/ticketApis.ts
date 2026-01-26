@@ -7,10 +7,16 @@ import {
   IAdminCreateTicketPayload,
   IAdminSingleTicket,
   WithStatus,
+  IAdminTicketStats,
 } from "@/types";
 
 const ticketApis = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+    adminGetTicketStats: builder.query<IAdminTicketStats, void>({
+      query: () => `/admin/coin/stats`,
+      transformResponse: (response: WithStatus<IAdminTicketStats>) =>
+        response.data,
+    }),
     adminGetAllTickets: builder.query<
       IAdminTicketListDataPayload,
       IPaginationParams | void
@@ -129,6 +135,7 @@ const ticketApis = baseApi.injectEndpoints({
 });
 
 export const {
+  useAdminGetTicketStatsQuery,
   useAdminGetAllTicketsQuery,
   useAdminGetTicketByIdQuery,
   useAdminDeleteTicketByIdMutation,

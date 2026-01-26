@@ -174,7 +174,7 @@ export default function EventTicketPurchaseTable() {
         </CardContent>
       </Card>
 
-      <Pagenation ghoustBtn />
+      {/* <Pagenation ghoustBtn /> */}
     </section>
   );
 }

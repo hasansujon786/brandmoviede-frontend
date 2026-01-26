@@ -2,6 +2,15 @@ import * as z from "zod";
 import { WithPaginationAndStatus } from "../shared";
 import { IActiveStatus } from "./coin";
 
+export interface IAdminTicketStats {
+  total_tickets: number;
+  active_tickets: number;
+  inactive_tickets: number;
+  total_sold: number;
+  total_revenue: number;
+  total_upcoming: number;
+}
+
 export interface ITicket {
   id: string;
   title: string;
