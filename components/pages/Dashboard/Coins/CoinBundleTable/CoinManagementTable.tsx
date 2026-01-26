@@ -4,16 +4,9 @@ import { DataTable, Pagenation } from "@/components/shared/DataTable/DataTable";
 import { EyeIcon } from "@/components/shared/icons/EyeIcon";
 import { PenIcon } from "@/components/shared/icons/PenIcon";
 import { TrushIcon } from "@/components/shared/icons/TrushIcon";
+import { StatusSelect } from "@/components/shared/StatusSelect/StatusSelect";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { cn } from "@/lib/utils";
 import {
   useAdminDeleteCoinMutation,
   useAdminUpdateCoinMutation,
@@ -23,15 +16,6 @@ import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 import { ReactNode } from "react";
 import { toast } from "sonner";
-
-// TODO: remove this pseudo type
-export interface PackageItem {
-  packageName: number;
-  coinsAmount: string;
-  price: number;
-  totalSales: number;
-  status: string;
-}
 
 export const columns: ColumnDef<IAdminCoinBundle>[] = [
   {
@@ -113,7 +97,7 @@ function TableActionCell(props: IAdminCoinBundle) {
         size="icon-sm"
         asChild
       >
-        <Link href={`/bundles/${props?.id}`}>
+        <Link target="_blank" href={`/bundles/${props?.id}`}>
           <EyeIcon className="size-4" />
         </Link>
       </Button>
@@ -164,28 +148,10 @@ function TableActiveStatusCell({ status, id }: IAdminCoinBundle) {
   };
 
   return (
-    <Select
-      disabled={isLoading}
+    <StatusSelect
       value={status}
-      onValueChange={handleStatusChange}
-    >
-      <SelectTrigger
-        className={cn("w-28 border-transparent bg-current/10", {
-          "text-[#007BFF]": is_active,
-          "text-[#CF5C56]": !is_active,
-        })}
-        aria-label={status}
-      >
-        <SelectValue className="" placeholder="Select Status" />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectItem value="Active" className="rounded-lg">
-          Active
-        </SelectItem>
-        <SelectItem value="Inactive" className="rounded-lg">
-          Inactive
-        </SelectItem>
-      </SelectContent>
-    </Select>
+      isLoading={isLoading}
+      onChange={handleStatusChange}
+    />
   );
 }

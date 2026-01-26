@@ -6,28 +6,22 @@ import {
   usePaginatedQuery,
   usePaginationPage,
 } from "@/components/shared/DataTable/PaginationPageProvider";
-import { ChevronDown } from "@/components/shared/icons/chevron";
 import { EyeIcon } from "@/components/shared/icons/EyeIcon";
 import { PenIcon } from "@/components/shared/icons/PenIcon";
 import { TrushIcon } from "@/components/shared/icons/TrushIcon";
-import { Badge } from "@/components/ui/badge";
+import { StatusSelect } from "@/components/shared/StatusSelect/StatusSelect";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { createGetVarient } from "@/lib/utils/varients";
 import {
   useAdminDeleteTicketByIdMutation,
   useAdminGetAllTicketsQuery,
+  useAdminUpdateTicketMutation,
 } from "@/redux/features/admin/ticketApis";
 import { ITicketListItem } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
+import dayjs from "dayjs";
+import Link from "next/link";
 import { toast } from "sonner";
-
-export const statusVariantMap = {
-  Active: "info",
-  Inactive: "brown",
-} as const;
-const getStatusVariant = createGetVarient(statusVariantMap, "info");
-export type EventStatus = keyof typeof statusVariantMap;
 
 export const columns: ColumnDef<ITicketListItem>[] = [
   {
@@ -37,6 +31,7 @@ export const columns: ColumnDef<ITicketListItem>[] = [
   {
     accessorKey: "event_date",
     header: "Event Date",
+    cell: ({ row }) => dayjs(row.original.event_date).format("YYYY-MM-DD"),
   },
   {
     accessorKey: "revenue",
@@ -51,18 +46,7 @@ export const columns: ColumnDef<ITicketListItem>[] = [
   {
     accessorKey: "status",
     header: "Status",
-    cell: ({ row }) => {
-      const status = row?.original?.status;
-      const varient = getStatusVariant(status);
-
-      // TODO: add update status
-      return (
-        <Badge variant={varient}>
-          <span>{status}</span>
-          <ChevronDown />
-        </Badge>
-      );
-    },
+    cell: ({ row }) => <TableActiveStatusCell {...row.original} />,
   },
   {
     header: "Actions",
@@ -130,8 +114,11 @@ function TableActionCell(props: ITicketListItem) {
         className="border-primary-200 text-primary-400 hover:border-primary-400 rounded-md"
         variant="primary-secondary"
         size="icon-sm"
+        asChild
       >
-        <EyeIcon className="size-4" />
+        <Link target="_blank" href={`/tickets/${props.id}`}>
+          <EyeIcon className="size-4" />
+        </Link>
       </Button>
 
       <CreateEventTicketDialog mode="edit" initialValues={props}>
@@ -154,5 +141,31 @@ function TableActionCell(props: ITicketListItem) {
         <TrushIcon className="size-4" />
       </Button>
     </div>
+  );
+}
+
+function TableActiveStatusCell({
+  status,
+  id,
+}: Pick<ITicketListItem, "status" | "id">) {
+  const [updateCoin, { isLoading }] = useAdminUpdateTicketMutation();
+
+  const is_active = status === "Active";
+
+  const handleStatusChange = async (newStatus: "Active" | "Inactive") => {
+    try {
+      await updateCoin({ id, is_active: !is_active }).unwrap();
+      toast.success(`Ticket status updated to ${newStatus}`);
+    } catch {
+      toast.error("Failed to update ticket status");
+    }
+  };
+
+  return (
+    <StatusSelect
+      value={status}
+      isLoading={isLoading}
+      onChange={handleStatusChange}
+    />
   );
 }
