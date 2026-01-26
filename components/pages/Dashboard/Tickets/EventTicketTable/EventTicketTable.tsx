@@ -12,6 +12,7 @@ import { TrushIcon } from "@/components/shared/icons/TrushIcon";
 import { StatusSelect } from "@/components/shared/StatusSelect/StatusSelect";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { getFormatedDate } from "@/lib/utils";
 import {
   useAdminDeleteTicketByIdMutation,
   useAdminGetAllTicketsQuery,
@@ -19,7 +20,6 @@ import {
 } from "@/redux/features/admin/ticketApis";
 import { ITicketListItem } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
-import dayjs from "dayjs";
 import Link from "next/link";
 import { toast } from "sonner";
 
@@ -31,7 +31,7 @@ export const columns: ColumnDef<ITicketListItem>[] = [
   {
     accessorKey: "event_date",
     header: "Event Date",
-    cell: ({ row }) => dayjs(row.original.event_date).format("YYYY-MM-DD"),
+    cell: ({ row }) => getFormatedDate(row.original.event_date),
   },
   {
     accessorKey: "revenue",

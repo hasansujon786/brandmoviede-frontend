@@ -1,0 +1,26 @@
+{
+  "adminGetMonthlyRevenueComparisonChart": [
+    { "month": "Jan", "currentYear": 4200, "lastYear": 3100 },
+    { "month": "Feb", "currentYear": 5100, "lastYear": 3800 },
+    { "month": "Mar", "currentYear": 6700, "lastYear": 5200 },
+    { "month": "Apr", "currentYear": 5900, "lastYear": 4600 },
+    { "month": "May", "currentYear": 7400, "lastYear": 6100 },
+    { "month": "Jun", "currentYear": 8200, "lastYear": 6900 },
+    { "month": "Jul", "currentYear": 9600, "lastYear": 7700 },
+    { "month": "Aug", "currentYear": 8800, "lastYear": 7200 },
+    { "month": "Sep", "currentYear": 9100, "lastYear": 7600 },
+    { "month": "Oct", "currentYear": 10500, "lastYear": 8400 },
+    { "month": "Nov", "currentYear": 9800, "lastYear": 7900 },
+    { "month": "Dec", "currentYear": 12500, "lastYear": 9200 }
+  ],
+  "adminGetSaleDistributionPieChart": {
+    "coin": {
+      "amount": 123,
+      "percentage": 30
+    },
+    "event_ticket": {
+      "amount": 33,
+      "percentage": 70
+    }
+  }
+}
