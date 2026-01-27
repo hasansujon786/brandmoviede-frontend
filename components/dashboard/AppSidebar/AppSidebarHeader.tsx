@@ -1,24 +1,24 @@
 "use client";
 
-import { SidebarTrigger } from "@/components/ui/sidebar";
+import { ChevronDown } from "@/components/shared/icons/chevron";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Bell, SearchIcon } from "lucide-react";
-import { ChevronDown } from "@/components/shared/icons/chevron";
-import { Button } from "@/components/ui/button";
-import { useGetMeQuery } from "@/redux/api";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useGetMeQuery } from "@/redux/api";
+import { SearchIcon } from "lucide-react";
+import NotificationBell from "./NotificationBell";
 
 export default function AppSidebarHeader() {
   return (
@@ -39,14 +39,7 @@ export default function AppSidebarHeader() {
           </InputGroupAddon>
         </InputGroup>
 
-        <div>
-          <Button size="icon" className="cursor-pointer border-none">
-            <div className="relative">
-              <span className="bg-primary absolute top-0 right-0 box-content block size-2 rounded-full border-2 border-white" />
-              <Bell className="text-body-200" />
-            </div>
-          </Button>
-        </div>
+        <NotificationBell />
 
         <DropdownMenu>
           <DropdownMenuTrigger>
