@@ -1,5 +1,6 @@
 const constants = {
-  baseApiUrl: process.env.NEXT_PUBLIC_API_URL || "http://192.168.7.42:4008/api",
+  baseApiURL: process.env.NEXT_PUBLIC_API_URL || "http://192.168.7.42:4008/api",
+  socketURL: process.env.NEXT_PUBLIC_SOCKET_URL || "http://192.168.7.42:4008",
 };
 
 export const config = {

@@ -1,5 +1,6 @@
 "use client";
 
+import constants from "@/constant";
 import { useGetAdminNotificationsQuery } from "@/redux/features/admin/nofiticationApis";
 import { useAuth } from "@/redux/features/auth/hooks";
 import { ISocketEmmitData } from "@/types/admin/socket";
@@ -14,8 +15,6 @@ import {
 import { io, Socket } from "socket.io-client";
 import { toast } from "sonner";
 
-// const SOCKET_URL = process.env.NEXT_PUBLIC_SOCKET_URL!;
-const SOCKET_URL = "http://192.168.7.42:4008"; // or env var
 
 type SocketContextType = {
   socket: Socket | null;
@@ -87,7 +86,7 @@ export function SocketProvider({ children }: { children: ReactNode }) {
     // Prevent duplicate connections
     if (socketRef.current) return;
 
-    const socket = io(SOCKET_URL, {
+    const socket = io(constants.socketURL, {
       extraHeaders: {
         authorization: `Bearer ${token}`,
       },

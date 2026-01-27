@@ -10,7 +10,7 @@ import constants from "@/constant";
 import { ILoginPayload, ILoginParams } from "@/types";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: constants.baseApiUrl,
+  baseUrl: constants.baseApiURL,
   credentials: "include",
   prepareHeaders: (headers, { getState }) => {
     // Setting header on every API call
