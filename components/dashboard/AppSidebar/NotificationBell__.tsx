@@ -6,16 +6,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 import { getTitleFromType } from "@/redux/api/socket/SocketProvider";
 import { useSocketState } from "@/redux/api/socket/useSocketState";
 import { useGetAdminNotificationsQuery } from "@/redux/features/admin/nofiticationApis";
 import { IAdminNotificationItem } from "@/types";
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
 import { Bell } from "lucide-react";
-dayjs.extend(relativeTime);
 
 export interface UINotification {
   id: string;
@@ -38,10 +34,15 @@ export const mapAdminNotificationToUI = (
 });
 
 export default function NotificationBell() {
-  const { hasNewNotification, clearNotification } = useSocketState();
+  const {
+    hasNewNotification,
+    clearNotification,
+    notifications, // ← array
+  } = useSocketState();
   const { data, isLoading } = useGetAdminNotificationsQuery();
 
-  const fetchedNotifications = data?.map(mapAdminNotificationToUI) ?? [];
+  const fetchedNotifications = data?.map(mapAdminNotificationToUI);
+  console.log("fetchedNotifications", fetchedNotifications);
 
   return (
     <DropdownMenu onOpenChange={(open) => open && clearNotification()}>
@@ -54,42 +55,29 @@ export default function NotificationBell() {
                 { block: hasNewNotification },
               )}
             />
-            {isLoading ? <Spinner /> : <Bell className="text-body-200" />}
+            <Bell className="text-body-200" />
           </div>
         </Button>
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="end" className="w-80 p-0">
-        <div className="flex items-center justify-between px-4 py-2 font-semibold">
-          <span>Notifications</span>
-
-          <span className="text-xs">{fetchedNotifications.length}</span>
-        </div>
+        <div className="px-4 py-2 font-semibold">Notifications</div>
         <DropdownMenuSeparator />
 
-        <div className="max-h-[320px] overflow-y-auto">
-          {isLoading ? (
+        <div className="max-h-[calc(64*5px)] overflow-y-scroll">
+          {notifications.length === 0 ? (
             <div className="text-muted-foreground px-4 py-6 text-center text-sm">
-              Loading notifications…
-            </div>
-          ) : fetchedNotifications.length === 0 ? (
-            <div className="text-muted-foreground px-4 py-6 text-center text-sm">
-              No notifications
+              No new notifications
             </div>
           ) : (
-            fetchedNotifications.map((n) => (
+            notifications.map((n, i) => (
               <DropdownMenuItem
-                key={n.id}
+                key={i}
                 className="flex cursor-pointer flex-col items-start gap-1 px-4 py-3"
               >
                 <span className="text-sm font-medium">{n.title}</span>
-
                 <span className="text-muted-foreground text-xs">
                   {n.message}
-                </span>
-
-                <span className="text-muted-foreground text-[11px]">
-                  {dayjs(n.createdAt).fromNow()}
                 </span>
               </DropdownMenuItem>
             ))

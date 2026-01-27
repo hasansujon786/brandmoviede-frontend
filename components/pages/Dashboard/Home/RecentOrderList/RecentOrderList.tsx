@@ -43,9 +43,12 @@ function RecentOrderListItem(props: IOrderItem) {
       <div className="text-body-200 flex items-center justify-between text-sm">
         <h6>{props.type}</h6>
         <h6>
-          {formatDistanceToNow(new Date(props.created_at), {
-            addSuffix: true,
-          })}
+          {/* fix: there is no date */}
+          {props?.created_at
+            ? formatDistanceToNow(new Date(props?.created_at), {
+                addSuffix: true,
+              })
+            : ""}
         </h6>
       </div>
     </div>

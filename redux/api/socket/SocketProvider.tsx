@@ -1,6 +1,8 @@
 "use client";
 
+import { useGetAdminNotificationsQuery } from "@/redux/features/admin/nofiticationApis";
 import { useAuth } from "@/redux/features/auth/hooks";
+import { ISocketEmmitData } from "@/types/admin/socket";
 import {
   createContext,
   ReactNode,
@@ -21,6 +23,19 @@ type SocketContextType = {
   clearNotification: () => void;
 };
 
+export const getTitleFromType = (type: string) => {
+  switch (type) {
+    case "owner_coin_low":
+      return "Low balance";
+    case "PAYMENT_DONE":
+      return "Payment successful";
+    case "COIN_PURCHASE":
+      return "Coins purchased";
+    default:
+      return "Notification";
+  }
+};
+
 export const SocketContext = createContext<SocketContextType | null>(null);
 
 export function SocketProvider({ children }: { children: ReactNode }) {
@@ -28,25 +43,27 @@ export function SocketProvider({ children }: { children: ReactNode }) {
 
   const socketRef = useRef<Socket | null>(null);
   const [hasNewNotification, setHasNewNotification] = useState(false);
+  const { refetch: refetchNotifications } = useGetAdminNotificationsQuery();
 
   // Event handlers map
   const eventHandlers = {
-    crossOwnerBalance: (data: any) => {
-      console.log("crossOwnerBalance:", data);
-    },
-
-    lowBalanceAlert: (data: any) => {
+    lowBalanceAlert: (data: ISocketEmmitData) => {
+      refetchNotifications();
       console.log("lowBalanceAlert from provider:", data);
       toast.message(`Low balance: ${JSON.stringify(data, null, 2)}`);
       setHasNewNotification(true);
     },
 
-    clientCoinPurchase: (data: any) => {
+    crossOwnerBalance: (data: ISocketEmmitData) => {
+      console.log("crossOwnerBalance:", data);
+    },
+
+    clientCoinPurchase: (data: ISocketEmmitData) => {
       console.log("clientCoinPurchase:", data);
       setHasNewNotification(true);
     },
 
-    paymentDone: (data: any) => {
+    paymentDone: (data: ISocketEmmitData) => {
       console.log("paymentDone:", data);
       setHasNewNotification(true);
     },
