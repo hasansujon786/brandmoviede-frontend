@@ -46,7 +46,7 @@ export default function Pill({
 }
 
 const state = {
-  REGULAR: {
+  General: {
     class: "pill--purple",
     value: "Regular",
   },
@@ -54,11 +54,12 @@ const state = {
     class: "pill--green",
     value: "New",
   },
-  MOST_POPULAR: {
+  VIP: {
     class: "pill--red2",
     value: "Most Popular",
   },
 };
+export type ITicketPillStatus = keyof typeof state;
 
 export function getPillClass(s?: string) {
   if (typeof s !== "string") return null;
@@ -66,15 +67,12 @@ export function getPillClass(s?: string) {
   return state[s as keyof typeof state];
 }
 
-// TODO: update ticker status
-export type TicketStatus = keyof typeof state;
-
 interface TicketBadgeProps {
   className?: string;
-  status?: TicketStatus;
+  status?: ITicketPillStatus;
 }
 
 export function TicketBadge({ className, status }: TicketBadgeProps) {
-  const c = getPillClass(status) ?? state.REGULAR;
+  const c = getPillClass(status) ?? state.General;
   return <Pill className={cn(c.class, className)}>{c.value}</Pill>;
 }
