@@ -1,16 +1,37 @@
 "use client";
 
+import CounterButton from "@/components/shared/CounterButton/CounterButton";
+import {
+  CounterButtonProvider,
+  useCounterButton,
+} from "@/components/shared/CounterButton/CounterButtonProvider";
 import { CheckCircle } from "@/components/shared/icons/CheckMark";
+import NavigationLink from "@/components/shared/NavigationLink/NavigationLink";
+import SummaryCard from "@/components/shared/SummaryCard/SummaryCard";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { formatCurrency } from "@/lib/utils/formatters";
+import { useGetSingleCoinBundleByIdQuery } from "@/redux/api";
 import Image from "next/image";
 import Link from "next/link";
-import SummaryCard from "@/components/shared/SummaryCard/SummaryCard";
-import CounterButton from "@/components/shared/CounterButton/CounterButton";
+import { useParams, useRouter } from "next/navigation";
 
 export default function BundleDetails() {
-  const bundle = {
-    price: "€10 EUR",
-    coins: "17,000 coins",
+  return (
+    <CounterButtonProvider>
+      <BundleDetailsContent />
+    </CounterButtonProvider>
+  );
+}
+
+function BundleDetailsContent() {
+  const { bundleId } = useParams<{ bundleId: string }>();
+
+  const { data: bundle, isLoading } = useGetSingleCoinBundleByIdQuery(bundleId);
+  const price = bundle?.price ?? 0;
+  const { counter } = useCounterButton();
+
+  const moreInfo = {
     whatsIncluded: [
       "Great value",
       "Instants delivery",
@@ -31,14 +52,14 @@ export default function BundleDetails() {
       { title: "Subtotal", value: "€40 EUR" },
       { title: "Tax", value: "€0.90 EUR" },
     ],
-    main: { title: "Total", value: "€40.99 EUR" },
   };
 
   return (
     <section className="bg-card rounded-2xl p-4 md:p-6 lg:p-8">
       <div className="grid gap-6 md:grid-cols-[1fr_1.4fr] xl:grid-cols-[1fr_1.2fr_1fr]">
         <Image
-          src="/images/sugo-coin.png"
+          unoptimized
+          src={bundle?.thumbnail_url}
           width={360}
           height={360}
           alt=""
@@ -46,16 +67,27 @@ export default function BundleDetails() {
         />
 
         <div>
-          <h2 className="text-heading-100 text-h2 font-medium">
-            {bundle.price}
-          </h2>
-          <h5 className="text-body-200 mt-3 text-lg">{bundle.coins}</h5>
+          {isLoading ? (
+            <Skeleton className="h-12 w-[150px]" />
+          ) : (
+            <h2 className="text-heading-100 text-h2 font-medium">
+              {formatCurrency(price)}
+            </h2>
+          )}
+
+          {isLoading ? (
+            <Skeleton className="mt-3 h-7 w-20" />
+          ) : (
+            <h5 className="text-body-200 mt-3 text-lg">
+              {bundle?.coin_amount} coins
+            </h5>
+          )}
 
           <div className="mt-4 flex flex-col gap-6 sm:flex-row md:mt-8 xl:justify-between">
             <div>
               <h4 className="text-xl font-medium">What’s Included</h4>
               <ul className="mt-4 flex flex-col gap-1.5">
-                {bundle.whatsIncluded.map((item) => (
+                {moreInfo.whatsIncluded.map((item) => (
                   <li className="flex items-center gap-3 text-base" key={item}>
                     <CheckCircle />
                     {item}
@@ -67,7 +99,7 @@ export default function BundleDetails() {
             <div>
               <h4 className="text-xl font-medium">Perfect For</h4>
               <ul className="mt-4 flex flex-col gap-2">
-                {bundle.perfectFor.map((item) => (
+                {moreInfo.perfectFor.map((item) => (
                   <li className="flex items-center gap-3 text-base" key={item}>
                     <CheckCircle />
                     {item}
@@ -85,8 +117,10 @@ export default function BundleDetails() {
 
           <SummaryCard
             className="bg-primary-50 mt-6 border"
-            items={purchaseInfo.items}
-            main={purchaseInfo.main}
+            main={{
+              title: "Total",
+              value: formatCurrency(price * counter),
+            }}
           >
             <CounterButton className="bg-card h-14 w-full" />
           </SummaryCard>
@@ -107,5 +141,14 @@ export default function BundleDetails() {
         </div>
       </div>
     </section>
+  );
+}
+
+export function ShowBackButton() {
+  const router = useRouter();
+  return (
+    <NavigationLink onClick={router.back} href="#">
+      Coin Bundle / Bundle Details
+    </NavigationLink>
   );
 }

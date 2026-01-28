@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { MinusIcon, PlusIcon } from "lucide-react";
-import { useState } from "react";
+import { useCounterButton } from "./CounterButtonProvider";
 
 export const CButton = ({
   children,
@@ -32,23 +32,12 @@ export const CButton = ({
 export default function CounterButton({
   className,
 }: React.ComponentProps<"div">) {
-  const [counter, setCounter] = useState(1);
-  const increment = () => {
-    setCounter((v) => v + 1);
-  };
-
-  const decrement = () => {
-    setCounter((v) => {
-      if (v <= 1) return 1;
-
-      return v - 1;
-    });
-  };
+  const { counter, increment, decrement } = useCounterButton();
 
   return (
     <div
       className={cn(
-        "flex h-14 gap-4 items-center justify-between rounded-[10px] border",
+        "flex h-14 items-center justify-between gap-4 rounded-[10px] border",
         className,
       )}
     >

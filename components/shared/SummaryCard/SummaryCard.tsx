@@ -3,8 +3,8 @@
 import { cn } from "@/lib/utils";
 
 interface SummaryCardProps extends React.ComponentProps<"div"> {
-  items: { title: string; value: string }[];
-  main: { title: string; value: string };
+  items?: { title: string; value: string }[];
+  main?: { title: string; value: string };
 }
 
 export default function SummaryCard({
@@ -39,8 +39,8 @@ export default function SummaryCard({
       <hr className="border-text-200 my-1" />
 
       <div className="text-heading-100 flex items-center justify-between text-lg font-medium">
-        <span>{main.title}</span>
-        <span>{main.value}</span>
+        <span>{main?.title}</span>
+        <span>{main?.value}</span>
       </div>
     </div>
   );

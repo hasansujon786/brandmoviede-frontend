@@ -1,20 +1,40 @@
 "use client";
 
 import { Pagenation } from "@/components/shared/DataTable/DataTable";
+import {
+  PaginationPageProvider,
+  usePaginatedQuery,
+  usePaginationPage,
+} from "@/components/shared/DataTable/PaginationPageProvider";
 import SectionHeading from "@/components/shared/SectionHeading/SectionHeading";
 import ShopCard, {
   ShopCardSkeleton,
 } from "@/components/shared/ShopCard/ShopCard";
 import { cn } from "@/lib/utils";
-import { useGetAllCoinBundlesQuery } from "@/redux/features/coin/appCoinApis";
+import { useGetAllCoinBundlesQuery } from "@/redux/api";
 
 interface ShopProps extends React.ComponentProps<"section"> {
   showPagination?: boolean;
 }
 
-export default function Shop({ className, showPagination }: ShopProps) {
+export default function Shop(props: ShopProps) {
+  return (
+    <PaginationPageProvider>
+      <ShopContent {...props} />;
+    </PaginationPageProvider>
+  );
+}
+
+function ShopContent({ className, showPagination }: ShopProps) {
   // useCardRevealAnimation(".shop");
-  const { data: coinBundles, isLoading } = useGetAllCoinBundlesQuery();
+  const { page } = usePaginationPage();
+  const { data, isLoading } = useGetAllCoinBundlesQuery({
+    page,
+    limit: showPagination ? 12 : 6,
+  });
+  usePaginatedQuery(data);
+
+  const coinBundles = data?.data || [];
 
   return (
     <section
@@ -45,7 +65,7 @@ export default function Shop({ className, showPagination }: ShopProps) {
 
       {showPagination && (
         <div className="mt-8">
-          {/* <Pagenation /> */}
+          <Pagenation />
         </div>
       )}
     </section>

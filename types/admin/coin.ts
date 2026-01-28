@@ -1,4 +1,4 @@
-import { IPaginationMetaData, WithPaginationAndStatus } from "../shared";
+import { WithPaginationAndStatus } from "../shared";
 
 export interface IAdminCoinStats {
   total_coin_bundles: number;
@@ -8,19 +8,7 @@ export interface IAdminCoinStats {
   total_revenue: number;
 }
 
-export interface ICoins extends IPaginationMetaData {
-  data: ICoin[];
-}
-
 export type IActiveStatus = "Active" | "Inactive";
-export interface ICoin {
-  id: string;
-  name: string;
-  price: number;
-  thumbnail: string;
-  coin_amount: number;
-  thumbnail_url: string;
-}
 
 export interface IAdminCoinBundle {
   id: string;
