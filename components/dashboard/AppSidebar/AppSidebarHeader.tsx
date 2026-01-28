@@ -19,8 +19,11 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useGetMeQuery } from "@/redux/api";
 import { SearchIcon } from "lucide-react";
 import NotificationBell from "./NotificationBell";
+import { useAuth } from "@/redux/features/auth/hooks";
 
 export default function AppSidebarHeader() {
+  const { logOut } = useAuth();
+
   return (
     <header className="border-sidebar-border sticky top-0 z-10 flex h-20 items-center justify-between border-b bg-white px-4">
       <div className="text-heading-100 flex items-center gap-2">
@@ -51,10 +54,7 @@ export default function AppSidebarHeader() {
           <DropdownMenuContent className="relative z-100">
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Profile</DropdownMenuItem>
-            <DropdownMenuItem>Billing</DropdownMenuItem>
-            <DropdownMenuItem>Team</DropdownMenuItem>
-            <DropdownMenuItem>Subscription</DropdownMenuItem>
+            <DropdownMenuItem onClick={logOut}>Logout</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

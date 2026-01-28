@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
-import { getTitleFromType } from "@/redux/api/socket/SocketProvider";
 import { useSocketState } from "@/redux/api/socket/useSocketState";
 import { useGetAdminNotificationsQuery } from "@/redux/features/admin/nofiticationApis";
 import { IAdminNotificationItem } from "@/types";
@@ -25,6 +24,19 @@ export interface UINotification {
   createdAt: string;
   read: boolean;
 }
+
+export const getTitleFromType = (type: string) => {
+  switch (type) {
+    case "owner_coin_low":
+      return "Low balance";
+    case "payment_done":
+      return "Payment successful";
+    case "coin_purchase":
+      return "Coins purchased";
+    default:
+      return "Notification";
+  }
+};
 
 export const mapAdminNotificationToUI = (
   item: IAdminNotificationItem,

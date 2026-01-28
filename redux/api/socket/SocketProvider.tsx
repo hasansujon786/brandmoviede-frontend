@@ -15,7 +15,6 @@ import {
 import { io, Socket } from "socket.io-client";
 import { toast } from "sonner";
 
-
 type SocketContextType = {
   socket: Socket | null;
   hasNewNotification: boolean;
@@ -26,12 +25,12 @@ export const getTitleFromType = (type: string) => {
   switch (type) {
     case "owner_coin_low":
       return "Low balance";
-    case "PAYMENT_DONE":
+    case "payment_done":
       return "Payment successful";
-    case "COIN_PURCHASE":
+    case "coin_purchase":
       return "Coins purchased";
     default:
-      return "Notification";
+      return "notification";
   }
 };
 
