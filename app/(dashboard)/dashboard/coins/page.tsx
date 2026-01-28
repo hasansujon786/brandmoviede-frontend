@@ -2,7 +2,6 @@ import CreateCoinBundleDialog from "@/components/dashboard/CreateCoinBundleDialo
 import TopActionBar from "@/components/dashboard/TopActionBar/TopActionBar";
 import AllCoinPurchaseTable from "@/components/pages/Dashboard/Coins/AllCoinPurchaseTable/AllCoinPurchaseTable";
 import CoinBundleTable from "@/components/pages/Dashboard/Coins/CoinBundleTable/CoinBundleTable";
-import SingleCoinTable from "@/components/pages/Dashboard/Coins/CoinBundleTable/SingleCoinTable";
 import CoinOverviewStats from "@/components/pages/Dashboard/Coins/CoinOverviewStats/CoinOverviewStats";
 import { Button } from "@/components/ui/button";
 
@@ -22,7 +21,7 @@ export default function DashboardCoinsPage() {
       <CoinOverviewStats />
 
       <section className="space-y-8">
-        <SingleCoinTable />
+        {/* <SingleCoinTable /> */}
 
         <CoinBundleTable />
 

@@ -6,13 +6,14 @@ import {
   usePaginatedQuery,
   usePaginationPage,
 } from "@/components/shared/DataTable/PaginationPageProvider";
+import TableSearchInput from "@/components/shared/DataTable/TableSearchInput";
 import { EyeIcon } from "@/components/shared/icons/EyeIcon";
 import { PenIcon } from "@/components/shared/icons/PenIcon";
 import { TrushIcon } from "@/components/shared/icons/TrushIcon";
 import { StatusSelect } from "@/components/shared/StatusSelect/StatusSelect";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getFormatedDate } from "@/lib/utils";
+import { getFormatedDate, isArrayEmpty } from "@/lib/utils";
 import {
   useAdminDeleteTicketByIdMutation,
   useAdminGetAllTicketsQuery,
@@ -66,8 +67,10 @@ function EventTicketTableContent() {
   return (
     <section className="space-y-3">
       <Card>
-        <CardHeader className="flex items-center gap-2">
+        <CardHeader className="flex items-center justify-between gap-2">
           <CardTitle>Event Ticket</CardTitle>
+
+          <TableSearchInput shouldResetOnBlur={isArrayEmpty(data?.data)} />
         </CardHeader>
         <CardContent>
           <DataTable

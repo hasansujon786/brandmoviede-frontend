@@ -6,7 +6,7 @@ import TopPerformingEvents from "@/components/pages/Dashboard/Analytics/TopPerfo
 export default function DashboardAnalyticsPage() {
   return (
     <div className="space-y-4 p-5">
-      <AnalyticsOverviewStats />
+      {/* <AnalyticsOverviewStats /> */}
 
       <section>
         <MonthlyRevenueChart />

@@ -1,51 +1,52 @@
 "use client";
 import { DataTable, Pagenation } from "@/components/shared/DataTable/DataTable";
-import { PaginationPageProvider } from "@/components/shared/DataTable/PaginationPageProvider";
-import TimeRangeSelector from "@/components/shared/TimeRangeSelector/TimeRangeSelector";
+import {
+  PaginationPageProvider,
+  usePaginatedQuery,
+  usePaginationPage,
+} from "@/components/shared/DataTable/PaginationPageProvider";
+import TableSearchInput from "@/components/shared/DataTable/TableSearchInput";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { getFormatedDate, isArrayEmpty } from "@/lib/utils";
 import { createGetVarient } from "@/lib/utils/varients";
+import { useGetRecentOrdersQuery } from "@/redux/api";
+import { IOrderItem } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
 import { useState } from "react";
 
 export const statusVariantMap = {
-  Active: "info",
-  Inactive: "brown",
-  Completed: "success",
-  Pending: "yellow",
+  active: "info",
+  inactive: "brown",
+  completed: "success",
+  pending: "yellow",
 } as const;
 const getStatusVariant = createGetVarient(statusVariantMap, "info");
 
 export type PackageStatus = keyof typeof statusVariantMap;
-export interface PackageItem {
-  userName: string;
-  packageName: number;
-  paymentDate: string;
-  price: number;
-  coinsAmount: string;
-  status: PackageStatus;
-}
 
-export const columns: ColumnDef<PackageItem>[] = [
+export const columns: ColumnDef<IOrderItem>[] = [
   {
-    accessorKey: "userName",
+    accessorKey: "user_name",
     header: "User Name",
   },
   {
-    accessorKey: "packageName",
+    accessorKey: "coin_name",
     header: "Package Name",
   },
   {
-    accessorKey: "paymentDate",
+    accessorKey: "payment_date",
     header: "Payment Date",
+    cell: ({ row }) => getFormatedDate(row.original?.payment_date),
   },
   {
     accessorKey: "price",
     header: "Price",
   },
   {
-    accessorKey: "coinsAmount",
+    accessorKey: "amount",
     header: "Coins Amount",
+    cell: ({ row }) => row.original?.amount ?? row.original?.quantity ?? 0,
   },
   {
     accessorKey: "status",
@@ -54,81 +55,14 @@ export const columns: ColumnDef<PackageItem>[] = [
       const status = row?.original?.status;
       const varient = getStatusVariant(status);
 
-      return <Badge variant={varient}>{status}</Badge>;
+      return (
+        <Badge className="capitalize" variant={varient}>
+          {status}
+        </Badge>
+      );
     },
   },
 ];
-
-export function getData() {
-  const packages: PackageItem[] = [
-    {
-      userName: "John Doe",
-      paymentDate: "April 28, 2016",
-      packageName: 41352,
-      coinsAmount: "100 Sugo",
-      price: 10.99,
-      status: "Completed",
-    },
-    {
-      userName: "John Doe",
-      paymentDate: "April 28, 2016",
-      packageName: 554683,
-      coinsAmount: "100 Sugo",
-      price: 10.99,
-      status: "Completed",
-    },
-    {
-      userName: "John Doe",
-      paymentDate: "April 28, 2016",
-      packageName: 153884,
-      coinsAmount: "100 Sugo",
-      price: 10.99,
-      status: "Pending",
-    },
-    {
-      userName: "John Doe",
-      paymentDate: "April 28, 2016",
-      packageName: 541588,
-      coinsAmount: "100 Sugo",
-      price: 10.99,
-      status: "Completed",
-    },
-    {
-      userName: "John Doe",
-      paymentDate: "April 28, 2016",
-      packageName: 874512,
-      coinsAmount: "100 Sugo",
-      price: 10.99,
-      status: "Completed",
-    },
-    {
-      userName: "John Doe",
-      paymentDate: "April 28, 2016",
-      packageName: 875489,
-      coinsAmount: "100 Sugo",
-      price: 10.99,
-      status: "Pending",
-    },
-    {
-      userName: "John Doe",
-      paymentDate: "April 28, 2016",
-      packageName: 546685,
-      coinsAmount: "100 Sugo",
-      price: 10.99,
-      status: "Completed",
-    },
-    {
-      userName: "John Doe",
-      paymentDate: "April 28, 2016",
-      packageName: 65481,
-      coinsAmount: "100 Sugo",
-      price: 10.99,
-      status: "Pending",
-    },
-  ];
-
-  return packages;
-}
 
 export default function AllCoinPurchaseTable() {
   return (
@@ -139,29 +73,45 @@ export default function AllCoinPurchaseTable() {
 }
 
 function AllCoinPurchaseTableConotent() {
-  const data = getData();
-  const [timeRange, setTimeRange] = useState("90d");
+  const { page, searchedId } = usePaginationPage();
+  const { data, isLoading, isError } = useGetRecentOrdersQuery({
+    type: "COIN",
+    page,
+    search: searchedId,
+  });
+  usePaginatedQuery(data);
 
   return (
     <section className="space-y-3">
       <Card>
-        <CardHeader className="flex items-center gap-2">
+        <CardHeader className="flex items-center justify-between gap-2">
           <CardTitle>All Coin Purchase</CardTitle>
-          <TimeRangeSelector value={timeRange} onValueChange={setTimeRange} />
+
+          <TableSearchInput shouldResetOnBlur={isArrayEmpty(data?.data)} />
         </CardHeader>
         <CardContent>
-          <DataTable
-            columns={columns}
-            data={data}
-            config={{
-              borderColor: "#F8C0CC",
-              headerClass: "bg-primary hover:bg-primary",
-            }}
-          />
+          {isLoading ? (
+            <div className="text-muted-foreground flex h-[250px] w-full items-center justify-center text-sm">
+              Loading table data...
+            </div>
+          ) : isError ? (
+            <div className="text-destructive flex h-[250px] w-full items-center justify-center text-sm">
+              Failed to load table data
+            </div>
+          ) : (
+            <DataTable
+              columns={columns}
+              data={data?.data || []}
+              config={{
+                borderColor: "#F8C0CC",
+                headerClass: "bg-primary hover:bg-primary",
+              }}
+            />
+          )}
         </CardContent>
       </Card>
 
-      {/* <Pagenation /> */}
+      <Pagenation ghostBtn />
     </section>
   );
 }

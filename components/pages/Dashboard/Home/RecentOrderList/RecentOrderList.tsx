@@ -19,8 +19,10 @@ export default function RecentOrderList() {
           Array.from({ length: 4 }).map((_, index) => (
             <RecentOrderItemSkeleton key={index} />
           ))
-        ) : Array.isArray(data) && data.length ? (
-          data?.map((item) => <RecentOrderListItem {...item} key={item.id} />)
+        ) : Array.isArray(data?.data) && data.data.length ? (
+          data.data?.map((item) => (
+            <RecentOrderListItem {...item} key={item.id} />
+          ))
         ) : (
           <div className="grid h-full place-items-center">
             <p className="text-muted-foreground -mt-12 text-center text-sm">
@@ -34,18 +36,18 @@ export default function RecentOrderList() {
 }
 
 function RecentOrderListItem(props: IOrderItem) {
+  console.log("RecentOrderListItem", props);
   return (
     <div className="rounded-2lg space-y-2 bg-[#F8FAFB] p-3">
       <div className="font-heading text-heading-100 flex items-center justify-between text-base font-medium">
         <h6>{props.user_name}</h6>
-        <h6>{props.amount}</h6>
+        <h6>{props?.amount ?? props?.quantity ?? 0}</h6>
       </div>
       <div className="text-body-200 flex items-center justify-between text-sm">
         <h6>{props.type}</h6>
         <h6>
-          {/* fix: there is no date */}
-          {props?.created_at
-            ? formatDistanceToNow(new Date(props?.created_at), {
+          {props?.payment_date
+            ? formatDistanceToNow(new Date(props?.payment_date), {
                 addSuffix: true,
               })
             : ""}

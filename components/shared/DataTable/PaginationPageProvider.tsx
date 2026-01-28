@@ -107,6 +107,6 @@ export function usePaginatedQuery<
 }
 
 export const searchCoinSchema = z.object({
-  search: z.string().min(8).max(16),
+  search: z.string().min(2),
 });
 export type SearchCoinFormValues = z.infer<typeof searchCoinSchema>;

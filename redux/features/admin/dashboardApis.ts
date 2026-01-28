@@ -8,18 +8,18 @@ import type {
   IUserActivityItem,
   IPaginationParams,
   WithStatus,
+  WithPaginationAndStatus,
 } from "@/types";
 
 const dashboardApis = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getRecentOrders: builder.query<IOrderItem[], IPaginationParams | void>({
-      query: (params) =>
-        `/admin/order${createQueryParams({
-          page: params?.page || null,
-          limit: params?.limit || null,
-        })}`,
+    getRecentOrders: builder.query<
+      WithPaginationAndStatus<IOrderItem[]>,
+      IPaginationParams | void
+    >({
+      query: (params) => `/admin/order${createQueryParams(params)}`,
       providesTags: ["Dashboard"] as const,
-      transformResponse: (response: WithStatus<IOrderItem[]>) => response.data,
+      // transformResponse: (response: WithStatus<IOrderItem[]>) => response.data,
     }),
     getOverviewStats: builder.query<IOverviewStats, void>({
       query: () => `/admin/overview/stats`,

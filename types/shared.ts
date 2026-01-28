@@ -30,4 +30,6 @@ export interface IPaginationParams {
   page?: number;
   limit?: number;
   search?: string;
+  type?: "COIN" | "TICKET";
+  filter?: string;
 }
