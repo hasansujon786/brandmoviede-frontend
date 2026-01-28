@@ -21,19 +21,6 @@ type SocketContextType = {
   clearNotification: () => void;
 };
 
-export const getTitleFromType = (type: string) => {
-  switch (type) {
-    case "owner_coin_low":
-      return "Low balance";
-    case "payment_done":
-      return "Payment successful";
-    case "coin_purchase":
-      return "Coins purchased";
-    default:
-      return "notification";
-  }
-};
-
 export const SocketContext = createContext<SocketContextType | null>(null);
 
 export function SocketProvider({ children }: { children: ReactNode }) {
@@ -47,8 +34,7 @@ export function SocketProvider({ children }: { children: ReactNode }) {
   const eventHandlers = {
     lowBalanceAlert: (data: ISocketEmmitData) => {
       refetchNotifications();
-      console.log("lowBalanceAlert from provider:", data);
-      toast.message(`Low balance: ${JSON.stringify(data, null, 2)}`);
+      toast.error(`Low balance: ${data.text}`);
       setHasNewNotification(true);
     },
 
