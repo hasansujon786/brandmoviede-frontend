@@ -1,11 +1,11 @@
 import { useLoginMutation } from "@/redux/api/baseApi";
 import { useAppDispatch } from "@/redux/store";
+import { useSelector } from "react-redux";
 import {
-  logOut as redusLogout,
+  logOut as reduxLogout,
   selectCurrentRole,
   selectCurrentToken,
 } from "./authSlice";
-import { useSelector } from "react-redux";
 
 export function useAuth() {
   const dispatch = useAppDispatch();
@@ -14,7 +14,7 @@ export function useAuth() {
   const role = useSelector(selectCurrentRole);
 
   function logOut() {
-    dispatch(redusLogout());
+    dispatch(reduxLogout());
   }
 
   // try {

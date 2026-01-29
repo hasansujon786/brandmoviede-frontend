@@ -4,6 +4,7 @@ import { useNextStep } from "@/components/shared/Stepper/Stepper";
 import { Button } from "@/components/ui/button";
 import { Field, FieldGroup, FieldLabel, FieldSet } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { useSearchParams } from "next/navigation";
 import { usePaymentStatus } from "./context/PaymentStatusContext";
 
 interface PaymentInfoFormProps {}
@@ -11,6 +12,12 @@ interface PaymentInfoFormProps {}
 export default function PaymentInfoForm({}: PaymentInfoFormProps) {
   const { goNext } = useNextStep();
   const { resetStatus } = usePaymentStatus();
+  const searchParams = useSearchParams();
+
+  const client_secret: string | null = searchParams.get("client_secret");
+  const transaction_id: string | null = searchParams.get("transaction_id");
+
+  console.log(client_secret, transaction_id);
 
   return (
     <div>

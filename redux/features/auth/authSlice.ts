@@ -1,4 +1,4 @@
-import { RootState } from "@/redux/store";
+import { persistor, RootState } from "@/redux/store";
 import { IAuthUser, IAuthUserRole } from "@/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import Cookies from "js-cookie";
@@ -43,6 +43,8 @@ const authSlice = createSlice({
       state.user = null;
       state.token = null;
       state.role = null;
+
+      persistor.purge();
 
       Cookies.remove("token");
       Cookies.remove("role");
