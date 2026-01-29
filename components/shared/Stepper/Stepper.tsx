@@ -1,12 +1,12 @@
 "use client";
 
+import { usePaymentStatus } from "@/components/pages/Checkout/context/PaymentStatusContext";
 import { cn } from "@/lib/utils";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { CheckMarkDoubleIcon } from "../icons/CheckMark";
 import CreditCardIcon from "../icons/CreditCardIcon";
 import EmailIcon from "../icons/EmailIcon";
-import { usePaymentStatus } from "@/components/pages/Checkout/context/PaymentStatusContext";
 
 const steps = [
   { label: "Checkout", path: "/checkout", icon: EmailIcon },
@@ -23,13 +23,13 @@ export const useNextStep = () => {
 
   const activeIndex = steps.findIndex((s) => s.path === pathname);
 
-  const goNext = () => {
+  const goNext = (queryParams?: string) => {
     if (activeIndex === -1) return;
 
     const next = steps[activeIndex + 1];
     if (!next) return;
 
-    router.push(next.path);
+    router.push(`${next.path}${queryParams}`);
   };
 
   return { goNext, activeIndex, isLast: activeIndex === steps.length - 1 };

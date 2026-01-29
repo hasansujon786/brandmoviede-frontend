@@ -1,6 +1,11 @@
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+"use client";
+
 import SummaryCard from "@/components/shared/SummaryCard/SummaryCard";
+import { Button } from "@/components/ui/button";
+import { selectCartItems } from "@/redux/features/cart/cartSlice";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useSelector } from "react-redux";
 
 export default function CartSummary() {
   const purchaseInfo = {
@@ -10,6 +15,9 @@ export default function CartSummary() {
     ],
     main: { title: "Total", value: "€40.99 EUR" },
   };
+
+  const cartItems = useSelector(selectCartItems);
+  const router = useRouter();
 
   return (
     <div>
@@ -24,8 +32,13 @@ export default function CartSummary() {
       />
 
       <div className="mt-8 space-y-2">
-        <Button asChild className="w-full" variant="primary">
-          <Link href="/checkout">Proceed to Checkout</Link>
+        <Button
+          disabled={cartItems.length < 1}
+          onClick={() => router.push("/checkout")}
+          className="w-full"
+          variant="primary"
+        >
+          Proceed to Checkout
         </Button>
 
         <Button

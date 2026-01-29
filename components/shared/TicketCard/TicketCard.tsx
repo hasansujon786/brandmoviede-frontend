@@ -1,14 +1,14 @@
 import { Button } from "@/components/ui/button";
+import { config } from "@/constant";
+import { getFormatedDate } from "@/lib/utils";
+import { formatCurrency, formatPluralNumber } from "@/lib/utils/formatters";
+import { IAppTicket } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
 import CalenderIcon from "../icons/CalenderIcon";
 import LocationPinIcon from "../icons/LocationPinIcon";
 import PeoplesIcon from "../icons/PeoplesIcon";
 import { TicketBadge, TicketStatus } from "../Pill/Pill";
-import { IAppTicket } from "@/types";
-import { getFormatedDate } from "@/lib/utils";
-import { formatCurrency, formatPluralNumber } from "@/lib/utils/formatters";
-import { config } from "@/constant";
 
 interface TicketCardProps extends IAppTicket {}
 
@@ -74,7 +74,11 @@ export default function TicketCard(props: TicketCardProps) {
         <Button asChild variant="primary-secondary">
           <Link href={`/tickets/${props.id}`}>View Details</Link>
         </Button>
-        <Button variant="primary">Buy Ticket</Button>
+
+        <Button asChild variant="primary">
+          <Link href={`/demo/${props.id}`}>Buy Ticket</Link>
+          {/* <Link href={`/checkout/ticket/${props.id}`}>Buy Ticket</Link> */}
+        </Button>
       </div>
     </div>
   );
