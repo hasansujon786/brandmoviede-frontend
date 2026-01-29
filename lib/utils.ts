@@ -13,8 +13,11 @@ export function isArrayEmpty<T>(
   return !Array.isArray(value) || value.length === 0;
 }
 
-export function getFormatedDate(iso?: string | Date | null): string {
+export function getFormatedDate(
+  iso?: string | Date | null,
+  formatString: string = "DD-MM-YYYY",
+): string {
   if (!iso) return "";
 
-  return dayjs(iso).format("DD-MM-YYYY");
+  return dayjs(iso).format(formatString);
 }

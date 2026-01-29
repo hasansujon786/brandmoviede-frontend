@@ -1,111 +1,80 @@
-import NavigationLink from "@/components/shared/NavigationLink/NavigationLink";
-import Image from "next/image";
-import { CheckCircle } from "@/components/shared/icons/CheckMark";
-import { Button } from "@/components/ui/button";
+"use client";
+import HighlightNthWord from "@/components/shared/HighlightNthWord/HighlightNthWord";
 import CalenderIcon from "@/components/shared/icons/CalenderIcon";
+import { CheckCircle } from "@/components/shared/icons/CheckMark";
 import LocationPinIcon from "@/components/shared/icons/LocationPinIcon";
 import PeoplesIcon from "@/components/shared/icons/PeoplesIcon";
-import HighlightNthWord from "@/components/shared/HighlightNthWord/HighlightNthWord";
 import InfoCard from "@/components/shared/InfoCard/InfoCard";
-
-const ticketDetails = {
-  id: "01",
-  title: "Sugo Connect 2025",
-  type: "MOST_POPULAR",
-  desc: "Premier gathering of Sugo Chat enthusiasts for networking and workshops",
-  subtitle:
-    "Join the premier gathering of Sugo Chat enthusiasts for three days of networking, workshops, and exclusive announcements.",
-  price: "€149 EUR",
-  ticketAvailableCount: "267 tickets left",
-  date: "December 15-17, 2025",
-  location: "San Francisco, CA",
-  peopleCapacity: "Up to 500 attendees",
-  image: "/images/tickets/bg-ticket-card.png",
-  aboutTheEvent: [
-    "Sugo Connect 2025 is our annual flagship event bringing together the vibrant community of Sugo Chat users, creators, and industry leaders. This three-day experience is designed to inspire, educate, and connect.",
-    "Attendees will enjoy exclusive access to product announcements, hands-on workshops, networking sessions, and keynote presentations from thought leaders in the tech and communication space.",
-    "Whether you're a long-time user or new to the Sugo ecosystem, this event offers something for everyone. Don't miss this opportunity to be part of our growing community.",
-  ],
-  includedFeatures: [
-    "3 day event",
-    "All keynote sessions",
-    "Workshop participation",
-    "Networking events",
-    "Exclusive Sugo swag bag",
-    "Lunch & refreshments",
-    "Digital certificate of attendance",
-    "Post-event recordings access",
-  ],
-};
+import NavigationLink from "@/components/shared/NavigationLink/NavigationLink";
+import { Button } from "@/components/ui/button";
+import { config } from "@/constant";
+import { getFormatedDate } from "@/lib/utils";
+import { formatPluralNumber } from "@/lib/utils/formatters";
+import { useGetSingleTicketByIdQuery } from "@/redux/features/app/appTicketApis";
+import Image from "next/image";
+import { useParams, useRouter } from "next/navigation";
 
 export default function TicketDetails() {
-  const {
-    title,
-    date,
-    location,
-    peopleCapacity,
-    subtitle,
-    image,
-    aboutTheEvent,
-    includedFeatures,
-  } = ticketDetails;
+  const router = useRouter();
+  const { ticketId } = useParams<{ ticketId: string }>();
+
+  const { data: ticket, isLoading } = useGetSingleTicketByIdQuery(ticketId);
+  const includedFeatures = ticket?.included ?? [];
 
   const infoCards = [
     {
       icon: <CalenderIcon className="size-6" />,
-      label: "Date & Time",
-      value: [date, "9:00 AM - 6:00 PM daily"],
+      label: "Date",
+      value: [getFormatedDate(ticket?.event_date, "MMMM DD, YYYY")],
     },
     {
       icon: <LocationPinIcon className="size-6" />,
       label: "Location",
-      value: [
-        "San Francisco Convention Center 747 Howard St, San Francisco, CA",
-      ],
+      value: [ticket?.location ?? ""],
     },
     {
       icon: <PeoplesIcon className="size-6" />,
       label: "Capacity",
-      value: [peopleCapacity, "267 tickets remaining"],
+      value: [
+        `Up to ${ticket?.sold_limit} attendees`,
+        `${formatPluralNumber((ticket?.sold_limit ?? 0) - (ticket?.total_sold ?? 0), "ticket")} tickets remaining`,
+      ],
     },
   ];
 
   return (
     <div>
       <div className="custom-container py-10 lg:py-20">
-        <NavigationLink href="/tickets">
+        <NavigationLink onClick={router.back} href="#">
           Event Tickets / Tickets Details
         </NavigationLink>
 
         <section className="mt-8">
           <Image
-            src={image}
+            src={ticket?.thumbnail}
             className="aspect-[4.7826086957] h-[276px] rounded-xl object-cover object-center"
             width={1320}
             height={276}
+            unoptimized={config.imageUnoptimized}
             alt=""
           />
 
           <div className="mt-8 flex flex-col-reverse justify-between gap-3 md:flex-row md:items-center">
             <HighlightNthWord
               className="text-h2 leading-[132%] font-semibold"
-              title={title}
+              title={ticket?.title ?? ""}
               n={2}
             />
 
             <Button variant="primary">Get Your Ticket</Button>
           </div>
-          <p className="mt-4 text-base max-w-4xl">{subtitle}</p>
+          <p className="mt-4 max-w-4xl text-base">{ticket?.description}</p>
         </section>
 
         <section className="mt-6 grid gap-6 lg:grid-cols-2">
           <div className="space-y-3">
             <h5 className="text-xl font-medium">About The Event</h5>
-            {aboutTheEvent.map((item, index) => (
-              <p className="text-base" key={index}>
-                {item}
-              </p>
-            ))}
+            {ticket?.about}
           </div>
 
           <div>

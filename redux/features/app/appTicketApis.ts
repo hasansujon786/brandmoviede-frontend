@@ -2,6 +2,7 @@ import { createQueryParams } from "@/lib/utils/formatters";
 import { baseApi } from "@/redux/api/baseApi";
 import type {
   IAppTicket,
+  IAppTicketDetails,
   IPaginationParams,
   WithPaginationAndStatus,
   WithStatus,
@@ -21,10 +22,11 @@ const appTicketApis = baseApi.injectEndpoints({
       providesTags: ["Ticket"] as const,
       // transformResponse: (response: WithStatus<IAuthUser>) => response.data,
     }),
-    getSingleTicketById: builder.query<IAppTicket, string>({
+    getSingleTicketById: builder.query<IAppTicketDetails, string>({
       query: (id) => `/ticket/${id}`,
       providesTags: (_result, _error, id) => [{ type: "Ticket", id }],
-      transformResponse: (response: WithStatus<IAppTicket>) => response.data,
+      transformResponse: (response: WithStatus<IAppTicketDetails>) =>
+        response.data,
     }),
   }),
   overrideExisting: false,
