@@ -14,6 +14,7 @@ export function useAuth() {
   const role = useSelector(selectCurrentRole);
 
   function logOut() {
+    // persistor.purge();
     dispatch(reduxLogout());
   }
 
