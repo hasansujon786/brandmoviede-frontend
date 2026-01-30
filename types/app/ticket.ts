@@ -32,3 +32,12 @@ export interface IAppTicketDetails {
   total_sold: number;
   created_at: string;
 }
+
+export interface IAppTicketCheckoutOrderParams {
+  items: TicketCheckoutOrderItem[];
+}
+
+export interface TicketCheckoutOrderItem {
+  ticket_id: string;
+  quantity: number;
+}

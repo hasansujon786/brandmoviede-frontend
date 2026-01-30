@@ -9,8 +9,11 @@ import {
 } from "@/components/ui/field";
 import { Input, inputStyles } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { useCreateCoinCheckoutOrderMutation } from "@/redux/api";
-import { selectCartItems } from "@/redux/features/cart/cartSlice";
+import {
+  useCreateCoinCheckoutOrderMutation,
+  useCreateTicketCheckoutOrderMutation,
+} from "@/redux/api";
+import { clearCart, selectCartItems } from "@/redux/features/cart/cartSlice";
 import { useAppDispatch } from "@/redux/store";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { useForm } from "@tanstack/react-form";
@@ -25,14 +28,28 @@ const schema = z.object({
   cardholderName: z.string().min(2, "Cardholder name is required"),
 });
 
-export function CardCheckoutForm({ sugoId }: { sugoId: string }) {
+type CheckoutCoin = {
+  type: "coin";
+  sugoId: string;
+};
+
+type CheckoutTicket = {
+  type: "ticket";
+  ticketId: string;
+};
+
+type CardCheckoutFormProps = CheckoutCoin | CheckoutTicket;
+
+export function CardCheckoutForm(props: CardCheckoutFormProps) {
   const stripe = useStripe();
   const elements = useElements();
 
   const { goNext } = useNextStep();
   const { resetStatus, setStatus } = usePaymentStatus();
 
-  const [createOrder] = useCreateCoinCheckoutOrderMutation();
+  const [createTicketOrder] = useCreateTicketCheckoutOrderMutation();
+
+  const [createCoinOrder] = useCreateCoinCheckoutOrderMutation();
   const cartItems = useSelector(selectCartItems);
   const dispatch = useAppDispatch();
 
@@ -47,24 +64,23 @@ export function CardCheckoutForm({ sugoId }: { sugoId: string }) {
       onSubmit: schema,
     },
     onSubmit: async ({ value }) => {
-      if (!sugoId) {
-        toast.error("Invalid sugoId");
-        return;
-      }
-
       try {
         setLoading(true);
         resetStatus();
+        let client_secret = null;
 
-        const { client_secret } = await createOrder({
-          sugoId: sugoId,
-          items: cartItems.map((i) => ({
-            bundle_id: i.data.id,
-            quantity: i.quantity,
-          })),
-        }).unwrap();
+        if (props.type == "coin") {
+          client_secret = await tryCoinCheckout(props.sugoId);
+        }
 
-        // toast.success("Order placed successfully 🎉");
+        if (props.type == "ticket") {
+          client_secret = await tryTicketCheckout(props.ticketId);
+        }
+
+        if (!client_secret) {
+          return toast.error("Failed to place order. Please try again.");
+        }
+
         await handleStripePayment(client_secret, {
           name: value.cardholderName,
         });
@@ -77,6 +93,40 @@ export function CardCheckoutForm({ sugoId }: { sugoId: string }) {
       }
     },
   });
+
+  async function tryCoinCheckout(sugoId: string) {
+    if (!sugoId) {
+      toast.error("Invalid sugoId");
+      return null;
+    }
+
+    const { client_secret } = await createCoinOrder({
+      sugoId: sugoId,
+      items: cartItems.map((i) => ({
+        bundle_id: i.data.id,
+        quantity: i.quantity || 1,
+      })),
+    }).unwrap();
+
+    console.log("coin", client_secret);
+
+    return client_secret;
+  }
+
+  async function tryTicketCheckout(ticketId: string) {
+    if (!ticketId) {
+      toast.error("Invalid ticketId");
+      return null;
+    }
+
+    const { client_secret, ...other } = await createTicketOrder({
+      items: [{ ticket_id: ticketId, quantity: 1 }],
+    }).unwrap();
+
+    console.log("ticket", client_secret, other);
+
+    return client_secret;
+  }
 
   async function handleStripePayment(
     clientSecret: string,
@@ -106,7 +156,7 @@ export function CardCheckoutForm({ sugoId }: { sugoId: string }) {
     }
 
     if (paymentIntent?.status === "succeeded") {
-      // dispatch(clearCart());
+      dispatch(clearCart());
       setStatus("success");
       goNext();
       toast.success("Payment successful");

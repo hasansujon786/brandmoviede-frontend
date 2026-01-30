@@ -40,7 +40,10 @@ export default function SugoIDForm(props: EmailFormProps) {
       onSubmit: sugoCheckoutSchema,
     },
     onSubmit: async ({ value }) => {
-      const query = createQueryParams({ sugoId: value.sugoId });
+      const query = createQueryParams({
+        type: "coin",
+        sugoId: value.sugoId,
+      });
       goNext(query);
     },
   });

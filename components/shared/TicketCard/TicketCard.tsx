@@ -1,7 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { config } from "@/constant";
 import { getFormatedDate } from "@/lib/utils";
-import { formatCurrency, formatPluralNumber } from "@/lib/utils/formatters";
+import {
+  createQueryParams,
+  formatCurrency,
+  formatPluralNumber,
+} from "@/lib/utils/formatters";
 import { IAppTicket } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
@@ -76,8 +80,14 @@ export default function TicketCard(props: TicketCardProps) {
         </Button>
 
         <Button asChild variant="primary">
-          <Link href={`/demo/${props.id}`}>Buy Ticket</Link>
-          {/* <Link href={`/checkout/ticket/${props.id}`}>Buy Ticket</Link> */}
+          <Link
+            href={`/checkout/payment/${createQueryParams({
+              type: "ticket",
+              ticketId: props.id,
+            })}`}
+          >
+            Buy Ticket
+          </Link>
         </Button>
       </div>
     </div>

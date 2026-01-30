@@ -9,7 +9,10 @@ interface PaymentInfoFormProps {}
 
 export default function PaymentInfoForm({}: PaymentInfoFormProps) {
   const searchParams = useSearchParams();
+
+  const type = searchParams.get("type") as "coin" | "ticket" | null;
   const sugoId: string | null = searchParams.get("sugoId");
+  const ticketId: string | null = searchParams.get("ticketId");
 
   return (
     <div>
@@ -19,11 +22,19 @@ export default function PaymentInfoForm({}: PaymentInfoFormProps) {
       <p className="mt-3 text-xl">
         Your payment details are encrypted and secure.
       </p>
-      {sugoId && (
+
+      {type == "coin" && sugoId && (
         <Elements stripe={stripePromise}>
-          <CardCheckoutForm sugoId={sugoId} />
+          <CardCheckoutForm type="coin" sugoId={sugoId} />
         </Elements>
       )}
+
+      {type == "ticket" && ticketId && (
+        <Elements stripe={stripePromise}>
+          <CardCheckoutForm type="ticket" ticketId={ticketId} />
+        </Elements>
+      )}
+
       {/* <form */}
       {/*   className="mt-4" */}
       {/*   onSubmit={(e) => { */}
