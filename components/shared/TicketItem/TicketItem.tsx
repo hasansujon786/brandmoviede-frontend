@@ -4,35 +4,27 @@ import {
   ClockIcon,
 } from "@/components/shared/icons/CalenderIcon";
 import { Button } from "@/components/ui/button";
-import { Copy } from "lucide-react";
-import { cn } from "@/lib/utils";
-
-export interface Ticket {
-  status: string;
-  title: string;
-  date: string;
-  expire_date: string;
-  ticket_id: string;
-}
+import { Copy, FlagTriangleRight } from "lucide-react";
+import { cn, getFormatedDate } from "@/lib/utils";
+import { IAppMyTicketOrderItem } from "@/types";
+import { toast } from "sonner";
 
 export default function TicketItem({
-  date,
-  expire_date,
-  ticket_id,
-  status,
-  title,
-}: Ticket) {
+  event_ticket,
+  event_ticket_id,
+}: IAppMyTicketOrderItem) {
   const info = [
     {
       icon: <CalenderDatesIcon className="size-6" />,
-      value: date,
+      value: getFormatedDate(event_ticket.event_date),
     },
     {
-      icon: <ClockIcon className="size-6" />,
-      value: expire_date,
+      icon: <FlagTriangleRight className="size-6" />,
+      value: event_ticket.location,
     },
   ];
 
+  const status = event_ticket.status;
   const isInactive = status === "inactive";
 
   return (
@@ -40,15 +32,14 @@ export default function TicketItem({
       <div className="space-y-2">
         <Badge variant={isInactive ? "destructive" : "success"}>{status}</Badge>
         <h3 className="text-heading-100 font-heading mb-4 text-2xl font-semibold">
-          {title}
+          {event_ticket.title}
         </h3>
 
-        {/* date & expire_date */}
-        <div className="">
+        <div className="space-y-2">
           {info.map((item, index) => (
             <div
               key={index}
-              className="mt-1 flex items-center gap-1 px-2 text-base text-[#777980]"
+              className="flex items-center gap-1 px-2 text-base text-[#777980]"
             >
               {item.icon}
               <p>{item.value}</p>
@@ -69,10 +60,14 @@ export default function TicketItem({
 
         <div className="flex w-full items-center justify-between gap-3 md:gap-x-32">
           <p className="text-primary-foreground font-heading overflow-x-scroll text-lg font-semibold md:text-2xl lg:text-3xl">
-            {ticket_id}
+            {event_ticket_id}
           </p>
 
           <Button
+            onClick={() => {
+              navigator.clipboard.writeText(event_ticket_id);
+              toast.success("Event Ticket ID copied");
+            }}
             className="shrink-0 rounded-[12px] border-transparent"
             variant="secondary"
             size="icon"

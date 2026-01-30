@@ -1,6 +1,7 @@
 import { createQueryParams } from "@/lib/utils/formatters";
 import { baseApi } from "@/redux/api/baseApi";
 import {
+  IAppMyTicketOrderItem,
   IAppOrderStat as IAppOrderStats,
   IAppOrderTableItem,
   IAppTicket,
@@ -28,8 +29,23 @@ export const appOrderApis = baseApi.injectEndpoints({
         })}`,
       providesTags: ["Order"] as const,
     }),
+    getMyTicketOrders: builder.query<
+      WithPaginationAndStatus<IAppMyTicketOrderItem[]>,
+      IPaginationParams | void
+    >({
+      query: (params) =>
+        `/order/tickets${createQueryParams({
+          page: params?.page || null,
+          limit: params?.limit || null,
+        })}`,
+      providesTags: ["MyTicketOrder"] as const,
+    }),
   }),
   overrideExisting: false,
 });
 
-export const { useGetOrderStatsQuery, useGetAllOrdersQuery } = appOrderApis;
+export const {
+  useGetOrderStatsQuery,
+  useGetAllOrdersQuery,
+  useGetMyTicketOrdersQuery,
+} = appOrderApis;
