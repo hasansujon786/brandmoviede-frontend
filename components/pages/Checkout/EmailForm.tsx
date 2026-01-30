@@ -37,8 +37,8 @@ export default function EmailForm(props: EmailFormProps) {
 
   const form = useForm({
     defaultValues: {
-      sugoId: "",
-      confirmSugoId: "",
+      sugoId: "SUGO123",
+      confirmSugoId: "SUGO123",
     },
     validators: {
       onSubmit: sugoCheckoutSchema,

@@ -23,7 +23,7 @@ export const useNextStep = () => {
 
   const activeIndex = steps.findIndex((s) => s.path === pathname);
 
-  const goNext = (queryParams?: string) => {
+  const goNext = (queryParams = "") => {
     if (activeIndex === -1) return;
 
     const next = steps[activeIndex + 1];
