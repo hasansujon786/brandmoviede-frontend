@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { config } from "@/constant";
 import { formatCurrency, formatPluralNumber } from "@/lib/utils/formatters";
-import { useCreateCoinCheckoutDraftMutation } from "@/redux/api";
 import { addToCart } from "@/redux/features/cart/cartSlice";
 import { useAppDispatch } from "@/redux/store";
 import { IAppCoinBundle } from "@/types";
@@ -53,39 +52,26 @@ export default function ShopCard({ coin }: { coin: IAppCoinBundle }) {
 
 function BuyButton(coinBundle: IAppCoinBundle) {
   const { counter } = useCounterButton();
-  const [checkoutCoin, { isLoading, error }] =
-    useCreateCoinCheckoutDraftMutation();
-
   const dispatch = useAppDispatch();
 
-  const handleCheckout = async () => {
+  const handleAddToCart = async () => {
     dispatch(
       addToCart({
+        type: "coin",
         data: coinBundle,
         quantity: counter || 1,
       }),
     );
     toast.success("Item added to cart");
-    // try {
-    //   const res = await checkoutCoin({
-    //     sugo_id: "SUGO123",
-    //     items: [{ bundle_id: coinId, quantity: counter || 1 }],
-    //   }).unwrap();
-    //
-    //   toast.success("Successfully added to your cart");
-    // } catch {
-    //   toast.error("Failed to add to cart. Please try again.");
-    // }
   };
 
   return (
     <Button
-      onClick={handleCheckout}
-      disabled={isLoading}
+      onClick={handleAddToCart}
       variant="primary"
       className="bg-primary-50 border-primary-50 text-body-200 hover:bg-primary hover:text-primary-foreground flex-1"
     >
-      {isLoading ? "Processing..." : "Add to Cart"}
+      Add to Cart
     </Button>
   );
 }

@@ -2,6 +2,7 @@
 
 import { useNextStep } from "@/components/shared/Stepper/Stepper";
 import { Button } from "@/components/ui/button";
+
 import {
   Field,
   FieldError,
@@ -10,13 +11,10 @@ import {
   FieldSet,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { useCreateCoinCheckoutOrderMutation } from "@/redux/api";
-import { selectCartItems } from "@/redux/features/cart/cartSlice";
-import { useSelector } from "react-redux";
-import { toast } from "sonner";
-import { z } from "zod";
-import { useForm } from "@tanstack/react-form";
 import { createQueryParams } from "@/lib/utils/formatters";
+import { useForm } from "@tanstack/react-form";
+import { CircleAlert } from "lucide-react";
+import { z } from "zod";
 
 export const sugoCheckoutSchema = z
   .object({
@@ -30,37 +28,20 @@ export const sugoCheckoutSchema = z
 
 interface EmailFormProps {}
 
-export default function EmailForm(props: EmailFormProps) {
+export default function SugoIDForm(props: EmailFormProps) {
   const { goNext } = useNextStep();
-  const [createOrder] = useCreateCoinCheckoutOrderMutation();
-  const cartItems = useSelector(selectCartItems);
 
   const form = useForm({
     defaultValues: {
-      sugoId: "SUGO123",
-      confirmSugoId: "SUGO123",
+      sugoId: "",
+      confirmSugoId: "",
     },
     validators: {
       onSubmit: sugoCheckoutSchema,
     },
     onSubmit: async ({ value }) => {
-      try {
-        const { client_secret, transaction_id } = await createOrder({
-          sugoId: value.sugoId,
-          items: cartItems.map((i) => ({
-            bundle_id: i.data.id,
-            quantity: i.quantity,
-          })),
-        }).unwrap();
-
-        toast.success("Order placed successfully 🎉");
-        const query = createQueryParams({ client_secret, transaction_id });
-        goNext(query);
-      } catch (err: any) {
-        toast.error(
-          err?.data?.message || "Failed to place order. Please try again.",
-        );
-      }
+      const query = createQueryParams({ sugoId: value.sugoId });
+      goNext(query);
     },
   });
 
@@ -70,8 +51,9 @@ export default function EmailForm(props: EmailFormProps) {
         Sugo ID
       </h5>
       <p className="mt-3 text-xl">
-        Your digital code will be sent to this email address
+        This Sugo ID will be used to deliver your Coin bundle.
       </p>
+
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -126,15 +108,25 @@ export default function EmailForm(props: EmailFormProps) {
           </FieldGroup>
         </FieldSet>
 
+        <p className="mt-6 flex items-center gap-2 text-sm">
+          <CircleAlert size={16} className="text-destructive" />
+          Please make sure the ID is correct before continuing.
+        </p>
+
         <form.Subscribe
-          selector={(state) => [state.canSubmit, state.isSubmitting]}
+          selector={(state) => [
+            state.canSubmit,
+            state.isSubmitting,
+            state.isValid,
+            state.isTouched,
+          ]}
         >
-          {([canSubmit, isSubmitting]) => (
+          {([canSubmit, isSubmitting, isValid, isTouched]) => (
             <Button
               type="submit"
               variant="primary"
-              className="mt-8 w-full"
-              disabled={!canSubmit || isSubmitting}
+              className="mt-3 w-full"
+              disabled={!isTouched || !isValid || !canSubmit || isSubmitting}
             >
               {isSubmitting ? "Processing..." : "Continue to Payment"}
             </Button>

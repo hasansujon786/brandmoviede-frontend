@@ -1,5 +1,5 @@
-import EmailForm from "@/components/pages/Checkout/EmailForm";
+import SugoIDForm from "@/components/pages/Checkout/SugoIDForm";
 
 export default function CheckoutPage() {
-  return <EmailForm />;
+  return <SugoIDForm />;
 }

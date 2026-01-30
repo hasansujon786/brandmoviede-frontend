@@ -1,11 +1,14 @@
 import { RootState } from "@/redux/store";
-import { IAppCoinBundle } from "@/types";
+import { IAppCoinBundle, IAppTicket } from "@/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export interface CartListItem {
+export interface CartCoinItem {
+  type: "coin";
   data: IAppCoinBundle;
   quantity: number;
 }
+
+export type CartListItem = CartCoinItem;
 
 interface CartState {
   items: CartListItem[];

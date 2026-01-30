@@ -8,7 +8,7 @@ import Link from "next/link";
 import CalenderIcon from "../icons/CalenderIcon";
 import LocationPinIcon from "../icons/LocationPinIcon";
 import PeoplesIcon from "../icons/PeoplesIcon";
-import { TicketBadge, TicketStatus } from "../Pill/Pill";
+import { TicketBadge } from "../Pill/Pill";
 
 interface TicketCardProps extends IAppTicket {}
 
@@ -30,7 +30,7 @@ export default function TicketCard(props: TicketCardProps) {
 
   return (
     <div className="slide-up bg-card @container relative rounded-2xl p-3 @xs:p-4">
-      <TicketBadge status={props.ticket_status as TicketStatus} />
+      <TicketBadge status={props.ticket_status} />
       <h3 className="text-heading-200 mt-4 text-2xl font-semibold @xs:text-3xl">
         {props.title}
       </h3>

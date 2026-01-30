@@ -9,9 +9,7 @@ interface PaymentInfoFormProps {}
 
 export default function PaymentInfoForm({}: PaymentInfoFormProps) {
   const searchParams = useSearchParams();
-
-  const clientSecret: string | null = searchParams.get("client_secret");
-  const transaction_id: string | null = searchParams.get("transaction_id");
+  const sugoId: string | null = searchParams.get("sugoId");
 
   return (
     <div>
@@ -21,12 +19,9 @@ export default function PaymentInfoForm({}: PaymentInfoFormProps) {
       <p className="mt-3 text-xl">
         Your payment details are encrypted and secure.
       </p>
-      {clientSecret && (
-        <Elements stripe={stripePromise} options={{ clientSecret }}>
-          <CardCheckoutForm
-            clientSecret={clientSecret}
-            orderId={transaction_id}
-          />
+      {sugoId && (
+        <Elements stripe={stripePromise}>
+          <CardCheckoutForm sugoId={sugoId} />
         </Elements>
       )}
       {/* <form */}

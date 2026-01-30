@@ -1,51 +1,98 @@
 "use client";
 
 import { useNextStep } from "@/components/shared/Stepper/Stepper";
-import { FieldGroup } from "@/components/ui/field";
-import { inputStyles } from "@/components/ui/input";
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
+import { Input, inputStyles } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { useCreateCoinCheckoutOrderMutation } from "@/redux/api";
+import { selectCartItems } from "@/redux/features/cart/cartSlice";
+import { useAppDispatch } from "@/redux/store";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
+import { useForm } from "@tanstack/react-form";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { toast } from "sonner";
+import z from "zod";
 import { Button } from "../../ui/button";
 import { usePaymentStatus } from "./context/PaymentStatusContext";
 
-export function CardCheckoutForm({
-  clientSecret,
-  orderId,
-}: {
-  clientSecret: string;
-  orderId: string;
-}) {
-  const { goNext } = useNextStep();
-  const { resetStatus, setStatus } = usePaymentStatus();
+const schema = z.object({
+  cardholderName: z.string().min(2, "Cardholder name is required"),
+});
 
+export function CardCheckoutForm({ sugoId }: { sugoId: string }) {
   const stripe = useStripe();
   const elements = useElements();
 
-  const [loading, setLoading] = useState(false);
+  const { goNext } = useNextStep();
+  const { resetStatus, setStatus } = usePaymentStatus();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const [createOrder] = useCreateCoinCheckoutOrderMutation();
+  const cartItems = useSelector(selectCartItems);
+  const dispatch = useAppDispatch();
+
+  const [loading, setLoading] = useState(false);
+  const [complete, setComplete] = useState(false);
+
+  const form = useForm({
+    defaultValues: {
+      cardholderName: "",
+    },
+    validators: {
+      onSubmit: schema,
+    },
+    onSubmit: async ({ value }) => {
+      if (!sugoId) {
+        toast.error("Invalid sugoId");
+        return;
+      }
+
+      try {
+        setLoading(true);
+        resetStatus();
+
+        const { client_secret } = await createOrder({
+          sugoId: sugoId,
+          items: cartItems.map((i) => ({
+            bundle_id: i.data.id,
+            quantity: i.quantity,
+          })),
+        }).unwrap();
+
+        // toast.success("Order placed successfully 🎉");
+        await handleStripePayment(client_secret, {
+          name: value.cardholderName,
+        });
+      } catch (err: any) {
+        toast.error(
+          err?.data?.message || "Failed to place order. Please try again.",
+        );
+      } finally {
+        setLoading(false);
+      }
+    },
+  });
+
+  async function handleStripePayment(
+    clientSecret: string,
+    billing_details: { name: string },
+  ) {
     if (!stripe || !elements) return;
 
     const card = elements.getElement(CardElement);
     if (!card) return;
-
-    setLoading(true);
-    resetStatus();
 
     const { error, paymentIntent } = await stripe.confirmCardPayment(
       clientSecret,
       {
         payment_method: {
           card,
-          billing_details: {
-            // name: ""
-            // address: {
-            //   postal_code: postalCode,
-            // },
-          },
+          billing_details,
         },
       },
     );
@@ -59,53 +106,76 @@ export function CardCheckoutForm({
     }
 
     if (paymentIntent?.status === "succeeded") {
+      // dispatch(clearCart());
       setStatus("success");
       goNext();
-      // window.location.href = `/tickets/success?order_id=${orderId}`;
       toast.success("Payment successful");
     }
-  };
-
-  const [complete, setComplete] = useState(false);
+  }
 
   return (
-    <form className="mt-4" onSubmit={handleSubmit}>
+    <form
+      className="mt-4"
+      onSubmit={(e) => {
+        e.preventDefault();
+        form.handleSubmit();
+      }}
+    >
       <FieldGroup>
-        {/* <Field> */}
-        {/*   <FieldLabel htmlFor="name">Cardholder Name</FieldLabel> */}
-        {/*   <Input id="name" autoComplete="off" placeholder="Enter Full Name" /> */}
-        {/* </Field> */}
-
-        <div
-          className={cn(
-            inputStyles,
-            "focus-within:ring-ring/50 focus-within:ring-[3px]",
+        <form.Field name="cardholderName">
+          {(field) => (
+            <Field
+              data-invalid={
+                field.state.meta.isTouched && !field.state.meta.isValid
+              }
+            >
+              <FieldLabel htmlFor={field.name}>Cardholder Name</FieldLabel>
+              <Input
+                id={field.name}
+                autoComplete="off"
+                placeholder="Enter full name"
+                value={field.state.value}
+                onBlur={field.handleBlur}
+                onChange={(e) => field.handleChange(e.target.value)}
+              />
+              <FieldError errors={field.state.meta.errors} />
+            </Field>
           )}
-        >
-          <CardElement
-            onChange={(e) => setComplete(e.complete)}
-            className="flex h-full flex-col justify-center"
-            options={{
-              style: {
-                base: {
-                  backgroundColor: "",
-                  fontSize: "16px",
-                  color: "#111827",
-                  fontFamily: "Inter, system-ui, sans-serif",
-                  "::placeholder": {
-                    color: "#9CA3AF",
+        </form.Field>
+
+        <Field>
+          <FieldLabel htmlFor="name">Card Info</FieldLabel>
+          <div
+            className={cn(
+              inputStyles,
+              "focus-within:ring-ring/50 focus-within:ring-[3px]",
+            )}
+          >
+            <CardElement
+              onChange={(e) => setComplete(e.complete)}
+              className="flex h-full flex-col justify-center"
+              options={{
+                style: {
+                  base: {
+                    fontSize: "16px",
+                    color: "#111827",
+                    fontFamily: "Inter, system-ui, sans-serif",
+                    "::placeholder": {
+                      color: "#9CA3AF",
+                    },
+                  },
+                  invalid: {
+                    color: "#DC2626",
                   },
                 },
-                invalid: {
-                  color: "#DC2626",
-                },
-              },
-            }}
-          />
-        </div>
+              }}
+            />
+          </div>
+        </Field>
       </FieldGroup>
 
       <Button
+        type="submit"
         className="mt-8 w-full"
         variant="primary"
         disabled={!complete || !stripe || loading}

@@ -13,6 +13,7 @@ export default function CartList() {
       <h5 className="text-heading-200 font-heading text-3xl font-semibold">
         Shopping Cart
       </h5>
+
       <p className="mt-3 text-xl">
         {cartItems.length ? (
           <>{formatPluralNumber(cartItems.length, "item")} in your cart</>
