@@ -1,9 +1,11 @@
+import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 
 interface InfoCardProps extends React.ComponentProps<"div"> {
+  isLoading?: boolean;
   icon: React.JSX.Element;
   label: string;
-  value: string[];
+  value: (string | number)[];
   variant?: "light" | "default";
 }
 
@@ -25,6 +27,7 @@ export default function InfoCard({
   icon,
   label,
   value,
+  isLoading,
   variant = "default",
   className,
   ...props
@@ -52,11 +55,15 @@ export default function InfoCard({
       <h6 className="text-heading-200 font-heading mt-4 font-semibold md:text-xl lg:mt-6 lg:text-2xl">
         {label}
       </h6>
-      {value.map((v, index) => (
-        <p key={index} className="mt-1 max-w-xs px-2 text-base">
-          {v}
-        </p>
-      ))}
+      {isLoading ? (
+        <Skeleton className="mt-1 h-6 w-12" />
+      ) : (
+        value.map((v, index) => (
+          <p key={index} className="mt-1 max-w-xs px-2 text-base">
+            {v}
+          </p>
+        ))
+      )}
     </div>
   );
 }

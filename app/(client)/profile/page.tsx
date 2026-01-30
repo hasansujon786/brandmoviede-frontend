@@ -2,25 +2,10 @@
 
 import { SignOutIcon } from "@/components/dashboard/AppSidebar/AppSidebarIcons";
 import ActiveTicket from "@/components/pages/Profile/Dashboard/ActiveTicket/ActiveTicket";
-import RecentOrders from "@/components/pages/Profile/Dashboard/RecentOrders/RecentOrders";
-import { TodoListChecked } from "@/components/shared/icons/CheckMark";
-import HeadsetIcon from "@/components/shared/icons/HeadsetIcon";
-import InfoCard from "@/components/shared/InfoCard/InfoCard";
+import OrderStats from "@/components/pages/Profile/Dashboard/OrderStats/OrderStats";
+import OrderTable from "@/components/shared/OrderTable/OrderTable";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/redux/features/auth/hooks";
-
-const infoCards = [
-  {
-    icon: <TodoListChecked className="size-6" />,
-    label: "Total Orders",
-    value: ["4"],
-  },
-  {
-    icon: <HeadsetIcon className="size-6" />,
-    label: "Active Tickets",
-    value: ["1"],
-  },
-];
 
 export default function ProfileDashboardPage() {
   const { logOut } = useAuth();
@@ -32,21 +17,10 @@ export default function ProfileDashboardPage() {
         Log Out
       </Button>
 
-      <section className="@container">
-        <div className="grid gap-4 lg:gap-6 @xs:grid-cols-2">
-          {infoCards.map((item) => (
-            <InfoCard
-              className="aspect-auto items-start"
-              variant="light"
-              key={item.label}
-              {...item}
-            />
-          ))}
-        </div>
-      </section>
+      <OrderStats />
 
       <section className="">
-        <RecentOrders />
+        <OrderTable limit={3} title="Recent Orders" shoPagination={false} />
       </section>
 
       <section className="">

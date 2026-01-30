@@ -1,9 +1,9 @@
-import MyOrderHistory from "../../../../components/pages/Profile/OrderHistory/MyOrderHistory/MyOrderHistory";
+import OrderTable from "@/components/shared/OrderTable/OrderTable";
 
 export default function OrderHistoryPage() {
   return (
     <>
-      <MyOrderHistory />
+      <OrderTable title="Order History" />
     </>
   );
 }
