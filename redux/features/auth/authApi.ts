@@ -1,5 +1,11 @@
 import { baseApi } from "@/redux/api/baseApi";
-import type { IAuthUser, WithStatus } from "@/types";
+import type {
+  IAuthRegisterParams,
+  IAuthRegisterResponse,
+  IAuthUser,
+  IAuthVerifyEmailParams,
+  WithStatus,
+} from "@/types";
 
 const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -8,9 +14,30 @@ const authApi = baseApi.injectEndpoints({
       providesTags: ["Auth"] as const,
       transformResponse: (response: WithStatus<IAuthUser>) => response.data,
     }),
+    registerUser: builder.mutation<IAuthRegisterResponse, IAuthRegisterParams>({
+      query: (body) => ({
+        url: "/auth/register",
+        method: "POST",
+        body,
+      }),
+    }),
+    verifyEmail: builder.mutation<
+      IAuthRegisterResponse,
+      IAuthVerifyEmailParams
+    >({
+      query: (body) => ({
+        url: "/auth/verify-email",
+        method: "POST",
+        body,
+      }),
+    }),
   }),
   overrideExisting: false,
 });
 
-export const { useGetMeQuery } = authApi;
+export const {
+  useGetMeQuery,
+  useRegisterUserMutation,
+  useVerifyEmailMutation,
+} = authApi;
 export default authApi;

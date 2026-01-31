@@ -41,3 +41,19 @@ export interface IAuthUser {
   date_of_birth: string | null; // ISO date string
   created_at: string; // ISO datetime string
 }
+
+export interface IAuthRegisterParams {
+  name: string;
+  email: string;
+  password: string;
+}
+
+export interface IAuthRegisterResponse {
+  success: boolean;
+  message: string;
+}
+
+export interface IAuthVerifyEmailParams {
+  email: string;
+  token: string;
+}

@@ -122,12 +122,12 @@ export default function LoginForm({ type }: { type: IAuthUserRole }) {
                     >
                       <div className="flex items-center justify-between">
                         <Label htmlFor={field.name}>Password</Label>
-                        <Link
-                          href="/forgot-password"
-                          className="text-primary hover:text-primary-400 text-sm font-medium"
-                        >
-                          Forgot?
-                        </Link>
+                        {/* <Link */}
+                        {/*   href="/forgot-password" */}
+                        {/*   className="text-primary hover:text-primary-400 text-sm font-medium" */}
+                        {/* > */}
+                        {/*   Forgot? */}
+                        {/* </Link> */}
                       </div>
 
                       <Input
