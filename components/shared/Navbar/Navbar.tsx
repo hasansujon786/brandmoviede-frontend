@@ -1,10 +1,24 @@
 "use client";
 
 import ConditionalWrapper from "@/components/shared/ConditionalWrapper/ConditionalWrapper";
-import { Menu, ShoppingCart, UserRound } from "lucide-react";
+import {
+  EllipsisVertical,
+  LogInIcon,
+  Menu,
+  ShoppingCart,
+  UserRound,
+} from "lucide-react";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Sheet,
   SheetClose,
@@ -19,6 +33,7 @@ import { cn } from "@/lib/utils";
 import { useAuth } from "@/redux/features/auth/hooks";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { RoleUtils } from "@/types";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -145,33 +160,78 @@ function ActionIcon({
 function ActionIcons(props: { isMobile: boolean }) {
   const pathname = usePathname();
 
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, role } = useAuth();
+  const isUser = RoleUtils.isUser(role);
 
-  const actionLinks = [
-    ...(isAuthenticated
-      ? [{ label: "Profile", href: "/profile", icon: UserRound }]
-      : []),
-    { label: "Cart", href: "/cart", icon: ShoppingCart },
-  ];
+  const actionLinks = isAuthenticated
+    ? [
+        ...(isUser
+          ? [
+              {
+                label: "Profile",
+                href: "/profile",
+                icon: <UserRound className="h-5 w-5 text-current" />,
+              },
+              {
+                label: "Cart",
+                href: "/cart",
+                icon: <ShoppingCart className="h-5 w-5 text-current" />,
+              },
+            ]
+          : []),
+        {
+          label: "More",
+          href: "#",
+          component: <MoreActin />,
+        },
+      ]
+    : [
+        {
+          label: "Sign in",
+          href: "/signin",
+          icon: <LogInIcon className="h-5 w-5 text-current" />,
+        },
+      ];
 
   return (
     <>
       {actionLinks.map((link) => {
         const isActive = pathname.startsWith(link.href);
+        if (link.component) {
+          return link.component;
+        }
+
         return (
           <ConditionalWrapper
             key={link.label}
             condition={props.isMobile}
             wrapper={(children) => <SheetClose asChild>{children}</SheetClose>}
           >
-            <ActionIcon isActive={isActive} asChild aria-label="Cart">
-              <Link href={link.href}>
-                <link.icon className="h-5 w-5 text-current" />
-              </Link>
+            <ActionIcon isActive={isActive} asChild>
+              <Link href={link.href}>{link.icon}</Link>
             </ActionIcon>
           </ConditionalWrapper>
         );
       })}
     </>
+  );
+}
+
+function MoreActin() {
+  const { logOut } = useAuth();
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger className="rounded-full">
+        <ActionIcon isActive={false}>
+          <EllipsisVertical className="h-6 w-6 text-current" />
+        </ActionIcon>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="relative z-300">
+        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={logOut}>Logout</DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

@@ -13,7 +13,7 @@ import { Field, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/redux/features/auth/hooks";
-import { IAuthUserRole } from "@/types";
+import { IAuthUserRole, RoleUtils } from "@/types";
 import { useForm } from "@tanstack/react-form";
 import Image from "next/image";
 import Link from "next/link";
@@ -42,8 +42,15 @@ export default function LoginForm({ type }: { type: IAuthUserRole }) {
     },
     onSubmit: async ({ value }) => {
       try {
-        await logIn({ email: value.email, password: value.password }).unwrap();
-        router.replace(type === "admin" ? "/dashboard" : "/");
+        const res = await logIn({
+          email: value.email,
+          password: value.password,
+        }).unwrap();
+        const isCurrentUserAdmin = RoleUtils.isAdmin(res?.type);
+
+        router.replace(
+          type === "admin" || isCurrentUserAdmin ? "/dashboard" : "/",
+        );
       } catch (error) {
         toast.error(
           error?.data?.message || "Failed to SignIn. Please try again.",
