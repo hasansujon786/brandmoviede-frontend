@@ -6,6 +6,7 @@ import LocationPinIcon from "@/components/shared/icons/LocationPinIcon";
 import PeoplesIcon from "@/components/shared/icons/PeoplesIcon";
 import InfoCard from "@/components/shared/InfoCard/InfoCard";
 import NavigationLink from "@/components/shared/NavigationLink/NavigationLink";
+import { useBuyTicket } from "@/components/shared/TicketCard/TicketCard";
 import { Button } from "@/components/ui/button";
 import { config } from "@/constant";
 import { getFormatedDate } from "@/lib/utils";
@@ -20,6 +21,8 @@ export default function TicketDetails() {
 
   const { data: ticket, isLoading } = useGetSingleTicketByIdQuery(ticketId);
   const includedFeatures = ticket?.included ?? [];
+
+  const { onBuyTicket } = useBuyTicket();
 
   const infoCards = [
     {
@@ -66,7 +69,14 @@ export default function TicketDetails() {
               n={2}
             />
 
-            <Button variant="primary">Get Your Ticket</Button>
+            <Button
+              onClick={() => {
+                if (ticket) onBuyTicket({ data: ticket, quantity: 1 });
+              }}
+              variant="primary"
+            >
+              Get Your Ticket
+            </Button>
           </div>
           <p className="mt-4 max-w-4xl text-base">{ticket?.description}</p>
         </section>

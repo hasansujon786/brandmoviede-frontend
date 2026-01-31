@@ -2,15 +2,16 @@
 
 import LockIcon from "@/components/shared/icons/LockIcon";
 import SummaryCard from "@/components/shared/SummaryCard/SummaryCard";
+import { formatCurrency } from "@/lib/utils/formatters";
+import { selectCurrentSelectedTicket } from "@/redux/features/cart/cartSlice";
+import { useSearchParams } from "next/navigation";
+import { useSelector } from "react-redux";
+import { CartListSummary } from "../Cart/CartList";
 
 export default function CheckoutSummary() {
-  const purchaseInfo = {
-    items: [
-      { title: "Subtotal", value: "€40 EUR" },
-      { title: "Tax", value: "€0.90 EUR" },
-    ],
-    main: { title: "Total", value: "€40.99 EUR" },
-  };
+  const searchParams = useSearchParams();
+
+  const type = searchParams.get("type") as "coin" | "ticket" | null;
 
   return (
     <div>
@@ -18,11 +19,8 @@ export default function CheckoutSummary() {
         Order Summary
       </h5>
 
-      <SummaryCard
-        className="mt-6"
-        items={purchaseInfo.items}
-        main={purchaseInfo.main}
-      />
+      {type === "coin" ? <CartListSummary /> : null}
+      {type === "ticket" ? <CheckoutTicketSummary /> : null}
 
       <div className="bg-card/50 mt-4 flex flex-col gap-2 rounded-xl p-4">
         <div className="flex items-center gap-2">
@@ -37,5 +35,23 @@ export default function CheckoutSummary() {
         </p>
       </div>
     </div>
+  );
+}
+
+function CheckoutTicketSummary() {
+  const currentTicket = useSelector(selectCurrentSelectedTicket);
+
+  if (!currentTicket) {
+    return null;
+  }
+  const quantity = currentTicket.quantity || 1;
+  const totalPirce = quantity * (currentTicket?.data?.ticket_price ?? 0);
+
+  return (
+    <SummaryCard
+      className="mt-6"
+      items={[{ title: "Ticket", value: currentTicket.quantity || 1 }]}
+      main={{ title: "Total Price", value: formatCurrency(totalPirce) }}
+    />
   );
 }

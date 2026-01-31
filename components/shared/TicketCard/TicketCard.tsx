@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { config } from "@/constant";
 import { getFormatedDate } from "@/lib/utils";
@@ -6,9 +8,15 @@ import {
   formatCurrency,
   formatPluralNumber,
 } from "@/lib/utils/formatters";
+import {
+  addCurrentCheckoutTicket,
+  CartTicketItem,
+} from "@/redux/features/cart/cartSlice";
+import { useAppDispatch } from "@/redux/store";
 import { IAppTicket } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import CalenderIcon from "../icons/CalenderIcon";
 import LocationPinIcon from "../icons/LocationPinIcon";
 import PeoplesIcon from "../icons/PeoplesIcon";
@@ -31,6 +39,7 @@ export default function TicketCard(props: TicketCardProps) {
       value: `Up to ${props.sold_limit} attendees`,
     },
   ];
+  const { onBuyTicket } = useBuyTicket();
 
   return (
     <div className="slide-up bg-card @container relative rounded-2xl p-3 @xs:p-4">
@@ -79,17 +88,37 @@ export default function TicketCard(props: TicketCardProps) {
           <Link href={`/tickets/${props.id}`}>View Details</Link>
         </Button>
 
-        <Button asChild variant="primary">
-          <Link
-            href={`/checkout/payment/${createQueryParams({
-              type: "ticket",
-              ticketId: props.id,
-            })}`}
-          >
-            Buy Ticket
-          </Link>
+        <Button
+          variant="primary"
+          onClick={() => onBuyTicket({ data: props, quantity: 1 })}
+        >
+          Buy Ticket
         </Button>
       </div>
     </div>
   );
+}
+
+export function useBuyTicket() {
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+
+  function onBuyTicket(ticket: Omit<CartTicketItem, "type">) {
+    const href = `/checkout/payment/${createQueryParams({
+      type: "ticket",
+      ticketId: ticket.data.id,
+    })}`;
+
+    dispatch(
+      addCurrentCheckoutTicket({
+        type: "ticket",
+        data: ticket.data,
+        quantity: ticket.quantity || 1,
+      }),
+    );
+
+    router.push(href);
+  }
+
+  return { onBuyTicket };
 }

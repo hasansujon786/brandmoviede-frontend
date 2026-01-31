@@ -8,14 +8,22 @@ export interface CartCoinItem {
   quantity: number;
 }
 
+export interface CartTicketItem {
+  type: "ticket";
+  data: IAppTicket;
+  quantity: number;
+}
+
 export type CartListItem = CartCoinItem;
 
 interface CartState {
   items: CartListItem[];
+  currentSelectedTicket: CartTicketItem | null;
 }
 
 const initialState: CartState = {
   items: [],
+  currentSelectedTicket: null,
 };
 
 const cartSlice = createSlice({
@@ -31,6 +39,12 @@ const cartSlice = createSlice({
         state.items.push(action.payload);
       }
     },
+    addCurrentCheckoutTicket: (
+      state,
+      action: PayloadAction<CartTicketItem | null>,
+    ) => {
+      state.currentSelectedTicket = action.payload;
+    },
 
     removeFromCart: (state, action: PayloadAction<string>) => {
       state.items = state.items.filter(
@@ -40,11 +54,19 @@ const cartSlice = createSlice({
 
     clearCart: (state) => {
       state.items = [];
+      state.currentSelectedTicket = null;
     },
   },
 });
 
-export const { addToCart, removeFromCart, clearCart } = cartSlice.actions;
+export const {
+  addToCart,
+  removeFromCart,
+  clearCart,
+  addCurrentCheckoutTicket,
+} = cartSlice.actions;
 export default cartSlice.reducer;
 
 export const selectCartItems = (state: RootState) => state.cart.items;
+export const selectCurrentSelectedTicket = (state: RootState) =>
+  state.cart.currentSelectedTicket;
