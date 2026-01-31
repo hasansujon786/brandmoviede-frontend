@@ -12,6 +12,7 @@ import { toast } from "sonner";
 export default function TicketItem({
   event_ticket,
   event_ticket_id,
+  status,
 }: IAppMyTicketOrderItem) {
   const info = [
     {
@@ -24,8 +25,7 @@ export default function TicketItem({
     },
   ];
 
-  const status = event_ticket.status;
-  const isInactive = status === "inactive";
+  const isInactive = status === "Inactive";
 
   return (
     <div className="bg-card border-input flex flex-col justify-between gap-4 rounded-2xl border p-3 lg:flex-row lg:px-4 lg:py-8">

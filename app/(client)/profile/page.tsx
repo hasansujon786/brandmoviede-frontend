@@ -1,8 +1,9 @@
 "use client";
 
 import OrderStats from "@/components/pages/Profile/Dashboard/OrderStats/OrderStats";
-import MyTickets from "@/components/pages/Profile/MyTickets/MyTickets";
+import { PaginationPageProvider } from "@/components/shared/DataTable/PaginationPageProvider";
 import OrderTable from "@/components/shared/OrderTable/OrderTable";
+import TicketItemList from "@/components/shared/TicketItemList/TicketItemList";
 
 export default function ProfileDashboardPage() {
   return (
@@ -11,7 +12,9 @@ export default function ProfileDashboardPage() {
 
       <OrderTable limit={3} title="Recent Orders" shoPagination={false} />
 
-      <MyTickets showAll={false} />
+      <PaginationPageProvider>
+        <TicketItemList status="Active" title="Active Tickets" />
+      </PaginationPageProvider>
     </div>
   );
 }
