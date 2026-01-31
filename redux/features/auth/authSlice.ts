@@ -1,16 +1,16 @@
 import { RootState } from "@/redux/store";
-import { IAuthUser, IAuthUserRole } from "@/types";
+import { IAuthUserRole } from "@/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import Cookies from "js-cookie";
 
 interface AuthState {
   token: string | null | false;
-  user: IAuthUser | null;
+  // user: IAuthUser | null;
   role: IAuthUserRole | null;
 }
 
 const initialState: AuthState = {
-  user: null,
+  // user: null,
   token: false,
   role: null,
 };
@@ -40,7 +40,7 @@ const authSlice = createSlice({
       }
     },
     logOut: (state) => {
-      state.user = null;
+      // state.user = null;
       state.token = null;
       state.role = null;
 
@@ -54,7 +54,6 @@ export const { setCredentials, logOut } = authSlice.actions;
 
 export default authSlice.reducer;
 
-export const selectCurrentUser = (state: RootState) => state.auth.user;
 export const selectCurrentToken = (state: RootState) => state.auth.token;
 export const selectCurrentRole = (state: RootState) => state.auth.role;
 

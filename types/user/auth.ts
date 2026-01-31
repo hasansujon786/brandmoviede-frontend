@@ -34,6 +34,7 @@ export interface IAuthUser {
   name: string;
   email: string;
   avatar: string | null;
+  avatar_url: string | null;
   address: string | null;
   phone_number: string | null;
   type: "user" | "admin"; // User Role
@@ -41,6 +42,10 @@ export interface IAuthUser {
   date_of_birth: string | null; // ISO date string
   created_at: string; // ISO datetime string
 }
+
+export type IAuthUpdateUserParams = Omit<Partial<IAuthUser>, "avatar"> & {
+  avatar?: File;
+};
 
 export interface IAuthRegisterParams {
   name: string;
