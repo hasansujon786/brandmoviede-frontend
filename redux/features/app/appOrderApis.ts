@@ -4,7 +4,6 @@ import {
   IAppMyTicketOrderItem,
   IAppOrderStat as IAppOrderStats,
   IAppOrderTableItem,
-  IAppTicket,
   IPaginationParams,
   WithPaginationAndStatus,
   WithStatus,
@@ -31,13 +30,9 @@ export const appOrderApis = baseApi.injectEndpoints({
     }),
     getMyTicketOrders: builder.query<
       WithPaginationAndStatus<IAppMyTicketOrderItem[]>,
-      IPaginationParams | void
+      (IPaginationParams & { status?: "Active" | "Inactive" }) | void
     >({
-      query: (params) =>
-        `/order/tickets${createQueryParams({
-          page: params?.page || null,
-          limit: params?.limit || null,
-        })}`,
+      query: (params) => `/order/tickets${createQueryParams(params)}`,
       providesTags: ["MyTicketOrder"] as const,
     }),
   }),

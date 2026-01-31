@@ -2,32 +2,28 @@
 
 import TicketItemList from "@/components/shared/TicketItemList/TicketItemList";
 import { useGetMyTicketOrdersQuery } from "@/redux/features/app/appOrderApis";
-import { IAppMyTicketOrderItem } from "@/types";
+import { skipToken } from "@reduxjs/toolkit/query";
 
 export default function MyTickets({ showAll = true }: { showAll?: boolean }) {
-  const { data } = useGetMyTicketOrdersQuery();
-  const tickets = data?.data || [];
+  const { data: activeTickets } = useGetMyTicketOrdersQuery({
+    status: "Active",
+  });
 
-  const { activeTickets, otherTickets } = tickets.reduce(
-    (acc, ticket) => {
-      if (ticket.event_ticket.status === "Active") {
-        acc.activeTickets.push(ticket);
-      } else {
-        acc.otherTickets.push(ticket);
-      }
-      return acc;
-    },
-    {
-      activeTickets: [] as IAppMyTicketOrderItem[],
-      otherTickets: [] as IAppMyTicketOrderItem[],
-    },
+  const { data: inactiveTickets } = useGetMyTicketOrdersQuery(
+    showAll ? { status: "Inactive" } : skipToken,
   );
 
   return (
     <section className="space-y-8">
-      <TicketItemList title="Active Ticket" tickets={activeTickets} />
+      <TicketItemList
+        title="Active Ticket"
+        tickets={activeTickets?.data || []}
+      />
       {showAll ? (
-        <TicketItemList title="Inactive Tickets" tickets={otherTickets} />
+        <TicketItemList
+          title="Inactive Tickets"
+          tickets={inactiveTickets?.data || []}
+        />
       ) : null}
     </section>
   );
