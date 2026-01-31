@@ -35,7 +35,8 @@ const Status = ({}: { status: PaymentStatus }) => {
       <CheckoutStatus
         isSuccess
         title="Payment Successful!"
-        message="Your 500 coins have been added to your account."
+        message=""
+        // message="Your 500 coins have been added to your account."
       />
       {/* <CheckoutStatus title='Payment Unsuccessful!' message='Your 500 coins haven’t been added to your account.'/> */}
 

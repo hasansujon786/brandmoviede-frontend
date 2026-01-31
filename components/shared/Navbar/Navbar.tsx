@@ -34,6 +34,8 @@ import { useAuth } from "@/redux/features/auth/hooks";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { RoleUtils } from "@/types";
+import UserNotificationBell from "./UserNotificationBell";
+import { SocketProvider } from "@/redux/api/socket/SocketProvider";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -176,6 +178,15 @@ function ActionIcons(props: { isMobile: boolean }) {
                 label: "Cart",
                 href: "/cart",
                 icon: <ShoppingCart className="h-5 w-5 text-current" />,
+              },
+              {
+                label: "Notification",
+                href: "#",
+                icon: (
+                  <SocketProvider>
+                    <UserNotificationBell />
+                  </SocketProvider>
+                ),
               },
             ]
           : []),

@@ -62,6 +62,7 @@ export const baseApi = createApi({
     "Dashboard",
     "Notifications",
     "CoinCheckoutDraft",
+    "AppNotification",
   ] as const,
   endpoints: (builder) => ({
     login: builder.mutation<ILoginPayload, ILoginParams>({

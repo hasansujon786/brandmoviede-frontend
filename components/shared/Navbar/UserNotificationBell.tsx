@@ -1,3 +1,6 @@
+"use client";
+
+import { getTitleFromType } from "@/components/dashboard/AppSidebar/NotificationBell";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -9,8 +12,8 @@ import {
 import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 import { useSocketState } from "@/redux/api/socket/useSocketState";
-import { useGetAdminNotificationsQuery } from "@/redux/features/admin/nofiticationApis";
-import { IAdminNotificationItem } from "@/types";
+import { useGetAppNotificationsQuery } from "@/redux/features/app/notificationApis";
+import { IAppNotificationItem } from "@/types/app/notification";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { Bell } from "lucide-react";
@@ -25,26 +28,8 @@ export interface UINotification {
   read: boolean;
 }
 
-const formatTitle = (str: string) =>
-  str.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
-
-export const getTitleFromType = (type: string) => {
-  switch (type) {
-    case "ticket_purchase":
-      return "Ticket Purchase";
-    case "owner_coin_low":
-      return "Low balance";
-    case "payment_done":
-      return "Payment successful";
-    case "coin_purchase":
-      return "Coins purchased";
-    default:
-      return formatTitle(type) || "Notification";
-  }
-};
-
 export const mapAdminNotificationToUI = (
-  item: IAdminNotificationItem,
+  item: IAppNotificationItem,
 ): UINotification => ({
   id: item.id,
   title: getTitleFromType(item.notification_event.type),
@@ -54,9 +39,9 @@ export const mapAdminNotificationToUI = (
   read: false,
 });
 
-export default function NotificationBell() {
+export default function UserNotificationBell() {
   const { hasNewNotification, clearNotification } = useSocketState();
-  const { data, isLoading } = useGetAdminNotificationsQuery();
+  const { data, isLoading } = useGetAppNotificationsQuery();
 
   const fetchedNotifications = data?.map(mapAdminNotificationToUI) ?? [];
 
@@ -76,7 +61,7 @@ export default function NotificationBell() {
         </Button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent align="end" className="w-80 p-0">
+      <DropdownMenuContent align="end" className="z-300 w-80 p-0">
         <div className="flex items-center justify-between px-4 py-2 font-semibold">
           <span>Notifications</span>
 

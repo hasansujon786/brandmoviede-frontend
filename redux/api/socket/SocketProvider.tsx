@@ -2,8 +2,11 @@
 
 import constants from "@/constant";
 import { useGetAdminNotificationsQuery } from "@/redux/features/admin/nofiticationApis";
+import { useGetAppNotificationsQuery } from "@/redux/features/app/notificationApis";
 import { useAuth } from "@/redux/features/auth/hooks";
+import { RoleUtils } from "@/types";
 import { ISocketEmmitData } from "@/types/admin/socket";
+import { skipToken } from "@reduxjs/toolkit/query";
 import {
   createContext,
   ReactNode,
@@ -24,38 +27,74 @@ type SocketContextType = {
 export const SocketContext = createContext<SocketContextType | null>(null);
 
 export function SocketProvider({ children }: { children: ReactNode }) {
-  const { token, isAuthenticated } = useAuth();
+  const { token, isAuthenticated, role } = useAuth();
 
+  const isAdmin = RoleUtils.isAdmin(role);
+  const isUser = RoleUtils.isUser(role);
   const socketRef = useRef<Socket | null>(null);
+
   const [hasNewNotification, setHasNewNotification] = useState(false);
-  const { refetch: refetchNotifications } = useGetAdminNotificationsQuery();
+
+  const { refetch: refetchNotifications } = useGetAdminNotificationsQuery(
+    isAdmin ? undefined : skipToken,
+  );
+  const { refetch: refetchUserNotification } = useGetAppNotificationsQuery(
+    isUser ? undefined : skipToken,
+  );
 
   // Event handlers map
   const eventHandlers = {
     lowBalanceAlert: (data: ISocketEmmitData) => {
-      refetchNotifications();
+      // admin
+      if (isAdmin) refetchNotifications();
       toast.error(`Low balance: ${data.text}`);
-      setHasNewNotification(true);
     },
 
     crossOwnerBalance: (data: ISocketEmmitData) => {
+      // admin
+      if (isAdmin) refetchNotifications();
+
       console.log("crossOwnerBalance:", data);
     },
 
     clientCoinPurchase: (data: ISocketEmmitData) => {
+      // admin
+      if (isAdmin) refetchNotifications();
+
       console.log("clientCoinPurchase:", data);
-      setHasNewNotification(true);
+    },
+
+    clientTicketPurchase: (data: ISocketEmmitData) => {
+      // admin
+      if (isAdmin) refetchNotifications();
     },
 
     paymentDone: (data: ISocketEmmitData) => {
+      // user & admin
+      if (isAdmin) refetchNotifications();
+      if (isUser) refetchUserNotification();
+
       console.log("paymentDone:", data);
-      setHasNewNotification(true);
+    },
+
+    coinTransferFailed: (data: ISocketEmmitData) => {
+      // user & admin
+      if (isAdmin) refetchNotifications();
+      if (isUser) refetchUserNotification();
+    },
+    coinTransferDone: (data: ISocketEmmitData) => {
+      // user & admin
+      if (isAdmin) refetchNotifications();
+      if (isUser) refetchUserNotification();
     },
   };
 
   const registerAppEvents = useEffectEvent((socket: Socket) => {
     Object.entries(eventHandlers).forEach(([event, handler]) => {
-      socket.on(event, handler);
+      socket.on(event, (data) => {
+        setHasNewNotification(true);
+        handler(data);
+      });
     });
   });
 
