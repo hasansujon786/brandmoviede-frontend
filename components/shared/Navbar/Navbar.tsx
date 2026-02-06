@@ -168,36 +168,37 @@ function ActionIcons(props: { isMobile: boolean }) {
 
   const { isAuthenticated, role } = useAuth();
   const isUser = RoleUtils.isUser(role);
+  const isAdmin = RoleUtils.isAdmin(role);
 
   const actionLinks = isAuthenticated
     ? [
-        ...(isUser
-          ? [
-              {
-                label: "Profile",
-                href: "/profile",
-                icon: <UserRound className="h-5 w-5 text-current" />,
-              },
-              {
-                label: "Cart",
-                href: "/cart",
-                icon: <ShoppingCart className="h-5 w-5 text-current" />,
-              },
-              {
-                label: "Notification",
-                href: "#",
-                icon: (
-                  <SocketProvider>
-                    <UserNotificationBell />
-                  </SocketProvider>
-                ),
-              },
-            ]
-          : []),
+        {
+          label: "Profile",
+          href: isAdmin ? "/dashboard" : "/profile",
+          icon: <UserRound className="h-5 w-5 text-current" />,
+          show: isUser || isAdmin,
+        },
+        {
+          label: "Cart",
+          href: "/cart",
+          icon: <ShoppingCart className="h-5 w-5 text-current" />,
+          show: isUser,
+        },
+        {
+          label: "Notification",
+          href: "#",
+          icon: (
+            <SocketProvider>
+              <UserNotificationBell />
+            </SocketProvider>
+          ),
+          show: isUser,
+        },
         {
           label: "More",
           href: "#",
           component: <MoreActin key="more" />,
+          show: true,
         },
       ]
     : [
@@ -205,15 +206,18 @@ function ActionIcons(props: { isMobile: boolean }) {
           label: "Sign in",
           href: "/signin",
           icon: <LogInIcon className="h-5 w-5 text-current" />,
+          show: true,
         },
       ];
 
+  const filtred = actionLinks.filter((l) => l.show);
+
   return (
     <>
-      {actionLinks.map((link) => {
+      {filtred.map((link) => {
         const isActive = pathname.startsWith(link.href);
 
-        if (link.component) {
+        if (link?.component) {
           return link.component;
         }
 

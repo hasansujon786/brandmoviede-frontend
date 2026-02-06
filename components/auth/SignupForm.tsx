@@ -10,16 +10,23 @@ import {
 } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Field, FieldError } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
+import { Input, inputStyles } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { getErrorMessage } from "@/lib/utils";
+import { cn, getErrorMessage } from "@/lib/utils";
 import { useRegisterUserMutation } from "@/redux/api";
 import { useForm } from "@tanstack/react-form";
+import { EyeIcon, EyeOffIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "../ui/input-group";
 
 export const signupSchema = z
   .object({
@@ -44,6 +51,8 @@ export const signupSchema = z
 export default function SignupForm() {
   const [registerUser, { isLoading }] = useRegisterUserMutation();
   const router = useRouter();
+
+  const [showPassword, setShowPassword] = useState(false);
 
   const form = useForm({
     defaultValues: {
@@ -155,16 +164,32 @@ export default function SignupForm() {
                 {(field) => (
                   <Field>
                     <Label htmlFor="password">Password</Label>
-                    <Input
-                      id="password"
-                      name="password"
-                      type="password"
-                      placeholder="Enter your password"
-                      className="bg-gray-50"
-                      value={field.state.value}
-                      onBlur={field.handleBlur}
-                      onChange={(e) => field.handleChange(e.target.value)}
-                    />
+                    <InputGroup className={cn(inputStyles, "bg-gray-50")}>
+                      <InputGroupInput
+                        id="password"
+                        type={showPassword ? "text" : "password"}
+                        name="password"
+                        placeholder="Enter your password"
+                        className="px-0"
+                        value={field.state.value}
+                        onBlur={field.handleBlur}
+                        onChange={(e) => field.handleChange(e.target.value)}
+                      />
+
+                      <InputGroupAddon align="inline-end" className="px-0">
+                        <Button
+                          onClick={() => setShowPassword((v) => !v)}
+                          type="button"
+                          size="icon-sm"
+                          className="border-none"
+                          aria-label={
+                            showPassword ? "Hide password" : "Show password"
+                          }
+                        >
+                          {showPassword ? <EyeOffIcon /> : <EyeIcon />}
+                        </Button>
+                      </InputGroupAddon>
+                    </InputGroup>
                     <FieldError errors={field.state.meta.errors} />
                   </Field>
                 )}
@@ -178,7 +203,7 @@ export default function SignupForm() {
                     <Input
                       id="confirmPassword"
                       name="confirmPassword"
-                      type="password"
+                      type={showPassword ? "text" : "password"}
                       className="bg-gray-50"
                       placeholder="Re-enter your password"
                       value={field.state.value}

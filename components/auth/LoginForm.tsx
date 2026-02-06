@@ -10,9 +10,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Field, FieldError } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
+import { Input, inputStyles } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { getErrorMessage } from "@/lib/utils";
+import { cn, getErrorMessage } from "@/lib/utils";
 import { useAuth } from "@/redux/features/auth/hooks";
 import { IAuthUserRole, RoleUtils } from "@/types";
 import { useForm } from "@tanstack/react-form";
@@ -21,6 +21,13 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { z } from "zod";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "../ui/input-group";
+import { EyeIcon, EyeOffIcon } from "lucide-react";
+import { useState } from "react";
 
 const signInSchema = z.object({
   email: z.email("Enter a valid email address"),
@@ -59,6 +66,8 @@ export default function LoginForm({ type }: { type: IAuthUserRole }) {
       }
     },
   });
+
+  const [showPassword, setShowPassword] = useState(false);
 
   return (
     <PublicRoute>
@@ -138,17 +147,33 @@ export default function LoginForm({ type }: { type: IAuthUserRole }) {
                         {/* </Link> */}
                       </div>
 
-                      <Input
-                        id={field.name}
-                        type="password"
-                        placeholder="Enter password"
-                        autoComplete="current-password"
-                        className="bg-gray-50"
-                        value={field.state.value}
-                        onBlur={field.handleBlur}
-                        onChange={(e) => field.handleChange(e.target.value)}
-                        required
-                      />
+                      <InputGroup className={cn(inputStyles, "bg-gray-50")}>
+                        <InputGroupInput
+                          id={field.name}
+                          type={showPassword ? "text" : "password"}
+                          placeholder="Enter password"
+                          autoComplete="current-password"
+                          className="px-0"
+                          value={field.state.value}
+                          onBlur={field.handleBlur}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          required
+                        />
+
+                        <InputGroupAddon align="inline-end" className="px-0">
+                          <Button
+                            onClick={() => setShowPassword((v) => !v)}
+                            type="button"
+                            size="icon-sm"
+                            className="border-none"
+                            aria-label={
+                              showPassword ? "Hide password" : "Show password"
+                            }
+                          >
+                            {showPassword ? <EyeOffIcon /> : <EyeIcon />}
+                          </Button>
+                        </InputGroupAddon>
+                      </InputGroup>
                       <FieldError errors={field.state.meta.errors} />
                     </Field>
                   )}
