@@ -20,7 +20,6 @@ const authSlice = createSlice({
   initialState: initialState,
   reducers: {
     setCredentials: (state, action: PayloadAction<SetCredentialsPayload>) => {
-      console.warn("calling: setCredentials", action.payload);
       const { token = null, role = null } = action.payload;
       state.token = token;
       state.role = role;

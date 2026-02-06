@@ -30,9 +30,6 @@ export default function HighlightNthWord({
 
   // If the requested word doesn't exist, return fallback or plain title
   if (parts.length < n) {
-    console.warn(
-      `HighlightNthWord: requested word ${n} but title has only ${parts.length} words.`,
-    );
     return <h1 className={className}>{title}</h1>;
   }
 

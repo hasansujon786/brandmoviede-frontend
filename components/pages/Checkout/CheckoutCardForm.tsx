@@ -108,8 +108,6 @@ export function CardCheckoutForm(props: CardCheckoutFormProps) {
       })),
     }).unwrap();
 
-    console.log("coin", client_secret);
-
     return client_secret;
   }
 
@@ -119,11 +117,9 @@ export function CardCheckoutForm(props: CardCheckoutFormProps) {
       return null;
     }
 
-    const { client_secret, ...other } = await createTicketOrder({
+    const { client_secret } = await createTicketOrder({
       items: [{ ticket_id: ticketId, quantity: 1 }],
     }).unwrap();
-
-    console.log("ticket", client_secret, other);
 
     return client_secret;
   }

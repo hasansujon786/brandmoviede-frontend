@@ -69,8 +69,6 @@ export function SocketProvider({ children }: { children: ReactNode }) {
       // user & admin
       if (isAdmin) refetchNotifications();
       if (isUser) refetchUserNotification();
-
-      console.log("paymentDone:", data);
     },
 
     coinTransferFailed: (data: ISocketEmmitData) => {

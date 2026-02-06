@@ -11,6 +11,7 @@ import {
 import { logOut, setCredentials } from "../features/auth/authSlice";
 import { RootState } from "../store";
 import { toast } from "sonner";
+import { getErrorMessage } from "@/lib/utils";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: constants.baseApiURL,
@@ -92,7 +93,9 @@ export const baseApi = createApi({
 
           dispatch(setCredentials({ token, role }));
         } catch (error) {
-          console.error("Login mutation error:", error);
+          toast.error(
+            getErrorMessage(error, "Login failed. Please try again."),
+          );
         }
       },
     }),

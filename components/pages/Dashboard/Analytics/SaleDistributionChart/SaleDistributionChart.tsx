@@ -28,9 +28,8 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export default function SaleDistributionChart() {
-  const { data, isLoading, isError, error } =
+  const { data, isLoading, isError } =
     useAdminGetSaleDistributionPieChartQuery();
-  console.log("SaleDistributionChart.tsx", data, error);
 
   const chartData = [
     {

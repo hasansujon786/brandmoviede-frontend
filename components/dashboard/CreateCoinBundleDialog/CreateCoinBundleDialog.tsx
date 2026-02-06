@@ -99,7 +99,6 @@ export default function CreateCoinBundleDialog({
 
           toast.success("Coin bundle created successfully");
         } else {
-          console.log(value, initialValues!.id);
           await updateCoin({
             id: initialValues!.id,
             coin_amount: Number(value.coin_amount),

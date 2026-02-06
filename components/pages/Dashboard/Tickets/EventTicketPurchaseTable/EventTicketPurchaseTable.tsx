@@ -61,7 +61,6 @@ export const columns: ColumnDef<IOrderItem>[] = [
     cell: ({ row }) => {
       const status = row?.original?.status;
       const varient = getStatusVariant(status);
-      console.log(varient);
 
       return (
         <Badge className="capitalize" variant={varient}>
