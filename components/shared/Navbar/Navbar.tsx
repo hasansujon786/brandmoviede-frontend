@@ -193,7 +193,7 @@ function ActionIcons(props: { isMobile: boolean }) {
         {
           label: "More",
           href: "#",
-          component: <MoreActin />,
+          component: <MoreActin key="more" />,
         },
       ]
     : [
@@ -208,6 +208,7 @@ function ActionIcons(props: { isMobile: boolean }) {
     <>
       {actionLinks.map((link) => {
         const isActive = pathname.startsWith(link.href);
+
         if (link.component) {
           return link.component;
         }
@@ -233,7 +234,7 @@ function MoreActin() {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="rounded-full">
+      <DropdownMenuTrigger asChild className="rounded-full">
         <ActionIcon isActive={false}>
           <EllipsisVertical className="h-6 w-6 text-current" />
         </ActionIcon>

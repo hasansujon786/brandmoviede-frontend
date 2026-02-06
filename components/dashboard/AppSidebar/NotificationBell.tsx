@@ -37,7 +37,11 @@ export const getTitleFromType = (type: string) => {
     case "payment_done":
       return "Payment successful";
     case "coin_purchase":
-      return "Coins purchased";
+      return "Coins Purchased";
+    case "client_coin_purchase":
+      return "Coins Purchased";
+    case "client_coin_purchase_failed":
+      return "Coins Purchase Failed";
     default:
       return formatTitle(type) || "Notification";
   }

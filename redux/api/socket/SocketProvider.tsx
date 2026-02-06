@@ -53,15 +53,11 @@ export function SocketProvider({ children }: { children: ReactNode }) {
     crossOwnerBalance: (data: ISocketEmmitData) => {
       // admin
       if (isAdmin) refetchNotifications();
-
-      console.log("crossOwnerBalance:", data);
     },
 
     clientCoinPurchase: (data: ISocketEmmitData) => {
       // admin
       if (isAdmin) refetchNotifications();
-
-      console.log("clientCoinPurchase:", data);
     },
 
     clientTicketPurchase: (data: ISocketEmmitData) => {
@@ -92,6 +88,7 @@ export function SocketProvider({ children }: { children: ReactNode }) {
   const registerAppEvents = useEffectEvent((socket: Socket) => {
     Object.entries(eventHandlers).forEach(([event, handler]) => {
       socket.on(event, (data) => {
+        console.warn("Event fired", event, data);
         setHasNewNotification(true);
         handler(data);
       });
