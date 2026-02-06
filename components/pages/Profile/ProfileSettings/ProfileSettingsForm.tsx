@@ -44,7 +44,7 @@ export default function ProfileSettingsForm() {
       thumbnail: undefined as File | undefined,
     },
     validators: {
-      onSubmit: updateProfileSchema,
+      onSubmit: ({ value }) => updateProfileSchema.safeParse(value),
     },
     onSubmit: async ({ value }) => {
       try {

@@ -1,7 +1,6 @@
 "use client";
 
 import { IPaginationMetaData } from "@/types";
-import { useForm } from "@tanstack/react-form";
 import { createContext, useContext, useEffect, useState } from "react";
 import z from "zod";
 
@@ -16,9 +15,9 @@ type PaginationPageContextType = {
   totalPages: number;
 
   setMeta: (meta: { total: number; limit: number }) => void;
-  form: ReturnType<typeof useForm>;
   searchedId: string | undefined;
   clearSearch: () => void;
+  setSearch: (str: string | undefined) => void;
 };
 
 const PaginationPageContext = createContext<PaginationPageContextType | null>(
@@ -48,18 +47,9 @@ export function PaginationPageProvider({
   };
 
   // Search form
-  const form = useForm({
-    defaultValues: { search: "" },
-    validators: { onSubmit: searchCoinSchema },
-    onSubmit: async ({ value }) => {
-      setSearchedId(value.search);
-    },
-  });
   const [searchedId, setSearchedId] = useState<string | undefined>();
-  const clearSearch = () => {
-    form.reset();
-    setSearchedId(undefined);
-  };
+  const setSearch = (str: string | undefined) => setSearchedId(str);
+  const clearSearch = () => setSearchedId(undefined);
 
   return (
     <PaginationPageContext.Provider
@@ -72,8 +62,8 @@ export function PaginationPageProvider({
         limit,
         totalPages,
         setMeta,
-        form,
         searchedId,
+        setSearch,
         clearSearch,
       }}
     >

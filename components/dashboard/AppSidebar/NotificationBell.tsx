@@ -42,6 +42,10 @@ export const getTitleFromType = (type: string) => {
       return "Coins Purchased";
     case "client_coin_purchase_failed":
       return "Coins Purchase Failed";
+    case "client_ticket_purchase":
+      return "Ticket Purchase";
+    case "cross_owner_coin_balance":
+      return "Cross Owner Coin Balance";
     default:
       return formatTitle(type) || "Notification";
   }

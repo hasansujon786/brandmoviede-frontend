@@ -5,8 +5,15 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
+import { useForm } from "@tanstack/react-form";
 import { SearchIcon, X } from "lucide-react";
+import z from "zod";
 import { usePaginationPage } from "./PaginationPageProvider";
+
+export const searchCoinSchema = z.object({
+  search: z.string().min(2),
+});
+export type SearchCoinFormValues = z.infer<typeof searchCoinSchema>;
 
 interface TableSearchInputProps {
   shouldResetOnBlur: boolean;
@@ -15,7 +22,20 @@ interface TableSearchInputProps {
 export default function TableSearchInput({
   shouldResetOnBlur = false,
 }: TableSearchInputProps) {
-  const { searchedId, clearSearch, form } = usePaginationPage();
+  const { searchedId, clearSearch, setSearch } = usePaginationPage();
+
+  // Search form
+  const form = useForm({
+    defaultValues: { search: "" },
+    validators: { onSubmit: searchCoinSchema },
+    onSubmit: async ({ value }) => {
+      setSearch(value.search);
+    },
+  });
+  const handleClearSearch = () => {
+    form.reset();
+    clearSearch();
+  };
 
   return (
     <form
@@ -38,7 +58,7 @@ export default function TableSearchInput({
                   id={field.name}
                   value={field?.state?.value as string}
                   onBlur={() => {
-                    if (shouldResetOnBlur) clearSearch();
+                    if (shouldResetOnBlur) handleClearSearch();
                     field.handleBlur();
                   }}
                   onChange={(e) => field.handleChange(e.target.value)}
@@ -50,7 +70,7 @@ export default function TableSearchInput({
                 <InputGroupAddon align="inline-end">
                   {searchedId ? (
                     <Button
-                      onClick={clearSearch}
+                      onClick={handleClearSearch}
                       type="button"
                       className="rounded-full"
                       variant="ghost"

@@ -9,17 +9,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-} from "@/components/ui/input-group";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGetMeQuery } from "@/redux/api";
-import { SearchIcon } from "lucide-react";
-import NotificationBell from "./NotificationBell";
 import { useAuth } from "@/redux/features/auth/hooks";
+import NotificationBell from "./NotificationBell";
 
 export default function AppSidebarHeader() {
   const { logOut } = useAuth();
@@ -32,15 +26,15 @@ export default function AppSidebarHeader() {
       </div>
 
       <div className="ml-auto flex items-center gap-2">
-        <InputGroup className="h-9 w-[180px] rounded-2xl border-[#FFEBF8] bg-[#FFEBF8]/30">
-          <InputGroupInput
-            placeholder="Search..."
-            className="placeholder:text-[#D2D2D5]"
-          />
-          <InputGroupAddon>
-            <SearchIcon className="text-[#A5A5AB]" />
-          </InputGroupAddon>
-        </InputGroup>
+        {/* <InputGroup className="h-9 w-[180px] rounded-2xl border-[#FFEBF8] bg-[#FFEBF8]/30"> */}
+        {/*   <InputGroupInput */}
+        {/*     placeholder="Search..." */}
+        {/*     className="placeholder:text-[#D2D2D5]" */}
+        {/*   /> */}
+        {/*   <InputGroupAddon> */}
+        {/*     <SearchIcon className="text-[#A5A5AB]" /> */}
+        {/*   </InputGroupAddon> */}
+        {/* </InputGroup> */}
 
         <NotificationBell />
 

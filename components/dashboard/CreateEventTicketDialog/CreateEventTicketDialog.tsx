@@ -24,15 +24,16 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { getErrorMessage } from "@/lib/utils";
 import {
-  useAdminGetTicketByIdQuery,
   useAdminCreateTicketMutation,
+  useAdminGetTicketByIdQuery,
   useAdminUpdateTicketMutation,
 } from "@/redux/features/admin/ticketApis";
+import { IAdminSingleTicket, ITicketStatus, TicketStatusEnum } from "@/types";
 import { skipToken } from "@reduxjs/toolkit/query";
 import { useForm } from "@tanstack/react-form";
 import Image from "next/image";
-import { IAdminSingleTicket, ITicketStatus, TicketStatusEnum } from "@/types";
 import { useState } from "react";
 import { toast } from "sonner";
 import * as z from "zod";
@@ -52,8 +53,8 @@ const baseSchema = {
     ),
   location: z.string().min(3),
   about: z.string().min(10),
-  ticket_price: z.coerce.number().positive(),
-  sold_limit: z.coerce.number().positive(),
+  ticket_price: z.coerce.number<string>().positive(),
+  sold_limit: z.coerce.number<string>().positive(),
   ticket_status: TicketStatusEnum,
   included: z.string().min(3, "Please include at least one benefit or feature"),
   is_active: z.boolean(),
@@ -62,23 +63,15 @@ const baseSchema = {
 const createSchema = z.object({
   ...baseSchema,
   thumbnail: z
-    .custom<File>()
-    .refine((file) => file instanceof File, {
-      message: "Thumbnail is required",
-    })
-    .refine((file) => file && file.type.startsWith("image/"), {
+    .instanceof(File, { message: "Thumbnail is required" })
+    .refine((file) => file.type.startsWith("image/"), {
       message: "Thumbnail must be an image",
     }),
 });
 
 const updateSchema = z.object({
   ...baseSchema,
-  thumbnail: z
-    .custom<File | undefined>()
-    .optional()
-    .refine((file) => !file || file.type.startsWith("image/"), {
-      message: "Thumbnail must be an image",
-    }),
+  thumbnail: z.custom<File | undefined>(),
 });
 
 interface EventTicketDialogProps extends React.PropsWithChildren {
@@ -150,14 +143,13 @@ export default function CreateEventTicketDialog({
             ticket_status: value.ticket_status,
             included: includedArray,
             is_active: value.is_active,
-            thumbnail: value.thumbnail!,
+            thumbnail: value.thumbnail!, // safe: createSchema guarantees it
           }).unwrap();
 
           toast.success("Event ticket created successfully");
         } else {
-          if (!ticketId) {
-            throw new Error("Ticket Id not found");
-          }
+          if (!ticketId) throw new Error("Ticket Id not found");
+
           await updateTicket({
             id: ticketId,
             title: value.title,
@@ -170,7 +162,7 @@ export default function CreateEventTicketDialog({
             ticket_status: value.ticket_status,
             included: includedArray,
             is_active: value.is_active,
-            thumbnail: value.thumbnail,
+            thumbnail: value.thumbnail, // optional
           }).unwrap();
 
           toast.success("Event ticket updated successfully");
@@ -179,12 +171,11 @@ export default function CreateEventTicketDialog({
         form.reset();
         setOpen(false);
       } catch (err) {
-        console.log(err);
-        toast.error(
+        const msg =
           mode === "create"
             ? "Failed to create event ticket"
-            : "Failed to update event ticket",
-        );
+            : "Failed to update event ticket";
+        toast.error(getErrorMessage(err, msg));
       }
     },
   });

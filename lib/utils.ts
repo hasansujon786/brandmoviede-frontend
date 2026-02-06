@@ -1,6 +1,5 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 
 import dayjs from "dayjs";
 
@@ -23,22 +22,50 @@ export function getFormatedDate(
   return dayjs(iso).format(formatString);
 }
 
-export const getErrorMessage = (
+export function getErrorMessage(
   error: unknown,
-  defaultMessage = "Something went wrong",
-): string => {
-  if (error && typeof error === "object" && "data" in error) {
-    const data = (error as FetchBaseQueryError).data;
+  defaultMessage = "Something went wrong. Please try again.",
+): string {
+  if (!error) return defaultMessage;
 
+  // RTK Query / fetchBaseQuery error shape
+  if (typeof error === "object" && error !== null) {
+    const err = error as any;
+
+    // Handle array of messages (NestJS validation errors)
+    if (Array.isArray(err?.data?.message) && err.data.message.length > 0) {
+      return err.data.message[0]; // Return first error message
+      // OR join all messages:
+      // return err.data.message.join(", ");
+    }
+
+    // Handle single message string
+    if (typeof err?.data?.message === "string") {
+      return err.data.message;
+    }
+
+    // Handle direct message
+    if (typeof err?.message === "string") {
+      return err.message;
+    }
+
+    // Handle error string
+    if (typeof err?.error === "string") {
+      return err.error;
+    }
+
+    // Handle status text
     if (
-      data &&
-      typeof data === "object" &&
-      "message" in data &&
-      typeof (data as any).message === "string"
+      typeof err?.status === "number" &&
+      typeof err?.statusText === "string"
     ) {
-      return (data as any).message;
+      return `${err.status}: ${err.statusText}`;
     }
   }
 
+  if (error instanceof Error) {
+    return error.message;
+  }
+
   return defaultMessage;
-};
+}

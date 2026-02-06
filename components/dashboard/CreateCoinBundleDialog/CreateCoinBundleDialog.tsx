@@ -16,6 +16,7 @@ import { Field, FieldError } from "@/components/ui/field";
 import { FileInput } from "@/components/ui/file-input";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { getErrorMessage } from "@/lib/utils";
 import {
   useAdminGetCoinBundleByIdQuery,
   useAdminUpdateCoinMutation,
@@ -40,10 +41,7 @@ const baseSchema = {
 const createSchema = z.object({
   ...baseSchema,
   thumbnail: z
-    .custom<File>()
-    .refine((file) => file instanceof File, {
-      message: "Thumbnail is required",
-    })
+    .instanceof(File, { message: "Thumbnail is required" })
     .refine((file) => file.type.startsWith("image/"), {
       message: "Thumbnail must be an image",
     }),
@@ -51,7 +49,7 @@ const createSchema = z.object({
 
 const updateSchema = z.object({
   ...baseSchema,
-  thumbnail: z.custom<File | undefined>().optional(),
+  thumbnail: z.custom<File | undefined>(),
 });
 
 interface CoinBundleDialogProps extends React.PropsWithChildren {
@@ -87,7 +85,7 @@ export default function CreateCoinBundleDialog({
       is_active: initialValues?.is_active ?? true,
     },
     validators: {
-      onSubmit: mode === "create" ? createSchema : updateSchema,
+      onSubmit: mode === "edit" ? updateSchema : createSchema,
     },
     onSubmit: async ({ value }) => {
       try {
@@ -115,12 +113,13 @@ export default function CreateCoinBundleDialog({
 
         form.reset();
         setOpen(false);
-      } catch {
-        toast.error(
+      } catch (catchError) {
+        const msg =
           mode === "create"
             ? "Failed to create coin bundle"
-            : "Failed to update coin bundle",
-        );
+            : "Failed to update coin bundle";
+
+        toast.error(getErrorMessage(catchError, msg));
       }
     },
   });
@@ -261,7 +260,9 @@ export default function CreateCoinBundleDialog({
 
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="primary-inverse">Cancel</Button>
+              <Button size="lg" variant="primary-inverse">
+                Cancel
+              </Button>
             </DialogClose>
             <Button
               size="lg"

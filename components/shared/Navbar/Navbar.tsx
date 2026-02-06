@@ -48,7 +48,7 @@ export default function Navbar() {
   const pathname = usePathname();
 
   return (
-    <header className="fixed top-0 z-100 flex w-full md:top-3 md:px-3 lg:top-4 lg:px-4">
+    <header className="flex w-full md:px-3 lg:px-4">
       <div className="bg-primary-50 mx-auto flex w-full items-center justify-between px-4 py-3 text-sm shadow-xs backdrop-blur sm:px-6 md:rounded-xl">
         {/* Logo */}
         <Link
@@ -93,7 +93,7 @@ export default function Navbar() {
               <Menu className="h-5 w-5" />
             </Button>
           </SheetTrigger>
-          <SheetContent className="z-200 bg-[#fff9fc]">
+          <SheetContent className="z-200 gap-0 bg-[#fff9fc]">
             <SheetHeader>
               <SheetTitle className="text-gray-900">
                 Navigate Sugo Coin
@@ -103,39 +103,43 @@ export default function Navbar() {
               </SheetDescription>
             </SheetHeader>
 
-            <nav className="mt-8 flex flex-col gap-3 px-4">
-              {navLinks.map((link) => {
-                const isActive = link.href == pathname;
-                return (
-                  <SheetClose asChild key={link.label}>
-                    <Button
-                      asChild
-                      variant={isActive ? "primary" : "secondary"}
-                      className="justify-between shadow"
-                    >
-                      <Link href={link.href}>
-                        <span>{link.label}</span>
-                      </Link>
-                    </Button>
-                  </SheetClose>
-                );
-              })}
-            </nav>
+            <div className="overflow-y-scroll">
+              <nav className="flex flex-col gap-3 px-4">
+                {navLinks.map((link) => {
+                  const isActive = link.href == pathname;
+                  return (
+                    <SheetClose asChild key={link.label}>
+                      <Button
+                        asChild
+                        variant={isActive ? "primary" : "secondary"}
+                        className="justify-between shadow"
+                      >
+                        <Link href={link.href}>
+                          <span>{link.label}</span>
+                        </Link>
+                      </Button>
+                    </SheetClose>
+                  );
+                })}
+              </nav>
 
-            <SheetFooter className="pt-8">
-              <div className="border-body-200/30 flex items-center justify-between rounded-2xl border border-dashed px-4 py-3">
-                <div>
-                  <p className="text-heading-100 text-sm font-medium">
-                    Need help?
-                  </p>
-                  <p className="text-body-200 text-xs">support@sugo-coin.com</p>
-                </div>
+              <SheetFooter className="pt-8">
+                <div className="border-body-200/30 flex flex-wrap items-center justify-between gap-x-3 gap-y-4 rounded-2xl border border-dashed px-4 py-3">
+                  <div>
+                    <p className="text-heading-100 text-sm font-medium">
+                      Need help?
+                    </p>
+                    <p className="text-body-200 text-xs">
+                      support@sugo-coin.com
+                    </p>
+                  </div>
 
-                <div className="flex gap-2">
-                  <ActionIcons isMobile />
+                  <div className="flex gap-2">
+                    <ActionIcons isMobile />
+                  </div>
                 </div>
-              </div>
-            </SheetFooter>
+              </SheetFooter>
+            </div>
           </SheetContent>
         </Sheet>
       </div>

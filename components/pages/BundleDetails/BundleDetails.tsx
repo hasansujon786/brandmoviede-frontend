@@ -59,7 +59,7 @@ function BundleDetailsContent() {
       <div className="grid gap-6 md:grid-cols-[1fr_1.4fr] xl:grid-cols-[1fr_1.2fr_1fr]">
         <Image
           unoptimized
-          src={bundle?.thumbnail_url}
+          src={bundle?.thumbnail_url as string}
           width={360}
           height={360}
           alt=""

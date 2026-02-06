@@ -54,7 +54,7 @@ export default function TicketDetails() {
 
         <section className="mt-8">
           <Image
-            src={ticket?.thumbnail}
+            src={ticket?.thumbnail as string}
             className="aspect-[4.7826086957] h-[276px] rounded-xl object-cover object-center"
             width={1320}
             height={276}

@@ -12,6 +12,7 @@ import {
 import { Field, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { getErrorMessage } from "@/lib/utils";
 import { useAuth } from "@/redux/features/auth/hooks";
 import { IAuthUserRole, RoleUtils } from "@/types";
 import { useForm } from "@tanstack/react-form";
@@ -53,7 +54,7 @@ export default function LoginForm({ type }: { type: IAuthUserRole }) {
         );
       } catch (error) {
         toast.error(
-          error?.data?.message || "Failed to SignIn. Please try again.",
+          getErrorMessage(error, "Failed to SignIn. Please try again."),
         );
       }
     },

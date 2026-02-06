@@ -36,7 +36,6 @@ export default function RecentOrderList() {
 }
 
 function RecentOrderListItem(props: IOrderItem) {
-  console.log("RecentOrderListItem", props);
   return (
     <div className="rounded-2lg space-y-2 bg-[#F8FAFB] p-3">
       <div className="font-heading text-heading-100 flex items-center justify-between text-base font-medium">
