@@ -1,3 +1,4 @@
+import { baseApi } from "@/redux/api/baseApi";
 import { RootState } from "@/redux/store";
 import { IAuthUserRole } from "@/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";

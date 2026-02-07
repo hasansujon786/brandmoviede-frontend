@@ -1,6 +1,7 @@
 import { RootState } from "@/redux/store";
 import { IAppCoinBundle, IAppTicket } from "@/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { todo } from "node:test";
 
 export interface CartCoinItem {
   type: "coin";
@@ -35,6 +36,7 @@ const cartSlice = createSlice({
         (item) => item.data.id === action.payload.data.id,
       );
 
+      // TODO: update exists case
       if (!exists) {
         state.items.push(action.payload);
       }

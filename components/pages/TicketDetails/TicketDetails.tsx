@@ -6,12 +6,12 @@ import LocationPinIcon from "@/components/shared/icons/LocationPinIcon";
 import PeoplesIcon from "@/components/shared/icons/PeoplesIcon";
 import InfoCard from "@/components/shared/InfoCard/InfoCard";
 import NavigationLink from "@/components/shared/NavigationLink/NavigationLink";
-import { useBuyTicket } from "@/components/shared/TicketCard/TicketCard";
 import { Button } from "@/components/ui/button";
 import { config } from "@/constant";
 import { getFormatedDate } from "@/lib/utils";
 import { formatPluralNumber } from "@/lib/utils/formatters";
 import { useGetSingleTicketByIdQuery } from "@/redux/features/app/appTicketApis";
+import { useAppCart } from "@/redux/features/cart/cartHooks";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 
@@ -22,7 +22,7 @@ export default function TicketDetails() {
   const { data: ticket, isLoading } = useGetSingleTicketByIdQuery(ticketId);
   const includedFeatures = ticket?.included ?? [];
 
-  const { onBuyTicket } = useBuyTicket();
+  const { onBuyTicket } = useAppCart();
 
   const infoCards = [
     {

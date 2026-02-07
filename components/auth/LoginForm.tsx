@@ -18,7 +18,7 @@ import { IAuthUserRole, RoleUtils } from "@/types";
 import { useForm } from "@tanstack/react-form";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { z } from "zod";
 import {
@@ -29,6 +29,15 @@ import {
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import { useState } from "react";
 
+// Validate redirect URL
+const isValidRedirect = (url: string) => {
+  // Only allow relative paths (starting with /)
+  if (!url.startsWith("/")) return false;
+  // Prevent protocol-relative URLs (//evil.com)
+  if (url.startsWith("//")) return false;
+  return true;
+};
+
 const signInSchema = z.object({
   email: z.email("Enter a valid email address"),
   password: z.string().min(1, "Password is required"),
@@ -37,6 +46,8 @@ const signInSchema = z.object({
 
 export default function LoginForm({ type }: { type: IAuthUserRole }) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+
   const { logIn, isLoading: isLoginLoading } = useAuth();
 
   const form = useForm({
@@ -56,9 +67,16 @@ export default function LoginForm({ type }: { type: IAuthUserRole }) {
         }).unwrap();
         const isCurrentUserAdmin = RoleUtils.isAdmin(res?.type);
 
-        router.replace(
-          type === "admin" || isCurrentUserAdmin ? "/dashboard" : "/",
-        );
+        const redirectParams = searchParams.get("redirect");
+
+        const redirectTo =
+          redirectParams && isValidRedirect(redirectParams)
+            ? decodeURIComponent(redirectParams)
+            : type === "admin" || isCurrentUserAdmin
+              ? "/dashboard"
+              : "/";
+
+        router.replace(redirectTo);
       } catch (error) {
         toast.error(
           getErrorMessage(error, "Failed to SignIn. Please try again."),

@@ -4,12 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { config } from "@/constant";
 import { formatCurrency, formatPluralNumber } from "@/lib/utils/formatters";
-import { addToCart } from "@/redux/features/cart/cartSlice";
-import { useAppDispatch } from "@/redux/store";
+import { useAppCart } from "@/redux/features/cart/cartHooks";
 import { IAppCoinBundle } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
-import { toast } from "sonner";
 import CounterButton from "../CounterButton/CounterButton";
 import {
   CounterButtonProvider,
@@ -52,17 +50,14 @@ export default function ShopCard({ coin }: { coin: IAppCoinBundle }) {
 
 function BuyButton(coinBundle: IAppCoinBundle) {
   const { counter } = useCounterButton();
-  const dispatch = useAppDispatch();
+  const { addItemToCart } = useAppCart();
 
   const handleAddToCart = async () => {
-    dispatch(
-      addToCart({
-        type: "coin",
-        data: coinBundle,
-        quantity: counter || 1,
-      }),
-    );
-    toast.success("Item added to cart");
+    addItemToCart({
+      type: "coin",
+      data: coinBundle,
+      quantity: counter || 1,
+    });
   };
 
   return (

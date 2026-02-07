@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatCurrency } from "@/lib/utils/formatters";
 import { useGetSingleCoinBundleByIdQuery } from "@/redux/api";
+import { useAppCart } from "@/redux/features/cart/cartHooks";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
@@ -29,7 +30,6 @@ function BundleDetailsContent() {
 
   const { data: bundle, isLoading } = useGetSingleCoinBundleByIdQuery(bundleId);
   const price = bundle?.price ?? 0;
-  const { counter } = useCounterButton();
 
   const moreInfo = {
     whatsIncluded: [
@@ -52,6 +52,28 @@ function BundleDetailsContent() {
       { title: "Subtotal", value: "€40 EUR" },
       { title: "Tax", value: "€0.90 EUR" },
     ],
+  };
+
+  const { counter } = useCounterButton();
+  const { addItemToCart } = useAppCart();
+
+  const handleAddToCart = async () => {
+    if (!bundle) {
+      return;
+    }
+
+    addItemToCart({
+      type: "coin",
+      data: {
+        id: bundle?.id,
+        name: bundle?.name,
+        coin_amount: bundle?.coin_amount,
+        price: bundle?.price,
+        thumbnail_url: bundle?.thumbnail_url,
+        thumbnail: bundle?.thumbnail,
+      },
+      quantity: counter || 1,
+    });
   };
 
   return (
@@ -126,7 +148,11 @@ function BundleDetailsContent() {
           </SummaryCard>
 
           <div className="mt-8 space-y-2">
-            <Button className="w-full" variant="primary">
+            <Button
+              onClick={handleAddToCart}
+              className="w-full"
+              variant="primary"
+            >
               Add to Cart
             </Button>
 

@@ -3,15 +3,8 @@
 import { Button } from "@/components/ui/button";
 import { config } from "@/constant";
 import { getFormatedDate } from "@/lib/utils";
-import {
-  createQueryParams,
-  formatCurrency,
-  formatPluralNumber,
-} from "@/lib/utils/formatters";
-import {
-  addCurrentCheckoutTicket,
-  CartTicketItem,
-} from "@/redux/features/cart/cartSlice";
+import { formatCurrency, formatPluralNumber } from "@/lib/utils/formatters";
+import { useAppCart } from "@/redux/features/cart/cartHooks";
 import { useAppDispatch } from "@/redux/store";
 import { IAppTicket } from "@/types";
 import Image from "next/image";
@@ -39,7 +32,7 @@ export default function TicketCard(props: TicketCardProps) {
       value: `Up to ${props.sold_limit} attendees`,
     },
   ];
-  const { onBuyTicket } = useBuyTicket();
+  const { onBuyTicket } = useAppCart();
 
   return (
     <div className="slide-up bg-card @container relative rounded-2xl p-3 @xs:p-4">
@@ -97,28 +90,4 @@ export default function TicketCard(props: TicketCardProps) {
       </div>
     </div>
   );
-}
-
-export function useBuyTicket() {
-  const router = useRouter();
-  const dispatch = useAppDispatch();
-
-  function onBuyTicket(ticket: Omit<CartTicketItem, "type">) {
-    const href = `/checkout/payment/${createQueryParams({
-      type: "ticket",
-      ticketId: ticket.data.id,
-    })}`;
-
-    dispatch(
-      addCurrentCheckoutTicket({
-        type: "ticket",
-        data: ticket.data,
-        quantity: ticket.quantity || 1,
-      }),
-    );
-
-    router.push(href);
-  }
-
-  return { onBuyTicket };
 }

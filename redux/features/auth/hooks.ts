@@ -1,4 +1,4 @@
-import { useLoginMutation } from "@/redux/api/baseApi";
+import { baseApi, useLoginMutation } from "@/redux/api/baseApi";
 import { useAppDispatch } from "@/redux/store";
 import { useSelector } from "react-redux";
 import {
@@ -14,8 +14,8 @@ export function useAuth() {
   const role = useSelector(selectCurrentRole);
 
   function logOut() {
-    // persistor.purge();
     dispatch(reduxLogout());
+    dispatch(baseApi.util.resetApiState());
   }
 
   // try {
