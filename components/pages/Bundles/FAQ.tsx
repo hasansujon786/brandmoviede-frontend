@@ -51,7 +51,10 @@ export function FAQ() {
   useCardRevealAnimation(".faq");
 
   return (
-    <section className="faq slide-scope custom-container py-10 lg:py-20">
+    <section
+      id="faq"
+      className="faq slide-scope custom-container py-10 lg:py-20"
+    >
       <SectionHeading
         h2
         eyebrow="Frequently Asked Questions"
@@ -63,7 +66,7 @@ export function FAQ() {
       <Accordion
         type="single"
         collapsible
-        className="mt-12 grid w-full gap-3 md:gap-6 slide-up"
+        className="slide-up mt-12 grid w-full gap-3 md:gap-6"
       >
         {questions.map((item) => (
           <AccordionItem className="" key={item.title} value={item.title}>

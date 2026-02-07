@@ -17,16 +17,6 @@ function useInitiateAuthState() {
       Cookies.get(key),
     );
 
-    // TODO: get authuer here
-    // let initialUser: IAuthUser | null = null;
-    // if (savedUser) {
-    //   try {
-    //     initialUser = JSON.parse(savedUser);
-    //   } catch {
-    //     Cookies.remove("user");
-    //   }
-    // }
-
     dispatch(
       setCredentials({
         token: savedToken || null,
