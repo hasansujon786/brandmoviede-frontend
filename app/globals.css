@@ -143,6 +143,10 @@
   @apply mx-auto w-full max-w-[1300px] px-3 lg:px-5;
 }
 
+@utility navbar-padding {
+  @apply pt-[72px] md:pt-[82px];
+}
+
 @utility text-h1 {
   @apply text-4xl leading-[124%] sm:text-5xl md:text-7xl;
 }
@@ -189,7 +193,7 @@
 
 .custom-scrollbar {
   --sb-track-color: var(--muted);
-  --sb-thumb-color: #9F9F9F;
+  --sb-thumb-color: #9f9f9f;
   --sb-size: 6px;
 
   &::-webkit-scrollbar {

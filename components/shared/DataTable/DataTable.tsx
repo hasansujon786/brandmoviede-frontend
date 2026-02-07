@@ -45,7 +45,7 @@ export function DataTable<TData, TValue>({
       style={{
         borderColor: config?.borderColor,
       }}
-      className="text-body-200 overflow-hidden rounded-md border"
+      className="text-body-200 max-w-[calc(100vw-24px)] overflow-hidden rounded-md border"
     >
       <Table className="bg-card">
         <TableHeader>

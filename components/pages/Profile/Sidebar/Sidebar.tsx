@@ -15,25 +15,27 @@ const navLinks = [
 export default function Sidebar() {
   const pathname = usePathname();
   return (
-    <div className="lg:bg-card flex gap-3 overflow-x-scroll p-3 lg:flex-col lg:gap-2 lg:overflow-x-auto lg:rounded-xl">
-      {navLinks.map((link) => {
-        const isActive = pathname === link.href;
-        return (
-          <Button
-            className={cn(
-              "h-10 justify-start rounded-full px-4 text-right text-base lg:h-14 lg:rounded-[10px] lg:text-lg",
-              {
-                "bg-card": !isActive,
-              },
-            )}
-            variant={isActive ? "primary" : "ghost"}
-            asChild
-            key={link.label}
-          >
-            <Link href={link.href}>{link.label}</Link>
-          </Button>
-        );
-      })}
-    </div>
+    <aside className="flex overflow-x-auto lg:block">
+      <div className="lg:bg-card flex gap-3 rounded-xl p-3 lg:flex-col">
+        {navLinks.map((link) => {
+          const isActive = pathname === link.href;
+          return (
+            <Button
+              className={cn(
+                "h-10 justify-start rounded-full px-4 text-right text-base lg:h-14 lg:rounded-[10px] lg:text-lg",
+                {
+                  "bg-card": !isActive,
+                },
+              )}
+              variant={isActive ? "primary" : "ghost"}
+              asChild
+              key={link.label}
+            >
+              <Link href={link.href}>{link.label}</Link>
+            </Button>
+          );
+        })}
+      </div>
+    </aside>
   );
 }

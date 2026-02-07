@@ -1,12 +1,9 @@
+import { CalenderDatesIcon } from "@/components/shared/icons/CalenderIcon";
 import { Badge } from "@/components/ui/badge";
-import {
-  CalenderDatesIcon,
-  ClockIcon,
-} from "@/components/shared/icons/CalenderIcon";
 import { Button } from "@/components/ui/button";
-import { Copy, FlagTriangleRight } from "lucide-react";
 import { cn, getFormatedDate } from "@/lib/utils";
 import { IAppMyTicketOrderItem } from "@/types";
+import { Copy, FlagTriangleRight } from "lucide-react";
 import { toast } from "sonner";
 
 export default function TicketItem({
@@ -26,6 +23,10 @@ export default function TicketItem({
   ];
 
   const isInactive = status === "Inactive";
+  const handleCopyTicketId = () => {
+    navigator.clipboard.writeText(event_ticket_id);
+    toast.success("Event Ticket ID copied");
+  };
 
   return (
     <div className="bg-card border-input flex flex-col justify-between gap-4 rounded-2xl border p-3 lg:flex-row lg:px-4 lg:py-8">
@@ -50,7 +51,7 @@ export default function TicketItem({
 
       <div
         className={cn(
-          "flex flex-col justify-center rounded-xl p-3 lg:space-y-2 lg:p-4",
+          "relative flex flex-col justify-center rounded-xl p-3 lg:space-y-2 lg:p-4",
           isInactive ? "bg-primary-200" : "bg-primary",
         )}
       >
@@ -58,17 +59,23 @@ export default function TicketItem({
           Ticket ID
         </p>
 
-        <div className="flex w-full items-center justify-between gap-3 md:gap-x-32">
-          <p className="text-primary-foreground font-heading overflow-x-scroll text-lg font-semibold md:text-2xl lg:text-3xl">
+        <Button
+          onClick={handleCopyTicketId}
+          className="absolute right-2 shrink-0 rounded-[12px] border-transparent md:hidden"
+          variant="secondary"
+          size="icon"
+        >
+          <Copy className="size-6" />
+        </Button>
+
+        <div className="flex w-full items-center justify-between gap-0 md:gap-x-32">
+          <p className="text-primary-foreground font-heading text-sm font-semibold md:text-2xl lg:text-3xl">
             {event_ticket_id}
           </p>
 
           <Button
-            onClick={() => {
-              navigator.clipboard.writeText(event_ticket_id);
-              toast.success("Event Ticket ID copied");
-            }}
-            className="shrink-0 rounded-[12px] border-transparent"
+            onClick={handleCopyTicketId}
+            className="hidden shrink-0 rounded-[12px] border-transparent md:inline-flex"
             variant="secondary"
             size="icon"
           >
