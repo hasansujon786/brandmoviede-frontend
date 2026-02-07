@@ -31,7 +31,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${interTight.className} data-scroll-locked:mr-0! data-scroll-locked:overflow-visible! ${bricolageGrotesque.variable} antialiased`}
+        className={`${interTight.className} data-scroll-locked:mr-0! data-scroll-locked:overflow-visible! ${bricolageGrotesque.variable} overflow-y-scroll antialiased`}
       >
         <StoreProvider>
           <AuthProvider>{children}</AuthProvider>

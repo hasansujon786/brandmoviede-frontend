@@ -62,3 +62,8 @@ export interface IAuthVerifyEmailParams {
   email: string;
   token: string;
 }
+
+export interface IAuthChangePasswordParams {
+  old_password: string;
+  new_password: string;
+}

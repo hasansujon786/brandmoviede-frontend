@@ -1,5 +1,6 @@
 import { baseApi } from "@/redux/api/baseApi";
 import type {
+  IAuthChangePasswordParams,
   IAuthRegisterParams,
   IAuthRegisterResponse,
   IAuthUpdateUserParams,
@@ -31,6 +32,16 @@ const authApi = baseApi.injectEndpoints({
       query: () => `/auth/me`,
       providesTags: ["Me"] as const,
       transformResponse: (response: WithStatus<IAuthUser>) => response.data,
+    }),
+    changePassword: builder.mutation<
+      WithStatus<void>,
+      IAuthChangePasswordParams
+    >({
+      query: (body) => ({
+        url: "/auth/change-password",
+        method: "POST",
+        body,
+      }),
     }),
     updateAuthUser: builder.mutation<
       IAuthRegisterResponse,
@@ -64,5 +75,6 @@ export const {
   useRegisterUserMutation,
   useVerifyEmailMutation,
   useUpdateAuthUserMutation,
+  useChangePasswordMutation,
 } = authApi;
 export default authApi;

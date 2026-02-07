@@ -16,7 +16,7 @@ const Avatar: React.FC<AvatarProps> = ({ avatar, size = 40 }) => {
       {avatar ? (
         <Image
           src={avatar}
-          alt="Avater"
+          alt=" "
           width={size}
           height={size}
           unoptimized

@@ -87,7 +87,7 @@ export default function LoginForm({ type }: { type: IAuthUserRole }) {
           <Card className="border-0 shadow-lg">
             <CardHeader className="text-center">
               <CardTitle className="text-heading-100 text-2xl font-bold">
-                {type === "admin" ? "Dashboard Login" : "Sign In"}
+                {type === "admin" ? "Dashboard Sign in" : "Sign In"}
               </CardTitle>
               <CardDescription className="mt-2">
                 {type === "admin"

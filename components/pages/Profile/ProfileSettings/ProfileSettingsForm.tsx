@@ -26,7 +26,6 @@ const updateProfileSchema = z.object({
   name: z.string().min(2, "Name is required"),
   thumbnail: z
     .custom<File | undefined>()
-    .optional()
     .refine((file) => !file || file.type.startsWith("image/"), {
       message: "It be an image",
     }),
@@ -44,7 +43,7 @@ export default function ProfileSettingsForm() {
       thumbnail: undefined as File | undefined,
     },
     validators: {
-      onSubmit: ({ value }) => updateProfileSchema.safeParse(value),
+      onSubmit: updateProfileSchema,
     },
     onSubmit: async ({ value }) => {
       try {
@@ -131,13 +130,13 @@ export default function ProfileSettingsForm() {
         </FieldGroup>
       </FieldSet>
 
-      <div className="space-x-3">
+      <div className="mt-6 flex flex-col gap-4 md:flex-row">
         <form.Subscribe selector={(s) => [s.canSubmit, s.isSubmitting]}>
           {([canSubmit, isSubmitting]) => (
             <Button
               type="submit"
               variant="primary"
-              className="mt-8 w-full sm:w-auto"
+              className="w-full sm:w-auto"
               disabled={!canSubmit || isSubmitting || isLoading}
             >
               {isSubmitting || isLoading ? "Updating..." : "Update Profile"}
@@ -149,7 +148,7 @@ export default function ProfileSettingsForm() {
           type="button"
           onClick={router.back}
           variant="primary-inverse"
-          className="mt-8 w-full sm:w-auto"
+          className="w-full sm:w-auto"
         >
           Cancel
         </Button>
