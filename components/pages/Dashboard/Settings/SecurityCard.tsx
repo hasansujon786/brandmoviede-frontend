@@ -1,13 +1,11 @@
 "use client";
 
 import { ChevronRight } from "@/components/shared/icons/chevron";
-import CreditCardIcon from "@/components/shared/icons/CreditCardIcon";
+import LockIcon from "@/components/shared/icons/LockIcon";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { createQueryParams } from "@/lib/utils/formatters";
-import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import PasswordSettingsForm from "./PasswordSettingsForm";
-import LockIcon from "@/components/shared/icons/LockIcon";
 
 export default function SecurityCard() {
   const searchParams = useSearchParams();
@@ -16,6 +14,7 @@ export default function SecurityCard() {
   const isEditMode = isChangePassword;
 
   const pathname = usePathname();
+  const router = useRouter();
 
   return (
     <Card className="flex flex-col">
@@ -40,24 +39,28 @@ export default function SecurityCard() {
         {/* </div> */}
 
         {!isEditMode ? (
-          <Link
-            href={`${pathname}/${createQueryParams({ mode: "change-password" })}`}
+          <button
+            onClick={() =>
+              router.replace(
+                `${pathname}/${createQueryParams({ mode: "change-password" })}`,
+              )
+            }
             className="flex gap-4 rounded bg-[#FDEBEF] px-2 py-2.5"
           >
             <div className="text-primary flex size-12 items-center justify-center rounded-full bg-[#F8C0CC]">
               <LockIcon className="size-5" />
             </div>
-            <div className="mr-auto">
+            <div className="mr-auto text-left">
               <p className="text-heading-100">Change password</p>
               <p className="text-sm">Create a new password for your account</p>
             </div>
             <div className="text-body-200 flex items-center justify-center">
               <ChevronRight className="mr-1" />
             </div>
-          </Link>
+          </button>
         ) : null}
 
-        {isChangePassword ? <PasswordSettingsForm /> : null}
+        {isChangePassword ? <PasswordSettingsForm pathname={pathname} /> : null}
       </CardContent>
     </Card>
   );

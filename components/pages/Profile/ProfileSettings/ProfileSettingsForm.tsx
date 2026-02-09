@@ -31,7 +31,11 @@ const updateProfileSchema = z.object({
     }),
 });
 
-export default function ProfileSettingsForm() {
+export default function ProfileSettingsForm({
+  pathname,
+}: {
+  pathname: string;
+}) {
   const { data: defaultUser } = useGetMeQuery();
 
   const [updateAuthUser, { isLoading }] = useUpdateAuthUserMutation();
@@ -146,7 +150,7 @@ export default function ProfileSettingsForm() {
 
         <Button
           type="button"
-          onClick={router.back}
+          onClick={() => router.replace(pathname)}
           variant="primary-inverse"
           className="w-full sm:w-auto"
         >

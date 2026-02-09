@@ -36,7 +36,11 @@ const changePasswordScheme = z
     path: ["newPassword"],
   });
 
-export default function PasswordSettingsForm() {
+export default function PasswordSettingsForm({
+  pathname,
+}: {
+  pathname: string;
+}) {
   const [changePassword, { isLoading }] = useChangePasswordMutation();
   const router = useRouter();
 
@@ -151,7 +155,7 @@ export default function PasswordSettingsForm() {
 
         <Button
           type="button"
-          onClick={router.back}
+          onClick={() => router.replace(pathname)}
           variant="primary-inverse"
           className="w-full sm:w-auto"
         >
