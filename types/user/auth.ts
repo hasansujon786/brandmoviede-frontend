@@ -1,3 +1,11 @@
+export type IRefreshTokenPayload = {
+  success: boolean;
+  authorization: {
+    type: "bearer";
+    access_token: string;
+  };
+};
+
 export interface ILoginParams {
   email: string;
   password: string;

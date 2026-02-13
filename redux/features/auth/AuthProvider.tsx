@@ -13,14 +13,17 @@ function useInitiateAuthState() {
   const isAppLoading = token === false;
 
   useEffect(() => {
-    const [savedToken, savedRole] = ["token", "role"].map((key) =>
-      Cookies.get(key),
-    );
+    const [savedToken, savedRole, refreshToken] = [
+      "token",
+      "role",
+      "refresh_token",
+    ].map((key) => Cookies.get(key));
 
     dispatch(
       setCredentials({
         token: savedToken || null,
         role: (savedRole as IAuthUserRole) || null,
+        refreshToken: refreshToken || null,
       }),
     );
   }, [dispatch]);

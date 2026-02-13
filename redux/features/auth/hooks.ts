@@ -2,6 +2,7 @@ import { baseApi, useLoginMutation } from "@/redux/api/baseApi";
 import { useAppDispatch } from "@/redux/store";
 import { useSelector } from "react-redux";
 import {
+  invalidToken,
   logOut as reduxLogout,
   selectCurrentRole,
   selectCurrentToken,
@@ -18,26 +19,9 @@ export function useAuth() {
     dispatch(baseApi.util.resetApiState());
   }
 
-  // try {
-  //   // const userData = await login({
-  //   //   email: "admin1@gmail.com",
-  //   //   password: "Admin123",
-  //   // }).unwrap();
-  //   // dispatch(setCredentials({ ...userData }));
-  //   //navigate("/welcome");
-  // } catch (err) {
-  //   console.error("errrr", err);
-  //   // if (!err?.originalStatus) {
-  //   //   // isLoading: true until timeout occurs
-  //   //   setErrMsg("No Server Response");
-  //   // } else if (err.originalStatus === 400) {
-  //   //   setErrMsg("Missing Username or Password");
-  //   // } else if (err.originalStatus === 401) {
-  //   //   setErrMsg("Unauthorized");
-  //   // } else {
-  //   //   setErrMsg("Login Failed");
-  //   // }
-  // }
+  function invalidUserToken() {
+    dispatch(invalidToken());
+  }
 
   return {
     token,
@@ -45,6 +29,7 @@ export function useAuth() {
     isAuthenticated: !!token,
     logIn,
     logOut,
+    invalidUserToken,
     ...ctx,
   };
 }
