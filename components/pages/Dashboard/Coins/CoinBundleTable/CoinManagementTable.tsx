@@ -7,6 +7,7 @@ import { TrushIcon } from "@/components/shared/icons/TrushIcon";
 import { StatusSelect } from "@/components/shared/StatusSelect/StatusSelect";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { formatCurrency } from "@/lib/utils/formatters";
 import {
   useAdminDeleteCoinMutation,
   useAdminUpdateCoinMutation,
@@ -29,6 +30,7 @@ export const columns: ColumnDef<IAdminCoinBundle>[] = [
   {
     accessorKey: "price",
     header: "Price",
+    cell: ({ row }) => formatCurrency(row.original?.price ?? 0),
   },
   {
     accessorKey: "total_sold",

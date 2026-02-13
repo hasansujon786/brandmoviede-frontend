@@ -18,6 +18,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { getFormatedDate, isArrayEmpty } from "@/lib/utils";
+import { formatCurrency } from "@/lib/utils/formatters";
 import { createGetVarient } from "@/lib/utils/varients";
 import { useGetRecentOrdersQuery } from "@/redux/api";
 import { IOrderItem } from "@/types";
@@ -52,11 +53,17 @@ export const columns: ColumnDef<IOrderItem>[] = [
   {
     accessorKey: "price",
     header: "Price",
+    cell: ({ row }) => formatCurrency(row.original?.price ?? 0),
+  },
+  {
+    accessorKey: "quantity",
+    header: "Quantity",
+    cell: ({ row }) => row.original?.quantity ?? "N/A",
   },
   {
     accessorKey: "amount",
     header: "Coins Amount",
-    cell: ({ row }) => row.original?.amount ?? row.original?.quantity ?? 0,
+    cell: ({ row }) => row.original?.coin_amount ?? "N/A",
   },
   {
     accessorKey: "status",

@@ -9,18 +9,16 @@ import {
 import TableSearchInput from "@/components/shared/DataTable/TableSearchInput";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-} from "@/components/ui/input-group";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 import { getFormatedDate, isArrayEmpty } from "@/lib/utils";
 import { createGetVarient } from "@/lib/utils/varients";
-import { useGetRecentOrdersQuery } from "@/redux/api";
+import {
+  useAdminToggleTicketUsedStatusMutation,
+  useGetRecentOrdersQuery,
+} from "@/redux/api";
 import { IOrderItem } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
-import { SearchIcon } from "lucide-react";
-import { useState } from "react";
 
 export const statusVariantMap = {
   active: "info",
@@ -69,7 +67,41 @@ export const columns: ColumnDef<IOrderItem>[] = [
       );
     },
   },
+  {
+    accessorKey: "used",
+    header: "Ticket Used",
+    cell: ({ row }) => (
+      <ToggleUsedStatus
+        id={row.original.id}
+        used={
+          typeof row.original.used === "boolean" ? row.original.used : false
+        }
+      />
+    ),
+  },
 ];
+
+function ToggleUsedStatus({
+  used = false,
+  id,
+}: {
+  used?: boolean;
+  id: string;
+}) {
+  const [toggleUsedStatus] = useAdminToggleTicketUsedStatusMutation();
+  return (
+    <div className="flex items-center space-x-2">
+      <Switch
+        checked={used}
+        onClick={() => toggleUsedStatus({ id })}
+        id={`toggle-ticke-used-${id}`}
+      />
+      <Label className="cursor-pointer" htmlFor={`toggle-ticke-used-${id}`}>
+        Mark as Used
+      </Label>
+    </div>
+  );
+}
 
 export default function EventTicketPurchaseTable() {
   return (

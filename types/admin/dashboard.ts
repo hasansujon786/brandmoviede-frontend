@@ -8,6 +8,7 @@ export interface IOrderItem {
   ticket_price: number;
   status: "pending" | "completed" | "failed";
   amount?: number;
+  coin_amount?: number;
   quantity?: number;
   payment_date: string; // ISO date string
   user_name: string;

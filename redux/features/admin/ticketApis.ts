@@ -9,6 +9,7 @@ import {
   WithStatus,
   IAdminTicketStats,
 } from "@/types";
+import dashboardApis from "./dashboardApis";
 
 const ticketApis = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -29,6 +30,56 @@ const ticketApis = baseApi.injectEndpoints({
       providesTags: (_result, _error, id) => [{ type: "Ticket", id }],
       transformResponse: (response: WithStatus<IAdminSingleTicket>) =>
         response.data,
+    }),
+    adminToggleTicketUsedStatus: builder.mutation<
+      WithStatus<void>,
+      { id: string }
+    >({
+      query: ({ id }) => ({
+        url: `/admin/ticket/${id}/used`,
+        method: "PATCH",
+      }),
+
+      async onQueryStarted({ id }, { dispatch, queryFulfilled, getState }) {
+        // Get all queries that provide the "Dashboard" tag
+        const invalidatedQueries = baseApi.util.selectInvalidatedBy(
+          getState(),
+          ["RecentOrder"],
+        );
+
+        // Store patch results for rollback
+        const patchResults: { undo: () => void }[] = [];
+
+        for (const query of invalidatedQueries) {
+          if (query.endpointName !== "getRecentOrders") continue;
+
+          const patchResult = dispatch(
+            dashboardApis.util.updateQueryData(
+              "getRecentOrders",
+              query.originalArgs,
+              (draft) => {
+                const order = draft?.data?.find((item) => item.id === id);
+                console.log("found order", order);
+
+                if (order) {
+                  order.used = !order.used;
+                }
+              },
+            ),
+          );
+
+          patchResults.push(patchResult);
+        }
+
+        try {
+          await queryFulfilled;
+        } catch {
+          // rollback ALL patched queries
+          patchResults.forEach((patch) => patch.undo());
+        }
+      },
+      // optional safety refetch
+      // invalidatesTags: ["RecentOrder"],
     }),
     adminCreateTicket: builder.mutation<
       IAdminCreateTicketPayload,
@@ -141,6 +192,7 @@ export const {
   useAdminDeleteTicketByIdMutation,
   useAdminCreateTicketMutation,
   useAdminUpdateTicketMutation,
+  useAdminToggleTicketUsedStatusMutation,
 } = ticketApis;
 
 export default ticketApis;

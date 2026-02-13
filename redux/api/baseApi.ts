@@ -72,6 +72,7 @@ export const baseApi = createApi({
     "Coin",
     "Ticket",
     "Order",
+    "RecentOrder",
     "MyTicketOrder",
     "Dashboard",
     "Notifications",

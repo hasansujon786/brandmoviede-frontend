@@ -18,7 +18,7 @@ const dashboardApis = baseApi.injectEndpoints({
       IPaginationParams | void
     >({
       query: (params) => `/admin/order${createQueryParams(params)}`,
-      providesTags: ["Dashboard"] as const,
+      providesTags: ["RecentOrder"] as const,
       // transformResponse: (response: WithStatus<IOrderItem[]>) => response.data,
     }),
     getOverviewStats: builder.query<IOverviewStats, void>({
