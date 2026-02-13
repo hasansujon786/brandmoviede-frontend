@@ -7,12 +7,22 @@ import {
 } from "@/components/shared/DataTable/PaginationPageProvider";
 import TableSearchInput from "@/components/shared/DataTable/TableSearchInput";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Popover,
+  PopoverContent,
+  PopoverDescription,
+  PopoverHeader,
+  PopoverTitle,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { getFormatedDate, isArrayEmpty } from "@/lib/utils";
 import { createGetVarient } from "@/lib/utils/varients";
 import { useGetRecentOrdersQuery } from "@/redux/api";
 import { IOrderItem } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
+import { EyeIcon, InfoIcon } from "lucide-react";
 import { useState } from "react";
 
 export const statusVariantMap = {
@@ -59,6 +69,37 @@ export const columns: ColumnDef<IOrderItem>[] = [
         <Badge className="capitalize" variant={varient}>
           {status}
         </Badge>
+      );
+    },
+  },
+  {
+    accessorKey: "status_msg",
+    header: "Coin Transfer Status",
+    cell: ({ row }) => {
+      return (
+        <div className="">
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                className="border-primary-200 text-primary-400 hover:border-primary-400 rounded-md"
+                variant="primary-secondary"
+                size="icon-sm"
+              >
+                <EyeIcon className="size-4" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent>
+              <PopoverHeader>
+                <PopoverTitle>
+                  Status Code: {row.original?.status_code ?? "N/A"}
+                </PopoverTitle>
+                <PopoverDescription>
+                  {row.original?.status_msg ?? "N/A"}
+                </PopoverDescription>
+              </PopoverHeader>
+            </PopoverContent>
+          </Popover>
+        </div>
       );
     },
   },

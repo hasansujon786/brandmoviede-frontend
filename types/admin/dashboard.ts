@@ -18,6 +18,8 @@ export interface IOrderItem {
   ticket_number: string | null;
   payment_number: string;
   used: boolean | null;
+  status_code?: number;
+  status_msg?: string;
 }
 
 export interface IOverviewStats {
