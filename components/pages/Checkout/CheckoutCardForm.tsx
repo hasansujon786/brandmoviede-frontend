@@ -10,11 +10,17 @@ import {
 import { Input, inputStyles } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import {
+  IAppCoinCheckoutOrderResponse,
   useCreateCoinCheckoutOrderMutation,
   useCreateTicketCheckoutOrderMutation,
 } from "@/redux/api";
-import { clearCart, selectCartItems } from "@/redux/features/cart/cartSlice";
+import {
+  clearCart,
+  selectCartItems,
+  selectCurrentCustomBundleCoin,
+} from "@/redux/features/cart/cartSlice";
 import { useAppDispatch } from "@/redux/store";
+import { WithStatus } from "@/types";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { useForm } from "@tanstack/react-form";
 import { useState } from "react";
@@ -31,12 +37,10 @@ const schema = z.object({
 type CheckoutCoin = {
   type: "coin";
   sugoId: string;
+  meta: { isCustom: boolean };
 };
 
-type CheckoutTicket = {
-  type: "ticket";
-  ticketId: string;
-};
+type CheckoutTicket = { type: "ticket"; ticketId: string };
 
 type CardCheckoutFormProps = CheckoutCoin | CheckoutTicket;
 
@@ -51,6 +55,7 @@ export function CardCheckoutForm(props: CardCheckoutFormProps) {
 
   const [createCoinOrder] = useCreateCoinCheckoutOrderMutation();
   const cartItems = useSelector(selectCartItems);
+  const currentCustomBundleCoin = useSelector(selectCurrentCustomBundleCoin);
   const dispatch = useAppDispatch();
 
   const [loading, setLoading] = useState(false);
@@ -70,7 +75,33 @@ export function CardCheckoutForm(props: CardCheckoutFormProps) {
         let client_secret = null;
 
         if (props.type == "coin") {
-          client_secret = await tryCoinCheckout(props.sugoId);
+          let response: WithStatus<IAppCoinCheckoutOrderResponse> | null = null;
+
+          // Buy custom coin bundle
+          if (props.meta.isCustom) {
+            if (!currentCustomBundleCoin) {
+              return toast.error(
+                "Failed to place order your custom bundle. Please try again.",
+              );
+            }
+
+            response = await tryCustomCoinCheckout(props.sugoId, {
+              bundle_id: currentCustomBundleCoin.id,
+              coin_amount: currentCustomBundleCoin.coin_amount,
+            });
+          } else {
+            response = await tryCoinCheckout(props.sugoId);
+          }
+
+          if (response) {
+            client_secret = response?.data?.client_secret;
+          }
+
+          if (!client_secret) {
+            return toast.error(
+              response?.message ?? "Failed to place order. Please try again.",
+            );
+          }
         }
 
         if (props.type == "ticket") {
@@ -100,7 +131,7 @@ export function CardCheckoutForm(props: CardCheckoutFormProps) {
       return null;
     }
 
-    const { client_secret } = await createCoinOrder({
+    const response = await createCoinOrder({
       sugoId: sugoId,
       items: cartItems.map((i) => ({
         bundle_id: i.data.id,
@@ -108,7 +139,27 @@ export function CardCheckoutForm(props: CardCheckoutFormProps) {
       })),
     }).unwrap();
 
-    return client_secret;
+    return response;
+  }
+
+  async function tryCustomCoinCheckout(
+    sugoId: string,
+    item: {
+      bundle_id: string;
+      coin_amount: number;
+    },
+  ) {
+    if (!sugoId) {
+      toast.error("Invalid sugoId");
+      return null;
+    }
+
+    const response = await createCoinOrder({
+      sugoId: sugoId,
+      items: [item],
+    }).unwrap();
+
+    return response;
   }
 
   async function tryTicketCheckout(ticketId: string) {

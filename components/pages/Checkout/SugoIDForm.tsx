@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { createQueryParams } from "@/lib/utils/formatters";
 import { useForm } from "@tanstack/react-form";
 import { CircleAlert } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 import { z } from "zod";
 
 export const sugoCheckoutSchema = z
@@ -30,6 +31,7 @@ interface EmailFormProps {}
 
 export default function SugoIDForm(props: EmailFormProps) {
   const { goNext } = useNextStep();
+  const searchParams = useSearchParams();
 
   const form = useForm({
     defaultValues: {
@@ -43,6 +45,7 @@ export default function SugoIDForm(props: EmailFormProps) {
       const query = createQueryParams({
         type: "coin",
         sugoId: value.sugoId,
+        isCustomBundle: searchParams.get("isCustomBundle") == "true",
       });
       goNext(query);
     },

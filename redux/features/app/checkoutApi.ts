@@ -5,7 +5,8 @@ export interface IAppCoinCheckoutOrderParams {
   sugoId: string;
   items: {
     bundle_id: string;
-    quantity: number;
+    quantity?: number;
+    coin_amount?: number;
   }[];
 }
 
@@ -18,7 +19,7 @@ export interface IAppCoinCheckoutOrderResponse {
 export const paymentApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     createCoinCheckoutOrder: builder.mutation<
-      IAppCoinCheckoutOrderResponse,
+      WithStatus<IAppCoinCheckoutOrderResponse>,
       IAppCoinCheckoutOrderParams
     >({
       query: ({ sugoId, items }) => {
@@ -28,9 +29,9 @@ export const paymentApi = baseApi.injectEndpoints({
           body: { sugo_id: sugoId, items: items },
         };
       },
-      transformResponse: (
-        response: WithStatus<IAppCoinCheckoutOrderResponse>,
-      ) => response.data,
+      // transformResponse: (
+      //   response: WithStatus<IAppCoinCheckoutOrderResponse>,
+      // ) => response.data,
     }),
     createTicketCheckoutOrder: builder.mutation<
       IAppCoinCheckoutOrderResponse,

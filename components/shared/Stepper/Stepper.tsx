@@ -87,7 +87,9 @@ export default function Stepper() {
               key={path}
               isActive={isActive}
               disabled={!isClickable}
-              onClick={() => isClickable && router.push(path)}
+              onClick={() => {
+                if (isClickable) router.back();
+              }}
             >
               <Icon className="size-6" />
             </StepperPoint>

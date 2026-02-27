@@ -2,6 +2,7 @@ import { createQueryParams } from "@/lib/utils/formatters";
 import { baseApi } from "@/redux/api/baseApi";
 import type {
   IAppCoinBundle,
+  IAppCustomCoinBundle,
   IPaginationParams,
   WithPaginationAndStatus,
   WithStatus,
@@ -26,10 +27,19 @@ const appCoinApis = baseApi.injectEndpoints({
       transformResponse: (response: WithStatus<IAppCoinBundle>) =>
         response.data,
     }),
+    getCustomCoinBundle: builder.query<IAppCustomCoinBundle, void>({
+      query: () => `/coin/custom`,
+      providesTags: ["CustomBundle"],
+      transformResponse: (response: WithStatus<IAppCoinBundle>) =>
+        response.data,
+    }),
   }),
   overrideExisting: false,
 });
 
-export const { useGetAllCoinBundlesQuery, useGetSingleCoinBundleByIdQuery } =
-  appCoinApis;
+export const {
+  useGetAllCoinBundlesQuery,
+  useGetSingleCoinBundleByIdQuery,
+  useGetCustomCoinBundleQuery,
+} = appCoinApis;
 export default appCoinApis;

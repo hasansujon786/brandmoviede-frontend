@@ -7,6 +7,14 @@ export interface IAppCoinBundle {
   thumbnail_url: string;
 }
 
+export type IAppCustomCoinBundle = {
+  id: string;
+  name: string;
+  price: number; // single coin price
+  thumbnail: string;
+  thumbnail_url: string;
+};
+
 export type IAppCoinCheckoutParams = {
   sugo_id: string;
   items: IAppCoinCheckoutItem[];

@@ -125,6 +125,7 @@ export const baseApi = createApi({
     "Me",
     "Auth",
     "Coin",
+    "CustomBundle",
     "Ticket",
     "Order",
     "RecentOrder",

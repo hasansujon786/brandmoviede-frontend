@@ -2,6 +2,7 @@ import { useAppDispatch } from "@/redux/store";
 import { toast } from "sonner";
 import {
   addCurrentCheckoutTicket,
+  addCurrentCustomCoinBundle,
   addToCart,
   CartListItem,
   CartTicketItem,
@@ -9,6 +10,7 @@ import {
 import { useAuth } from "../auth/hooks";
 import { usePathname, useRouter } from "next/navigation";
 import { createQueryParams } from "@/lib/utils/formatters";
+import { IAppCoinBundle } from "@/types";
 
 export function useAppCart() {
   const dispatch = useAppDispatch();
@@ -25,6 +27,23 @@ export function useAppCart() {
 
     dispatch(addToCart(item));
     toast.success("Item added to cart");
+  };
+
+  const onBuyCustomCoinBundle = async (item?: IAppCoinBundle) => {
+    if (!isAuthenticated) {
+      toast.error("Sign in to buy items");
+      router.push(`/signin${createQueryParams({ redirect: pathname })}`);
+      return;
+    }
+
+    if (!item) {
+      return;
+    }
+
+    dispatch(addCurrentCustomCoinBundle(item));
+    router.push(
+      `/checkout${createQueryParams({ type: "coin", isCustomBundle: true })}`,
+    );
   };
 
   function onBuyTicket(ticket: Omit<CartTicketItem, "type">) {
@@ -50,5 +69,5 @@ export function useAppCart() {
     router.push(href);
   }
 
-  return { addItemToCart, onBuyTicket };
+  return { addItemToCart, onBuyTicket, onBuyCustomCoinBundle };
 }

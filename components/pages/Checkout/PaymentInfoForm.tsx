@@ -13,6 +13,7 @@ export default function PaymentInfoForm({}: PaymentInfoFormProps) {
   const type = searchParams.get("type") as "coin" | "ticket" | null;
   const sugoId: string | null = searchParams.get("sugoId");
   const ticketId: string | null = searchParams.get("ticketId");
+  const isCustomBundle: string | null = searchParams.get("isCustomBundle");
 
   return (
     <div>
@@ -25,7 +26,11 @@ export default function PaymentInfoForm({}: PaymentInfoFormProps) {
 
       {type == "coin" && sugoId && (
         <Elements stripe={stripePromise}>
-          <CardCheckoutForm type="coin" sugoId={sugoId} />
+          <CardCheckoutForm
+            type="coin"
+            sugoId={sugoId}
+            meta={{ isCustom: isCustomBundle === "true" }}
+          />
         </Elements>
       )}
 
