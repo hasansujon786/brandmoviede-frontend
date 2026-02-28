@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { createQueryParams } from "@/lib/utils/formatters";
+import { useAppCart } from "@/redux/features/cart/cartHooks";
 import { useForm } from "@tanstack/react-form";
 import { CircleAlert } from "lucide-react";
 import { useSearchParams } from "next/navigation";
@@ -33,6 +34,11 @@ export default function SugoIDForm(props: EmailFormProps) {
   const { goNext } = useNextStep();
   const searchParams = useSearchParams();
 
+  const {
+    tryCoinCheckoutWithPaypalFromCart,
+    tryCoinCheckoutWithPaypalFromCustomBundle,
+  } = useAppCart();
+
   const form = useForm({
     defaultValues: {
       sugoId: "",
@@ -42,12 +48,20 @@ export default function SugoIDForm(props: EmailFormProps) {
       onSubmit: sugoCheckoutSchema,
     },
     onSubmit: async ({ value }) => {
+      const isCustomBundle = searchParams.get("isCustomBundle") == "true";
       const query = createQueryParams({
         type: "coin",
         sugoId: value.sugoId,
-        isCustomBundle: searchParams.get("isCustomBundle") == "true",
+        isCustomBundle,
+        // paymentType: "PAYPAL",
       });
-      goNext(query);
+      // goNext(query);
+
+      if (isCustomBundle) {
+        tryCoinCheckoutWithPaypalFromCustomBundle(value.sugoId);
+      } else {
+        tryCoinCheckoutWithPaypalFromCart(value.sugoId);
+      }
     },
   });
 

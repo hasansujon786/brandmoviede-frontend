@@ -14,6 +14,7 @@ export default function PaymentInfoForm({}: PaymentInfoFormProps) {
   const sugoId: string | null = searchParams.get("sugoId");
   const ticketId: string | null = searchParams.get("ticketId");
   const isCustomBundle: string | null = searchParams.get("isCustomBundle");
+  const paymentType: "PAYPAL" | null = searchParams.get("paymentType");
 
   return (
     <div>
