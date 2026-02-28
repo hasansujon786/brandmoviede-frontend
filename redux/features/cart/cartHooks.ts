@@ -17,8 +17,12 @@ import { getErrorMessage } from "@/lib/utils";
 import {
   useCreateCoinCheckoutOrderWithPaypalMutation,
   IAppCoinCheckoutOrderParams,
+  useCreateTicketCheckoutOrderWithPaypalMutation,
 } from "../app";
 import { useSelector } from "react-redux";
+import { IAppCoinCheckoutOrderPaypalParams } from "@/types/app/checkout";
+
+const DEFAULT_ERRROR_MSG = "Someting went wrong, try again later.";
 
 export function useAppCart() {
   const dispatch = useAppDispatch();
@@ -57,27 +61,52 @@ export function useAppCart() {
       `/checkout${createQueryParams({ type: "coin", isCustomBundle: true })}`,
     );
   };
+  const [checkoutTicketWithPaypal] =
+    useCreateTicketCheckoutOrderWithPaypalMutation();
 
-  function onBuyTicket(ticket: Omit<CartTicketItem, "type">) {
+  async function onBuyTicket(ticket: Omit<CartTicketItem, "type">) {
     if (!isAuthenticated) {
       redirectToSignIn();
       return;
     }
 
-    const href = `/checkout/payment/${createQueryParams({
-      type: "ticket",
-      ticketId: ticket.data.id,
-    })}`;
+    try {
+      const response = await checkoutTicketWithPaypal({
+        ticketId: ticket.data.id,
+      }).unwrap();
 
-    dispatch(
-      addCurrentCheckoutTicket({
-        type: "ticket",
-        data: ticket.data,
-        quantity: ticket.quantity || 1,
-      }),
-    );
+      if (!response.success) {
+        toast.error(response.message || DEFAULT_ERRROR_MSG);
+        return false;
+      }
 
-    router.push(href);
+      if (!response.data.approval_url) {
+        toast.error(DEFAULT_ERRROR_MSG);
+        return false;
+      }
+
+      router.push(response.data.approval_url);
+      return true;
+    } catch (error) {
+      const msg = getErrorMessage(error, "Failed payment with paypal");
+      toast.error(msg);
+      return false;
+    }
+
+    // const href = `/checkout/payment/${createQueryParams({
+    //   type: "ticket",
+    //   ticketId: ticket.data.id,
+    // })}`;
+    //
+    // dispatch(
+    //   addCurrentCheckoutTicket({
+    //     type: "ticket",
+    //     data: ticket.data,
+    //     quantity: ticket.quantity || 1,
+    //   }),
+    // );
+    //
+    // router.push(href);
   }
 
   // payment checkout --------------------------------------------
@@ -89,7 +118,7 @@ export function useAppCart() {
   const tryCoinCheckoutWithPaypal = async ({
     sugoId,
     items,
-  }: IAppCoinCheckoutOrderParams) => {
+  }: IAppCoinCheckoutOrderPaypalParams) => {
     if (!isAuthenticated) {
       redirectToSignIn();
       return;
@@ -102,12 +131,12 @@ export function useAppCart() {
       }).unwrap();
 
       if (!response.success) {
-        toast.error(response.message);
+        toast.error(response.message || DEFAULT_ERRROR_MSG);
         return false;
       }
 
       if (!response.data.approval_url) {
-        toast.error("Someting went wrong, try again later.");
+        toast.error(DEFAULT_ERRROR_MSG);
         return false;
       }
 

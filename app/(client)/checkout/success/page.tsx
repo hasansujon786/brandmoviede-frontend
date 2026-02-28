@@ -44,6 +44,7 @@ export default function CheckoutSuccessPage() {
           return false;
         }
 
+        // console.log("success page response", orderId, response);
         router.replace("/checkout/result");
         dispatch(clearCart());
         return true;

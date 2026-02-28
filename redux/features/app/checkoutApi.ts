@@ -4,35 +4,18 @@ import {
   CapturePaypalOrderError,
   CapturePaypalOrderRequest,
   CapturePaypalOrderResponse,
+  IAppCoinCheckoutOrderPaypalParams,
+  IAppCoinCheckoutOrderResponse,
+  IAppCoinCheckoutOrderResponsePaypal,
+  IAppTicketCheckoutOrderParamsPaypal,
+  IAppTicketCheckoutOrderResponsePaypal,
 } from "@/types/app/checkout";
-
-export interface IAppCoinCheckoutOrderParams {
-  sugoId: string;
-  items: {
-    bundle_id: string;
-    quantity?: number;
-    coin_amount?: number;
-  }[];
-}
-
-export interface IAppCoinCheckoutOrderResponse {
-  client_secret: string;
-  transaction_id: string;
-  orders: string[];
-}
-
-export type IAppCoinCheckoutOrderResponsePaypal = {
-  order_id: string;
-  approval_url: string;
-  transaction_id: string;
-  orders: Array<string>;
-};
 
 export const paymentApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     createCoinCheckoutOrder: builder.mutation<
       WithStatus<IAppCoinCheckoutOrderResponse>,
-      IAppCoinCheckoutOrderParams
+      IAppCoinCheckoutOrderPaypalParams
     >({
       query: ({ sugoId, items }) => {
         return {
@@ -41,28 +24,6 @@ export const paymentApi = baseApi.injectEndpoints({
           body: { sugo_id: sugoId, items: items },
         };
       },
-    }),
-    createCoinCheckoutOrderWithPaypal: builder.mutation<
-      WithStatus<IAppCoinCheckoutOrderResponsePaypal>,
-      IAppCoinCheckoutOrderParams
-    >({
-      query: ({ sugoId, items }) => {
-        return {
-          url: "/coin/paypal/checkout/order",
-          method: "POST",
-          body: { sugo_id: sugoId, items: items },
-        };
-      },
-    }),
-    capturePaypalOrder: builder.mutation<
-      CapturePaypalOrderResponse | CapturePaypalOrderError,
-      CapturePaypalOrderRequest
-    >({
-      query: ({ orderId }) => ({
-        url: "/payment/paypal/capture",
-        method: "POST",
-        body: { orderId },
-      }),
     }),
     createTicketCheckoutOrder: builder.mutation<
       IAppCoinCheckoutOrderResponse,
@@ -77,6 +38,43 @@ export const paymentApi = baseApi.injectEndpoints({
         response: WithStatus<IAppCoinCheckoutOrderResponse>,
       ) => response.data,
     }),
+
+    // paypal
+    capturePaypalOrder: builder.mutation<
+      CapturePaypalOrderResponse | CapturePaypalOrderError,
+      CapturePaypalOrderRequest
+    >({
+      query: ({ orderId }) => ({
+        url: "/payment/paypal/capture",
+        method: "POST",
+        body: { orderId },
+      }),
+    }),
+    createCoinCheckoutOrderWithPaypal: builder.mutation<
+      WithStatus<IAppCoinCheckoutOrderResponsePaypal>,
+      IAppCoinCheckoutOrderPaypalParams
+    >({
+      query: ({ sugoId, items }) => {
+        return {
+          url: "/coin/paypal/checkout/order",
+          method: "POST",
+          body: { sugo_id: sugoId, items: items },
+        };
+      },
+    }),
+    createTicketCheckoutOrderWithPaypal: builder.mutation<
+      WithStatus<IAppTicketCheckoutOrderResponsePaypal>,
+      IAppTicketCheckoutOrderParamsPaypal
+    >({
+      query: ({ ticketId }) => {
+        return {
+          url: "/ticket/paypal/order",
+          method: "POST",
+          body: { ticket_id: ticketId },
+        };
+      },
+    }),
+
     // getAllCoinCheckoutDraft: builder.query<
     //   IAppCoinCartCheckoutDraftList[],
     //   void
@@ -111,4 +109,5 @@ export const {
   useCreateTicketCheckoutOrderMutation,
   useCreateCoinCheckoutOrderWithPaypalMutation,
   useCapturePaypalOrderMutation,
+  useCreateTicketCheckoutOrderWithPaypalMutation,
 } = paymentApi;

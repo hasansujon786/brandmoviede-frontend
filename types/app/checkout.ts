@@ -45,3 +45,35 @@ export interface CapturePaypalOrderError {
   message: string;
   error: string;
 }
+
+export interface IAppCoinCheckoutOrderPaypalParams {
+  sugoId: string;
+  items: {
+    bundle_id: string;
+    quantity?: number;
+    coin_amount?: number;
+  }[];
+}
+
+export type IAppCoinCheckoutOrderResponsePaypal = {
+  order_id: string;
+  approval_url: string;
+  transaction_id: string;
+  orders: Array<string>;
+};
+
+export interface IAppTicketCheckoutOrderParamsPaypal {
+  ticketId: string;
+}
+
+export type IAppTicketCheckoutOrderResponsePaypal = {
+  order_id: string;
+  approval_url: string;
+  transaction_id: string;
+};
+
+export interface IAppCoinCheckoutOrderResponse {
+  client_secret: string;
+  transaction_id: string;
+  orders: string[];
+}
