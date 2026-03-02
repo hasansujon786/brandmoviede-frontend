@@ -10,7 +10,6 @@ import {
 import { Input, inputStyles } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import {
-  IAppCoinCheckoutOrderResponse,
   useCreateCoinCheckoutOrderMutation,
   useCreateTicketCheckoutOrderMutation,
 } from "@/redux/api";
@@ -29,6 +28,7 @@ import { toast } from "sonner";
 import z from "zod";
 import { Button } from "../../ui/button";
 import { usePaymentStatus } from "./context/PaymentStatusContext";
+import { IAppCoinCheckoutOrderResponse } from "@/types/app/checkout";
 
 const schema = z.object({
   cardholderName: z.string().min(2, "Cardholder name is required"),
