@@ -54,6 +54,7 @@ const updateSchema = z.object({
 
 interface CoinBundleDialogProps extends React.PropsWithChildren {
   mode: "create" | "edit";
+  is_custom?: boolean;
   initialValues?: {
     id: string;
     coin_amount: number;
@@ -66,6 +67,7 @@ interface CoinBundleDialogProps extends React.PropsWithChildren {
 export default function CreateCoinBundleDialog({
   children,
   mode = "create",
+  is_custom = false,
   initialValues,
 }: CoinBundleDialogProps) {
   const [open, setOpen] = useState(false);
@@ -91,6 +93,7 @@ export default function CreateCoinBundleDialog({
       try {
         if (mode === "create") {
           await createCoin({
+            is_custom: is_custom,
             coin_amount: Number(value.coin_amount),
             price: Number(value.price),
             thumbnail: value.thumbnail!,
@@ -142,7 +145,11 @@ export default function CreateCoinBundleDialog({
       <DialogContent className="bg-card sm:max-w-2xl">
         <DialogHeader>
           <DialogTitle>
-            {mode === "create" ? "Create Coin Bundle" : "Update Coin Bundle"}
+            {mode === "create"
+              ? is_custom
+                ? "Create Custom Coin Bundle"
+                : "Create Coin Bundle"
+              : "Update Coin Bundle"}
           </DialogTitle>
           <DialogDescription>
             {mode === "create"
@@ -167,7 +174,10 @@ export default function CreateCoinBundleDialog({
                     field.state.meta.isTouched && !field.state.meta.isValid
                   }
                 >
-                  <Label htmlFor={field.name}>Coin Amount</Label>
+                  <Label htmlFor={field.name}>
+                    {is_custom ? "Min " : ""}
+                    Coin Amount
+                  </Label>
                   <Input
                     type="number"
                     id={field.name}
@@ -187,7 +197,10 @@ export default function CreateCoinBundleDialog({
                     field.state.meta.isTouched && !field.state.meta.isValid
                   }
                 >
-                  <Label htmlFor={field.name}>Price</Label>
+                  <Label htmlFor={field.name}>
+                    {is_custom ? "Each Coin " : ""}
+                    Price
+                  </Label>
                   <Input
                     id={field.name}
                     type="number"

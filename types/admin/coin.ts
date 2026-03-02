@@ -20,6 +20,7 @@ export interface IAdminCoinBundle {
   status: IActiveStatus;
   created_at: string;
   updated_at: string;
+  is_custom?: boolean;
 }
 
 export type IAdminCoinBundleDataPayload = WithPaginationAndStatus<
@@ -31,6 +32,7 @@ export interface ICreateCoinParams {
   thumbnail: File;
   coin_amount: number;
   is_active: boolean;
+  is_custom: boolean;
 }
 
 export interface IUpdateCoinParams {

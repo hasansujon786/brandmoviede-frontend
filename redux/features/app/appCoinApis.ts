@@ -29,7 +29,7 @@ const appCoinApis = baseApi.injectEndpoints({
     }),
     getCustomCoinBundle: builder.query<IAppCustomCoinBundle, void>({
       query: () => `/coin/custom`,
-      providesTags: ["CustomBundle"],
+      providesTags: () => [{ type: "Coin", id: "CustomBundle" }],
       transformResponse: (response: WithStatus<IAppCoinBundle>) =>
         response.data,
     }),

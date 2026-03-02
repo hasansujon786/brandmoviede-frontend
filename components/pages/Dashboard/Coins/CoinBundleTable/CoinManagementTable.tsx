@@ -30,7 +30,10 @@ export const columns: ColumnDef<IAdminCoinBundle>[] = [
   {
     accessorKey: "price",
     header: "Price",
-    cell: ({ row }) => formatCurrency(row.original?.price ?? 0),
+    cell: ({ row }) =>
+      row.original.is_custom
+        ? `$${row.original?.price}`
+        : formatCurrency(row.original?.price ?? 0),
   },
   {
     accessorKey: "total_sold",
@@ -81,11 +84,11 @@ export default function CoinManagementTable({
 function TableActionCell(props: IAdminCoinBundle) {
   const [deleteCoin, { isLoading: isDeleting }] = useAdminDeleteCoinMutation();
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (id: string, isCustom?: boolean) => {
     if (!confirm("Are you sure you want to delete this coin?")) return;
 
     try {
-      await deleteCoin({ id }).unwrap();
+      await deleteCoin({ id, isCustom }).unwrap();
       toast.success("Coin deleted successfully");
     } catch {
       toast.error("Failed to delete coin");
@@ -124,7 +127,7 @@ function TableActionCell(props: IAdminCoinBundle) {
 
       <Button
         disabled={isDeleting}
-        onClick={() => handleDelete(props.id)}
+        onClick={() => handleDelete(props.id, props.is_custom)}
         className="border-primary-200 text-primary-400 hover:border-primary-400 rounded-md"
         variant="primary-secondary"
         size="icon-sm"

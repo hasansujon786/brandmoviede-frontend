@@ -32,12 +32,22 @@ const coinApis = baseApi.injectEndpoints({
     }),
     adminCreateCoin: builder.mutation<void, ICreateCoinParams>({
       invalidatesTags: ["Coin"] as const, // update all coins query
-      query: ({ price, thumbnail, coin_amount, is_active }) => {
+      query: ({
+        price,
+        thumbnail,
+        coin_amount,
+        is_active,
+        is_custom = false,
+      }) => {
         const formData = new FormData();
         formData.append("coin_amount", coin_amount.toString());
         formData.append("price", price.toString());
         formData.append("thumbnail", thumbnail);
         formData.append("is_active", String(is_active));
+
+        if (is_custom === true) {
+          formData.append("is_custom", String(is_custom));
+        }
 
         return {
           url: "/admin/coin",
@@ -77,15 +87,48 @@ const coinApis = baseApi.injectEndpoints({
         };
       },
     }),
-    adminDeleteCoin: builder.mutation<void, { id: string }>({
-      invalidatesTags: (_result, _error, arg) => [
-        { type: "Coin", id: arg.id },
-        "Coin",
-      ],
-      query: ({ id }) => ({
-        url: `/admin/coin/${id}`,
-        method: "DELETE",
-      }),
+    adminDeleteCoin: builder.mutation<void, { id: string; isCustom?: boolean }>(
+      {
+        invalidatesTags: (_result, _error, arg) => [
+          { type: "Coin", id: arg.id },
+          "Coin",
+        ],
+        query: ({ id }) => ({
+          url: `/admin/coin/${id}`,
+          method: "DELETE",
+        }),
+        async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+          // Only run manual cache update for custom bundle
+          if (arg.isCustom) {
+            const patchResult = dispatch(
+              coinApis.util.updateQueryData(
+                "adminGetCustomCoinBundle",
+                undefined,
+                (draft) => {
+                  // If your query returns a single object:
+                  return null as any; // remove it completely
+                  // OR if it returns array:
+                  // return draft.filter(item => item.id !== arg.id)
+                },
+              ),
+            );
+
+            try {
+              await queryFulfilled;
+            } catch {
+              // rollback if request fails
+              patchResult.undo();
+            }
+          }
+        },
+      },
+    ),
+    // Custom coin bundle ------------------------------------------------
+    adminGetCustomCoinBundle: builder.query<IAdminCoinBundle, void>({
+      query: () => `/admin/coin/custom`,
+      providesTags: () => [{ type: "Coin", id: "CustomBundle" }],
+      transformResponse: (response: WithStatus<IAdminCoinBundle>) =>
+        response.data,
     }),
   }),
   overrideExisting: false,
@@ -98,6 +141,7 @@ export const {
   useAdminGetAllCoinBundlesQuery,
   useAdminUpdateCoinMutation,
   useAdminDeleteCoinMutation,
+  useAdminGetCustomCoinBundleQuery,
 } = coinApis;
 
 export default coinApis;

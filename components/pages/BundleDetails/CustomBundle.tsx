@@ -15,11 +15,14 @@ import { useAppCart } from "@/redux/features/cart/cartHooks";
 import { useForm } from "@tanstack/react-form";
 import { z } from "zod";
 
-const MIN_AMOUNT = 750;
+const COIN_MIN_AMOUNT = 750;
 const CustomBundleSchema = z.object({
   amount: z.coerce
-    .number<string>({ error: "Amount must be a valid number" })
-    .min(MIN_AMOUNT, `Minimum amount is $${MIN_AMOUNT}`),
+    .number<string>({ error: "Coin amount must be a valid number" })
+    .min(
+      COIN_MIN_AMOUNT,
+      `You must purchase at least ${COIN_MIN_AMOUNT} coins.`,
+    ),
 });
 
 export default function CustomBundle() {
@@ -27,9 +30,9 @@ export default function CustomBundle() {
   const { onBuyCustomCoinBundle } = useAppCart();
 
   const singleCoinPrice = data?.price ?? 0;
-  const calculateCoinQuantity = (amount: string) => {
-    if (!singleCoinPrice || Number(amount) < MIN_AMOUNT) return 0;
-    return Math.floor(Number(amount) / singleCoinPrice);
+  const calculateCoinPrice = (coin_amount: string) => {
+    if (!singleCoinPrice || Number(coin_amount) < COIN_MIN_AMOUNT) return 0;
+    return Math.floor(Number(coin_amount) * singleCoinPrice);
   };
 
   const form = useForm({
@@ -41,11 +44,12 @@ export default function CustomBundle() {
     },
     onSubmit: async ({ value }) => {
       if (!data) return;
-      const coinQuantity = calculateCoinQuantity(value.amount);
+      const coinPrice = calculateCoinPrice(value.amount);
+
       onBuyCustomCoinBundle({
         ...data,
-        coin_amount: coinQuantity,
-        price: parseInt(value.amount),
+        coin_amount: parseInt(value.amount),
+        price: coinPrice,
       });
     },
   });
@@ -61,31 +65,36 @@ export default function CustomBundle() {
       >
         <form.Field name="amount">
           {(field) => {
-            const coinQuantity = calculateCoinQuantity(field.state.value);
+            const coinTotalPrice = calculateCoinPrice(field.state.value);
+
+            const coinAmount = Number(field.state.value);
+
+            const isEmpty = !field.state.value || coinAmount === 0;
+            const isBelowMin = coinAmount > 0 && coinAmount < COIN_MIN_AMOUNT;
+            const isValid = coinAmount >= COIN_MIN_AMOUNT;
 
             return (
               <>
                 <Field>
-                  <Label htmlFor="amount-input">Amount</Label>
+                  <Label htmlFor="amount-input">Number of Coins</Label>
                   <InputGroup
                     className={cn(
                       inputStyles,
                       "bg-primary-100 border-primary-100 text-heading-100 px-1",
                     )}
                   >
-                    <InputGroupAddon className="text-heading-100">
-                      {isLoading ? (
-                        <Spinner className="size-4" />
-                      ) : (
-                        <div className="size-4">$</div>
-                      )}
+                    <InputGroupAddon
+                      align="inline-end"
+                      className="text-heading-100"
+                    >
+                      {isLoading ? <Spinner className="size-4" /> : null}
                     </InputGroupAddon>
                     <InputGroupInput
                       disabled={isLoading}
                       id="amount-input"
                       name="amount-input"
                       type="number"
-                      placeholder={`Enter amount (min: $${MIN_AMOUNT})`}
+                      placeholder={`Enter at least ${COIN_MIN_AMOUNT} coins`}
                       value={field.state.value}
                       onBlur={field.handleBlur}
                       onChange={(e) => field.handleChange(e.target.value)}
@@ -94,12 +103,37 @@ export default function CustomBundle() {
                   <FieldError errors={field.state.meta.errors} />
                 </Field>
 
-                <div className="bg-primary-100 mt-4 w-full rounded-xl p-8 text-center">
-                  <p className="text-2xl font-semibold">You will Get</p>
-                  <p className="text-primary mt-4 text-3xl font-bold">
-                    {coinQuantity > 0 ? coinQuantity.toLocaleString() : "—"}
-                  </p>
-                  <p className="text-base">Coins</p>
+                <div className="bg-primary-100 mt-4 grid min-h-52 w-full place-items-center rounded-xl p-8 text-center">
+                  {isEmpty && (
+                    <p className="text-destructive mt-2 text-base">
+                      Please enter a coin amount *
+                    </p>
+                  )}
+
+                  {isBelowMin && (
+                    <p className="text-destructive mt-2 text-base">
+                      You must purchase at least{" "}
+                      {COIN_MIN_AMOUNT.toLocaleString()} coins.
+                    </p>
+                  )}
+
+                  {isValid && (
+                    <div className="bg-primary-100 mt-4 w-full rounded-xl p-8 text-center">
+                      <p className="text-lg text-gray-600">
+                        Estimated bundle price
+                      </p>
+                      <p className="text-3xl font-semibold">
+                        <span className="text-primary">
+                          ${coinTotalPrice.toLocaleString()}
+                        </span>
+                      </p>
+                    </div>
+                  )}
+
+                  {/* <p className="text-2xl font-semibold"> */}
+                  {/*   Your bundle price is */}
+                  {/*   <span className="text-primary">{` $${coinTotalPrice.toLocaleString()}`}</span> */}
+                  {/* </p> */}
                 </div>
               </>
             );

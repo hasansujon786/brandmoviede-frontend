@@ -1,7 +1,10 @@
 "use client";
+import CreateCoinBundleDialog from "@/components/dashboard/CreateCoinBundleDialog/CreateCoinBundleDialog";
+import TopActionBar from "@/components/dashboard/TopActionBar/TopActionBar";
 import { PaginationPageProvider } from "@/components/shared/DataTable/PaginationPageProvider";
+import { Button } from "@/components/ui/button";
 import { CardHeader, CardTitle } from "@/components/ui/card";
-import { IAdminCoinBundle } from "@/types";
+import { useAdminGetCustomCoinBundleQuery } from "@/redux/api";
 import CoinManagementTable from "./CoinManagementTable";
 
 export default function SingleCoinTable() {
@@ -13,32 +16,27 @@ export default function SingleCoinTable() {
 }
 
 function SingleCoinTableContent() {
-  const data = getData();
+  const { data, isLoading, isFetching } = useAdminGetCustomCoinBundleQuery();
+  const tableData = data ? [data] : [];
+
   return (
     <CoinManagementTable
-      data={data}
+      data={tableData}
       header={
-        <CardHeader>
-          <CardTitle>Single Coint</CardTitle>
+        <CardHeader className="flex items-center justify-between">
+          <CardTitle>Custom Coin Bundle</CardTitle>
+
+          <TopActionBar>
+            {!data && !(isLoading || isFetching) ? (
+              <CreateCoinBundleDialog is_custom={true} mode="create">
+                <Button disabled={isLoading} size="lg" variant="primary">
+                  Create Custom Coin Bundle
+                </Button>
+              </CreateCoinBundleDialog>
+            ) : null}
+          </TopActionBar>
         </CardHeader>
       }
     />
   );
-}
-
-export function getData() {
-  const packages: IAdminCoinBundle[] = [
-    {
-      id: "cmkpcgma20002qgm0e84tb0jp",
-      name: "MKPCGM9Y",
-      price: 234,
-      coin_amount: 234,
-      total_sold: 123,
-      status: "Active",
-      created_at: "2026-01-22T11:04:01.994Z",
-      updated_at: "2026-01-22T11:04:01.994Z",
-    },
-  ];
-
-  return packages;
 }
