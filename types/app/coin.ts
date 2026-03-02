@@ -10,9 +10,8 @@ export interface IAppCoinBundle {
 export type IAppCustomCoinBundle = {
   id: string;
   name: string;
-  price: number; // single coin price
-  thumbnail: string;
-  thumbnail_url: string;
+  price: number;
+  coin_amount: number;
 };
 
 export type IAppCoinCheckoutParams = {

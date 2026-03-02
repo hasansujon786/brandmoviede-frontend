@@ -13,6 +13,7 @@ import { cn } from "@/lib/utils";
 import { useGetCustomCoinBundleQuery } from "@/redux/api";
 import { useAppCart } from "@/redux/features/cart/cartHooks";
 import { useForm } from "@tanstack/react-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 const COIN_MIN_AMOUNT = 750;
@@ -29,10 +30,19 @@ export default function CustomBundle() {
   const { data, isLoading } = useGetCustomCoinBundleQuery();
   const { onBuyCustomCoinBundle } = useAppCart();
 
-  const singleCoinPrice = data?.price ?? 0;
   const calculateCoinPrice = (coin_amount: string) => {
-    if (!singleCoinPrice || Number(coin_amount) < COIN_MIN_AMOUNT) return 0;
-    return Math.floor(Number(coin_amount) * singleCoinPrice);
+    if (!data) return 0;
+
+    const basePrice = Number(data.price);
+    const baseAmount = Number(data.coin_amount);
+    const amount = Number(coin_amount);
+
+    if (!basePrice || !baseAmount) return 0;
+    if (!amount || amount < COIN_MIN_AMOUNT) return 0;
+
+    const singleCoinPrice = basePrice / baseAmount;
+
+    return Number((amount * singleCoinPrice).toFixed(2));
   };
 
   const form = useForm({
@@ -43,9 +53,14 @@ export default function CustomBundle() {
       onSubmit: CustomBundleSchema,
     },
     onSubmit: async ({ value }) => {
-      if (!data) return;
-      const coinPrice = calculateCoinPrice(value.amount);
+      if (!data) {
+        toast.error(
+          "Custom bundles are temporarily unavailable. Please check back soon.",
+        );
+        return;
+      }
 
+      const coinPrice = calculateCoinPrice(value.amount);
       onBuyCustomCoinBundle({
         ...data,
         coin_amount: parseInt(value.amount),

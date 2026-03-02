@@ -1,5 +1,5 @@
 import { RootState } from "@/redux/store";
-import { IAppCoinBundle, IAppTicket } from "@/types";
+import { IAppCoinBundle, IAppCustomCoinBundle, IAppTicket } from "@/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface CartCoinItem {
@@ -19,7 +19,7 @@ export type CartListItem = CartCoinItem;
 interface CartState {
   items: CartListItem[];
   currentSelectedTicket: CartTicketItem | null;
-  currentCustomBundleCoin: IAppCoinBundle | null;
+  currentCustomBundleCoin: IAppCustomCoinBundle | null;
 }
 
 const initialState: CartState = {
@@ -50,7 +50,7 @@ const cartSlice = createSlice({
     },
     addCurrentCustomCoinBundle: (
       state,
-      action: PayloadAction<IAppCoinBundle | null>,
+      action: PayloadAction<IAppCustomCoinBundle | null>,
     ) => {
       state.currentCustomBundleCoin = action.payload;
     },

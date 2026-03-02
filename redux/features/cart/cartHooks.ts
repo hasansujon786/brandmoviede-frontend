@@ -1,7 +1,7 @@
 import { getErrorMessage } from "@/lib/utils";
 import { createQueryParams } from "@/lib/utils/formatters";
 import { useAppDispatch } from "@/redux/store";
-import { IAppCoinBundle } from "@/types";
+import { IAppCustomCoinBundle } from "@/types";
 import { IAppCoinCheckoutOrderPaypalParams } from "@/types/app/checkout";
 import { usePathname, useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
@@ -44,7 +44,7 @@ export function useAppCart() {
     toast.success("Item added to cart");
   };
 
-  const onBuyCustomCoinBundle = async (item?: IAppCoinBundle) => {
+  const onBuyCustomCoinBundle = async (item?: IAppCustomCoinBundle) => {
     if (!isAuthenticated) {
       redirectToSignIn();
       return;
