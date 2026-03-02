@@ -1,7 +1,17 @@
+import { getErrorMessage } from "@/lib/utils";
+import { createQueryParams } from "@/lib/utils/formatters";
 import { useAppDispatch } from "@/redux/store";
+import { IAppCoinBundle } from "@/types";
+import { IAppCoinCheckoutOrderPaypalParams } from "@/types/app/checkout";
+import { usePathname, useRouter } from "next/navigation";
+import { useSelector } from "react-redux";
 import { toast } from "sonner";
 import {
-  addCurrentCheckoutTicket,
+  useCreateCoinCheckoutOrderWithPaypalMutation,
+  useCreateTicketCheckoutOrderWithPaypalMutation,
+} from "../app";
+import { useAuth } from "../auth/hooks";
+import {
   addCurrentCustomCoinBundle,
   addToCart,
   CartListItem,
@@ -9,18 +19,6 @@ import {
   selectCartItems,
   selectCurrentCustomBundleCoin,
 } from "./cartSlice";
-import { useAuth } from "../auth/hooks";
-import { usePathname, useRouter } from "next/navigation";
-import { createQueryParams } from "@/lib/utils/formatters";
-import { IAppCoinBundle } from "@/types";
-import { getErrorMessage } from "@/lib/utils";
-import {
-  useCreateCoinCheckoutOrderWithPaypalMutation,
-  IAppCoinCheckoutOrderParams,
-  useCreateTicketCheckoutOrderWithPaypalMutation,
-} from "../app";
-import { useSelector } from "react-redux";
-import { IAppCoinCheckoutOrderPaypalParams } from "@/types/app/checkout";
 
 const DEFAULT_ERRROR_MSG = "Someting went wrong, try again later.";
 
