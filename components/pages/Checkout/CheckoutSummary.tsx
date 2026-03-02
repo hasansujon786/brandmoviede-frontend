@@ -12,6 +12,7 @@ export default function CheckoutSummary() {
   const searchParams = useSearchParams();
 
   const type = searchParams.get("type") as "coin" | "ticket" | null;
+  const isCustomBundle = searchParams.get("isCustomBundle") == "true";
 
   return (
     <div>
@@ -19,7 +20,7 @@ export default function CheckoutSummary() {
         Order Summary
       </h5>
 
-      {type === "coin" ? <CartListSummary /> : null}
+      {type === "coin" ? <CartListSummary isCustom={isCustomBundle} /> : null}
       {type === "ticket" ? <CheckoutTicketSummary /> : null}
 
       <div className="bg-card/50 mt-4 flex flex-col gap-2 rounded-xl p-4">

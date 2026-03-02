@@ -8,7 +8,10 @@ import {
   formatCurrency,
   formatPluralNumber,
 } from "@/lib/utils/formatters";
-import { selectCartItems } from "@/redux/features/cart/cartSlice";
+import {
+  selectCartItems,
+  selectCurrentCustomBundleCoin,
+} from "@/redux/features/cart/cartSlice";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
@@ -71,8 +74,10 @@ export default function CartList() {
   );
 }
 
-export function CartListSummary() {
+export function CartListSummary({ isCustom }: { isCustom?: boolean }) {
   const cartItems = useSelector(selectCartItems);
+
+  const cartCustomCoinBundle = useSelector(selectCurrentCustomBundleCoin);
 
   const totalItems = cartItems.reduce((sum, i) => sum + i.quantity, 0);
   const totalPrice = cartItems.reduce(
@@ -81,8 +86,18 @@ export function CartListSummary() {
   );
 
   const purchaseInfo = {
-    items: [{ title: "Coin Bundles", value: totalItems }],
-    main: { title: "Total Price", value: formatCurrency(totalPrice) },
+    items: [
+      {
+        title: "Coin Bundles",
+        value: isCustom ? 1 : totalItems,
+      },
+    ],
+    main: {
+      title: "Total Price",
+      value: formatCurrency(
+        isCustom ? (cartCustomCoinBundle?.price ?? 0) : totalPrice,
+      ),
+    },
   };
 
   return (
