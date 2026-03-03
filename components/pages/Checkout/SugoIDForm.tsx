@@ -16,6 +16,7 @@ import { useAppCart } from "@/redux/features/cart/cartHooks";
 import { useForm } from "@tanstack/react-form";
 import { CircleAlert } from "lucide-react";
 import { useSearchParams } from "next/navigation";
+import { useState } from "react";
 import { z } from "zod";
 
 export const sugoCheckoutSchema = z
@@ -53,14 +54,12 @@ export default function SugoIDForm(props: EmailFormProps) {
         type: "coin",
         sugoId: value.sugoId,
         isCustomBundle,
-        // paymentType: "PAYPAL",
       });
       // goNext(query);
-
       if (isCustomBundle) {
-        tryCoinCheckoutWithPaypalFromCustomBundle(value.sugoId);
+        await tryCoinCheckoutWithPaypalFromCustomBundle(value.sugoId);
       } else {
-        tryCoinCheckoutWithPaypalFromCart(value.sugoId);
+        await tryCoinCheckoutWithPaypalFromCart(value.sugoId);
       }
     },
   });

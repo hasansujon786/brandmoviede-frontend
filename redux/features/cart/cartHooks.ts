@@ -119,7 +119,7 @@ export function useAppCart() {
   }: IAppCoinCheckoutOrderPaypalParams) => {
     if (!isAuthenticated) {
       redirectToSignIn();
-      return;
+      return false;
     }
 
     try {
@@ -147,8 +147,8 @@ export function useAppCart() {
     }
   };
 
-  function tryCoinCheckoutWithPaypalFromCart(sugoId: string) {
-    tryCoinCheckoutWithPaypal({
+  async function tryCoinCheckoutWithPaypalFromCart(sugoId: string) {
+    return await tryCoinCheckoutWithPaypal({
       sugoId: sugoId,
       items: cartItems.map((i) => ({
         bundle_id: i.data.id,
@@ -158,14 +158,15 @@ export function useAppCart() {
     });
   }
 
-  function tryCoinCheckoutWithPaypalFromCustomBundle(sugoId: string) {
+  async function tryCoinCheckoutWithPaypalFromCustomBundle(sugoId: string) {
     if (!currentCustomBundleCoin) {
-      return toast.error(
+      toast.error(
         "Failed to place order your custom bundle. Please try again.",
       );
+      return false;
     }
 
-    tryCoinCheckoutWithPaypal({
+    return await tryCoinCheckoutWithPaypal({
       sugoId: sugoId,
       items: [
         {

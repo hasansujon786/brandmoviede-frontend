@@ -53,14 +53,16 @@ export default function TicketDetails() {
         </NavigationLink>
 
         <section className="mt-8">
-          <Image
-            src={ticket?.thumbnail as string}
-            className="aspect-[4.7826086957] h-[276px] rounded-xl object-cover object-center"
-            width={1320}
-            height={276}
-            unoptimized={config.imageUnoptimized}
-            alt=""
-          />
+          {ticket?.thumbnail ? (
+            <Image
+              src={ticket?.thumbnail}
+              className="aspect-[4.7826086957] h-[276px] rounded-xl object-cover object-center"
+              width={1320}
+              height={276}
+              unoptimized={config.imageUnoptimized}
+              alt=""
+            />
+          ) : null}
 
           <div className="mt-8 flex flex-col-reverse justify-between gap-3 md:flex-row md:items-center">
             <HighlightNthWord
@@ -70,6 +72,7 @@ export default function TicketDetails() {
             />
 
             <Button
+              disabled={isLoading}
               onClick={() => {
                 if (ticket) onBuyTicket({ data: ticket, quantity: 1 });
               }}
