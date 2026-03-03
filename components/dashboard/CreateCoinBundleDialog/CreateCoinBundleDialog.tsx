@@ -87,7 +87,7 @@ export default function CreateCoinBundleDialog({
       is_active: initialValues?.is_active ?? true,
     },
     validators: {
-      onSubmit: mode === "edit" ? updateSchema : createSchema,
+      onSubmit: mode === "edit" || is_custom ? updateSchema : createSchema,
     },
     onSubmit: async ({ value }) => {
       try {
@@ -174,10 +174,7 @@ export default function CreateCoinBundleDialog({
                     field.state.meta.isTouched && !field.state.meta.isValid
                   }
                 >
-                  <Label htmlFor={field.name}>
-                    {is_custom ? "Min " : ""}
-                    Coin Amount
-                  </Label>
+                  <Label htmlFor={field.name}>Coin Amount</Label>
                   <Input
                     type="number"
                     id={field.name}
@@ -197,10 +194,7 @@ export default function CreateCoinBundleDialog({
                     field.state.meta.isTouched && !field.state.meta.isValid
                   }
                 >
-                  <Label htmlFor={field.name}>
-                    {is_custom ? "Each Coin " : ""}
-                    Price
-                  </Label>
+                  <Label htmlFor={field.name}>Price</Label>
                   <Input
                     id={field.name}
                     type="number"
@@ -215,46 +209,48 @@ export default function CreateCoinBundleDialog({
           </div>
 
           {/* Thumbnail */}
-          <form.Field name="thumbnail">
-            {(field) => (
-              <Field
-                data-invalid={
-                  field.state.meta.isTouched && !field.state.meta.isValid
-                }
-              >
-                <Label htmlFor={field.name}>Thumbnail</Label>
-                <FileInput
-                  id={field.name}
-                  multiple={false}
-                  accept="image/*"
-                  onBlur={field.handleBlur}
-                  onChange={(files) => field.handleChange(files[0])}
-                />
+          {is_custom ? null : (
+            <form.Field name="thumbnail">
+              {(field) => (
+                <Field
+                  data-invalid={
+                    field.state.meta.isTouched && !field.state.meta.isValid
+                  }
+                >
+                  <Label htmlFor={field.name}>Thumbnail</Label>
+                  <FileInput
+                    id={field.name}
+                    multiple={false}
+                    accept="image/*"
+                    onBlur={field.handleBlur}
+                    onChange={(files) => field.handleChange(files[0])}
+                  />
 
-                {/* Existing image preview (edit mode) */}
-                {gettingEditModeInitialData ||
-                (!field.state.value && editModeCoinData?.thumbnail) ? (
-                  <>
-                    <h3 className="font-body mt-4 mb-1 text-sm">
-                      Current thumbnail
-                    </h3>
-                    <div className="bg-accent-light-gray border-border flex items-center justify-between space-x-4 rounded-lg border p-3">
-                      <Image
-                        unoptimized
-                        width={64}
-                        height={64}
-                        src={editModeCoinData?.thumbnail as string}
-                        alt=""
-                        className="bg-muted size-16 rounded border object-cover"
-                      />
-                    </div>
-                  </>
-                ) : null}
+                  {/* Existing image preview (edit mode) */}
+                  {gettingEditModeInitialData ||
+                  (!field.state.value && editModeCoinData?.thumbnail) ? (
+                    <>
+                      <h3 className="font-body mt-4 mb-1 text-sm">
+                        Current thumbnail
+                      </h3>
+                      <div className="bg-accent-light-gray border-border flex items-center justify-between space-x-4 rounded-lg border p-3">
+                        <Image
+                          unoptimized
+                          width={64}
+                          height={64}
+                          src={editModeCoinData?.thumbnail as string}
+                          alt=""
+                          className="bg-muted size-16 rounded border object-cover"
+                        />
+                      </div>
+                    </>
+                  ) : null}
 
-                <FieldError errors={field.state.meta.errors} />
-              </Field>
-            )}
-          </form.Field>
+                  <FieldError errors={field.state.meta.errors} />
+                </Field>
+              )}
+            </form.Field>
+          )}
 
           {/* Active Checkbox */}
           <form.Field name="is_active">

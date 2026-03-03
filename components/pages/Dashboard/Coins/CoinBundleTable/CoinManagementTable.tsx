@@ -54,11 +54,13 @@ export const columns: ColumnDef<IAdminCoinBundle>[] = [
 interface CoinBundleTableProps {
   data: IAdminCoinBundle[];
   header: ReactNode;
+  hidePaginatin?: boolean;
 }
 
 export default function CoinManagementTable({
   data,
   header,
+  hidePaginatin = false,
 }: CoinBundleTableProps) {
   return (
     <section className="space-y-3">
@@ -76,7 +78,7 @@ export default function CoinManagementTable({
         </CardContent>
       </Card>
 
-      <Pagenation />
+      {hidePaginatin ? null : <Pagenation />}
     </section>
   );
 }
@@ -109,6 +111,7 @@ function TableActionCell(props: IAdminCoinBundle) {
 
       <CreateCoinBundleDialog
         mode="edit"
+        is_custom={props.is_custom}
         initialValues={{
           id: props.id,
           coin_amount: props.coin_amount,
@@ -125,15 +128,17 @@ function TableActionCell(props: IAdminCoinBundle) {
         </Button>
       </CreateCoinBundleDialog>
 
-      <Button
-        disabled={isDeleting}
-        onClick={() => handleDelete(props.id, props.is_custom)}
-        className="border-primary-200 text-primary-400 hover:border-primary-400 rounded-md"
-        variant="primary-secondary"
-        size="icon-sm"
-      >
-        <TrushIcon className="size-4" />
-      </Button>
+      {props.is_custom ? null : (
+        <Button
+          disabled={isDeleting}
+          onClick={() => handleDelete(props.id, props.is_custom)}
+          className="border-primary-200 text-primary-400 hover:border-primary-400 rounded-md"
+          variant="primary-secondary"
+          size="icon-sm"
+        >
+          <TrushIcon className="size-4" />
+        </Button>
+      )}
     </div>
   );
 }

@@ -22,6 +22,7 @@ function SingleCoinTableContent() {
   return (
     <CoinManagementTable
       data={tableData}
+      hidePaginatin
       header={
         <CardHeader className="flex items-center justify-between">
           <CardTitle>Custom Coin Bundle</CardTitle>
