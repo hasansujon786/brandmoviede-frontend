@@ -27,8 +27,9 @@ const CustomBundleSchema = z.object({
 });
 
 export default function CustomBundle() {
-  const { data, isLoading } = useGetCustomCoinBundleQuery();
+  const { data, isLoading, isSuccess } = useGetCustomCoinBundleQuery();
   const { onBuyCustomCoinBundle } = useAppCart();
+  const isAvailable = isSuccess && !!data;
 
   const calculateCoinPrice = (coin_amount: string) => {
     if (!data) return 0;
@@ -61,7 +62,7 @@ export default function CustomBundle() {
       }
 
       const coinPrice = calculateCoinPrice(value.amount);
-      onBuyCustomCoinBundle({
+      await onBuyCustomCoinBundle({
         ...data,
         coin_amount: parseInt(value.amount),
         price: coinPrice,
@@ -119,30 +120,39 @@ export default function CustomBundle() {
                 </Field>
 
                 <div className="bg-primary-100 mt-4 grid min-h-52 w-full place-items-center rounded-xl p-8 text-center">
-                  {isEmpty && (
+                  {!isAvailable ? (
                     <p className="text-destructive mt-2 text-base">
-                      Please enter a coin amount *
+                      Custom bundles are temporarily unavailable. Please check
+                      back soon.
                     </p>
-                  )}
+                  ) : (
+                    <>
+                      {isEmpty && (
+                        <p className="text-destructive mt-2 text-base">
+                          Please enter a coin amount *
+                        </p>
+                      )}
 
-                  {isBelowMin && (
-                    <p className="text-destructive mt-2 text-base">
-                      You must purchase at least{" "}
-                      {COIN_MIN_AMOUNT.toLocaleString()} coins.
-                    </p>
-                  )}
+                      {isBelowMin && (
+                        <p className="text-destructive mt-2 text-base">
+                          You must purchase at least{" "}
+                          {COIN_MIN_AMOUNT.toLocaleString()} coins.
+                        </p>
+                      )}
 
-                  {isValid && (
-                    <div className="bg-primary-100 mt-4 w-full rounded-xl p-8 text-center">
-                      <p className="text-lg text-gray-600">
-                        Estimated bundle price
-                      </p>
-                      <p className="text-3xl font-semibold">
-                        <span className="text-primary">
-                          ${coinTotalPrice.toLocaleString()}
-                        </span>
-                      </p>
-                    </div>
+                      {isValid && (
+                        <div className="bg-primary-100 mt-4 w-full rounded-xl p-8 text-center">
+                          <p className="text-lg text-gray-600">
+                            Estimated bundle price
+                          </p>
+                          <p className="text-3xl font-semibold">
+                            <span className="text-primary">
+                              ${coinTotalPrice.toLocaleString()}
+                            </span>
+                          </p>
+                        </div>
+                      )}
+                    </>
                   )}
 
                   {/* <p className="text-2xl font-semibold"> */}
@@ -155,9 +165,32 @@ export default function CustomBundle() {
           }}
         </form.Field>
 
-        <Button type="submit" variant="primary" className="mt-8 w-full">
-          Buy now
-        </Button>
+        <form.Subscribe
+          selector={(state) => [
+            state.canSubmit,
+            state.isSubmitting,
+            state.isValid,
+            state.isTouched,
+          ]}
+        >
+          {([canSubmit, isSubmitting, isValid, isTouched]) => (
+            <Button
+              disabled={
+                !isAvailable ||
+                isLoading ||
+                !isTouched ||
+                !isValid ||
+                !canSubmit ||
+                isSubmitting
+              }
+              type="submit"
+              variant="primary"
+              className="mt-8 w-full"
+            >
+              Buy now
+            </Button>
+          )}
+        </form.Subscribe>
       </form>
     </div>
   );
