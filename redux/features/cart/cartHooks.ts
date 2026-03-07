@@ -35,20 +35,20 @@ export function useAppCart() {
   }
 
   const addItemToCart = async (item: CartListItem) => {
-    if (!isAuthenticated) {
-      redirectToSignIn();
-      return;
-    }
+    // if (!isAuthenticated) {
+    //   redirectToSignIn();
+    //   return;
+    // }
 
     dispatch(addToCart(item));
     toast.success("Item added to cart");
   };
 
   const onBuyCustomCoinBundle = async (item?: IAppCustomCoinBundle) => {
-    if (!isAuthenticated) {
-      redirectToSignIn();
-      return;
-    }
+    // if (!isAuthenticated) {
+    //   redirectToSignIn();
+    //   return;
+    // }
 
     if (!item) {
       return;
@@ -117,10 +117,10 @@ export function useAppCart() {
     sugoId,
     items,
   }: IAppCoinCheckoutOrderPaypalParams) => {
-    if (!isAuthenticated) {
-      redirectToSignIn();
-      return false;
-    }
+    // if (!isAuthenticated) {
+    //   redirectToSignIn();
+    //   return false;
+    // }
 
     try {
       const response = await checkoutCoinWithPaypal({

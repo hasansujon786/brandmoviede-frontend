@@ -203,6 +203,12 @@ function ActionIcons(props: { isMobile: boolean }) {
       ]
     : [
         {
+          label: "Cart",
+          href: "/cart",
+          icon: <ShoppingCart className="h-5 w-5 text-current" />,
+          show: true,
+        },
+        {
           label: "Sign in",
           href: "/signin",
           icon: <LogInIcon className="h-5 w-5 text-current" />,

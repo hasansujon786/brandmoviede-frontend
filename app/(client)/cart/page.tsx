@@ -1,4 +1,3 @@
-import UserRoute from "@/components/auth/UserRoute";
 import CartList from "@/components/pages/Cart/CartList";
 import { Dobis, DobisConfig } from "@/components/shared/Dobi/Dobi";
 import HeroGradientWrapper from "@/components/shared/HeroGradientWrapper/HeroGradientWrapper";
@@ -14,23 +13,21 @@ const dobisConfig: DobisConfig = [
 
 export default function CartPage() {
   return (
-    <UserRoute>
-      <div>
-        <HeroGradientWrapper>
-          <Dobis items={dobisConfig} />
+    <div>
+      <HeroGradientWrapper>
+        <Dobis items={dobisConfig} />
 
-          <div className="custom-container">
-            <SectionHeading
-              eyebrow="CART"
-              description="You're just one step away from owning these limited-edition pieces."
-            >
-              Your <span className="text-primary">Curated</span> Collection
-            </SectionHeading>
-          </div>
-        </HeroGradientWrapper>
+        <div className="custom-container">
+          <SectionHeading
+            eyebrow="CART"
+            description="You're just one step away from owning these limited-edition pieces."
+          >
+            Your <span className="text-primary">Curated</span> Collection
+          </SectionHeading>
+        </div>
+      </HeroGradientWrapper>
 
-        <CartList />
-      </div>
-    </UserRoute>
+      <CartList />
+    </div>
   );
 }
