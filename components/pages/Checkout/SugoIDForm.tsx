@@ -11,13 +11,14 @@ import {
   FieldSet,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { createQueryParams } from "@/lib/utils/formatters";
+import { useAuth } from "@/redux/features/auth/hooks";
 import { useAppCart } from "@/redux/features/cart/cartHooks";
 import { useForm } from "@tanstack/react-form";
 import { CircleAlert } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { z } from "zod";
+import CheckoutGuestUserDialog from "./CheckoutGuestUserDialog";
 
 export const sugoCheckoutSchema = z
   .object({
@@ -35,10 +36,32 @@ export default function SugoIDForm(props: EmailFormProps) {
   const { goNext } = useNextStep();
   const searchParams = useSearchParams();
 
+  const { isAuthenticated } = useAuth();
+  const [guestUserDialog, setGuestUserDialog] = useState(false);
+
+  const [isProcessing, setIsProcessing] = useState(false);
   const {
     tryCoinCheckoutWithPaypalFromCart,
     tryCoinCheckoutWithPaypalFromCustomBundle,
   } = useAppCart();
+
+  const handleCheckout = async (sugoId: string) => {
+    const isCustomBundle = searchParams.get("isCustomBundle") == "true";
+
+    try {
+      setIsProcessing(true);
+
+      if (isCustomBundle) {
+        await tryCoinCheckoutWithPaypalFromCustomBundle(sugoId);
+      } else {
+        await tryCoinCheckoutWithPaypalFromCart(sugoId);
+      }
+    } finally {
+      setTimeout(() => {
+        setIsProcessing(false);
+      }, 1000);
+    }
+  };
 
   const form = useForm({
     defaultValues: {
@@ -49,23 +72,28 @@ export default function SugoIDForm(props: EmailFormProps) {
       onSubmit: sugoCheckoutSchema,
     },
     onSubmit: async ({ value }) => {
-      const isCustomBundle = searchParams.get("isCustomBundle") == "true";
-      const query = createQueryParams({
-        type: "coin",
-        sugoId: value.sugoId,
-        isCustomBundle,
-      });
-      // goNext(query);
-      if (isCustomBundle) {
-        await tryCoinCheckoutWithPaypalFromCustomBundle(value.sugoId);
-      } else {
-        await tryCoinCheckoutWithPaypalFromCart(value.sugoId);
+      if (!isAuthenticated) {
+        setGuestUserDialog(true);
+        return;
       }
+
+      await handleCheckout(value.sugoId);
     },
   });
 
+  async function handleOnGuestContinue() {
+    setGuestUserDialog(false);
+    await handleCheckout(form.state.values.sugoId);
+  }
+
   return (
     <div>
+      <CheckoutGuestUserDialog
+        open={guestUserDialog}
+        onOpenChange={setGuestUserDialog}
+        onGuestContinue={handleOnGuestContinue}
+      />
+
       <h5 className="text-heading-200 font-heading text-3xl font-semibold">
         Sugo ID
       </h5>
@@ -145,9 +173,17 @@ export default function SugoIDForm(props: EmailFormProps) {
               type="submit"
               variant="primary"
               className="mt-3 w-full"
-              disabled={!isTouched || !isValid || !canSubmit || isSubmitting}
+              disabled={
+                !isTouched ||
+                !isValid ||
+                !canSubmit ||
+                isSubmitting ||
+                isProcessing
+              }
             >
-              {isSubmitting ? "Processing..." : "Continue to Payment"}
+              {isSubmitting || isProcessing
+                ? "Processing..."
+                : "Continue to Payment"}
             </Button>
           )}
         </form.Subscribe>
