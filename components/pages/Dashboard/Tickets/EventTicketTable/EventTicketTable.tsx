@@ -14,6 +14,7 @@ import { StatusSelect } from "@/components/shared/StatusSelect/StatusSelect";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getFormatedDate, isArrayEmpty } from "@/lib/utils";
+import { formatCurrency } from "@/lib/utils/formatters";
 import {
   useAdminDeleteTicketByIdMutation,
   useAdminGetAllTicketsQuery,
@@ -37,7 +38,7 @@ export const columns: ColumnDef<ITicketListItem>[] = [
   {
     accessorKey: "revenue",
     header: "Revenue",
-    cell: ({ row }) => `$${row.original.revenue}`,
+    cell: ({ row }) => formatCurrency(row.original.revenue),
   },
   {
     accessorKey: "total_sold",

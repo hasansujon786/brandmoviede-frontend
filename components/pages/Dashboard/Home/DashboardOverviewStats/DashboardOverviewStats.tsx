@@ -7,6 +7,7 @@ import {
 } from "@/components/dashboard/AppSidebar/AppSidebarIcons";
 import DashboardInfoCardList from "@/components/dashboard/DashboardInfoCardList/DashboardInfoCardList";
 import { TwoPeoplesIcon } from "@/components/shared/icons/PeoplesIcon";
+import { formatCurrency } from "@/lib/utils/formatters";
 import { useGetOverviewStatsQuery } from "@/redux/api";
 
 export default function DashboardOverviewStats() {
@@ -29,7 +30,7 @@ export default function DashboardOverviewStats() {
       id: "revenue",
       title: "Total Revenue",
       icon: <TwoPeoplesIcon />,
-      value: `$${data?.total_revenue?.toLocaleString() ?? 0}`,
+      value: formatCurrency(data?.total_revenue),
     },
     {
       id: "users",

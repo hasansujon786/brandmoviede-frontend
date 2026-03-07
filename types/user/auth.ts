@@ -13,8 +13,8 @@ export interface ILoginParams {
 
 export type IAuthUserRole = "user" | "admin";
 export const RoleUtils = {
-  isAdmin: (role?: IAuthUserRole | null) => role === "admin",
-  isUser: (role?: IAuthUserRole | null) => role === "user",
+  isAdmin: (role?: IAuthUserRole | null) => role?.toLocaleLowerCase() === "admin",
+  isUser: (role?: IAuthUserRole | null) => role?.toLocaleLowerCase() === "user",
   isPublic: (role?: IAuthUserRole | null) => role == null,
 
   hasRole: (

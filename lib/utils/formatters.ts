@@ -11,7 +11,7 @@ export function createQueryParams<T>(params: T): string {
 
 export function formatCurrency(
   amount: number | null | undefined,
-  currency: "USD" | "EUR" = "USD",
+  currency: "USD" | "EUR" = "EUR",
 ) {
   return new Intl.NumberFormat("en-US", {
     style: "currency",

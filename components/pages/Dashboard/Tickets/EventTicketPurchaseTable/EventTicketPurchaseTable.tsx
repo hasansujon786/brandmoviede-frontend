@@ -12,6 +12,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { getFormatedDate, isArrayEmpty } from "@/lib/utils";
+import { formatCurrency } from "@/lib/utils/formatters";
 import { createGetVarient } from "@/lib/utils/varients";
 import {
   useAdminToggleTicketUsedStatusMutation,
@@ -51,7 +52,7 @@ export const columns: ColumnDef<IOrderItem>[] = [
   {
     accessorKey: "ticket_price",
     header: "Ticket Price",
-    cell: ({ row }) => `$${row.original.ticket_price}`,
+    cell: ({ row }) => formatCurrency(row.original.ticket_price),
   },
   {
     accessorKey: "status",

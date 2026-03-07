@@ -32,7 +32,7 @@ export const columns: ColumnDef<IAdminCoinBundle>[] = [
     header: "Price",
     cell: ({ row }) =>
       row.original.is_custom
-        ? `$${row.original?.price}`
+        ? `€${row.original?.price}`
         : formatCurrency(row.original?.price ?? 0),
   },
   {

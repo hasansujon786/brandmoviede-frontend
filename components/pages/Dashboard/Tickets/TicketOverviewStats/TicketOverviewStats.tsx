@@ -4,6 +4,7 @@ import DashboardInfoCardList from "@/components/dashboard/DashboardInfoCardList/
 import { CreditCardExchangeIcon } from "@/components/shared/icons/CreditCardIcon";
 import { MessageWitPipeIcon } from "@/components/shared/icons/MessageIcon";
 import { TicketWithTextIcon } from "@/components/shared/icons/TicketIcon";
+import { formatCurrency } from "@/lib/utils/formatters";
 import { useAdminGetTicketStatsQuery } from "@/redux/features/admin/ticketApis";
 import { TicketIcon } from "lucide-react";
 
@@ -19,7 +20,7 @@ export default function TicketOverviewStats() {
     {
       title: "Total Revenue",
       icon: <CreditCardExchangeIcon />,
-      value: `$${(data?.total_revenue ?? 0).toLocaleString()}`,
+      value: formatCurrency(data?.total_revenue),
     },
     {
       title: "Upcoming Events",

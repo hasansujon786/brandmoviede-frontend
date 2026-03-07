@@ -5,6 +5,7 @@ import { CoinExchangeIcon } from "@/components/shared/icons/CoinIcon";
 import { CreditCardExchangeIcon } from "@/components/shared/icons/CreditCardIcon";
 import FireIcon from "@/components/shared/icons/FireIcon";
 import { LockWithDollarSignIcon } from "@/components/shared/icons/LockIcon";
+import { formatCurrency } from "@/lib/utils/formatters";
 import { useAdminGetCoinStatsQuery } from "@/redux/features/admin/coinApis";
 
 export default function CoinOverviewStats() {
@@ -29,7 +30,7 @@ export default function CoinOverviewStats() {
     {
       title: "Total Revenue",
       icon: <CreditCardExchangeIcon />,
-      value: `$${(data?.total_revenue ?? 0).toLocaleString()}`,
+      value: formatCurrency(data?.total_revenue),
     },
   ];
 

@@ -2,6 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getFormatedDate, isArrayEmpty } from "@/lib/utils";
+import { formatCurrency } from "@/lib/utils/formatters";
 import { useAdminGetTopPerformingEventsQuery } from "@/redux/features/admin/analyticsApis";
 
 export default function TopPerformingEvents() {
@@ -39,7 +40,7 @@ export default function TopPerformingEvents() {
 
               <div className="text-right">
                 <p className="text-primary text-lg font-medium">
-                  ${item.ticket_price}
+                  {formatCurrency(item.ticket_price)}
                 </p>
                 <p className="text-xs">
                   {item.total_sold}/{item.sold_limit}
