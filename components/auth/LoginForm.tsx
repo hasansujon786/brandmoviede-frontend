@@ -44,7 +44,7 @@ const signInSchema = z.object({
 });
 
 interface LoginFormProps {
-  onSignIn: () => void;
+  onSignIn?: () => void;
   type: IAuthUserRole;
   onlyCard?: boolean;
 }
