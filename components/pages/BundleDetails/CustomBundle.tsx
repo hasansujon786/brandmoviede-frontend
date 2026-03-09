@@ -10,6 +10,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
+import { formatCurrency } from "@/lib/utils/formatters";
 import { useGetCustomCoinBundleQuery } from "@/redux/api";
 import { useAppCart } from "@/redux/features/cart/cartHooks";
 import { useForm } from "@tanstack/react-form";
@@ -147,7 +148,7 @@ export default function CustomBundle() {
                           </p>
                           <p className="text-3xl font-semibold">
                             <span className="text-primary">
-                              ${coinTotalPrice.toLocaleString()}
+                              {formatCurrency(coinTotalPrice)}
                             </span>
                           </p>
                         </div>

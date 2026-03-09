@@ -9,10 +9,20 @@ export function createQueryParams<T>(params: T): string {
   return qs.stringify(params, { addQueryPrefix: true }); // Automatically adds `?` at the beginning
 }
 
+const currencySymbols = {
+  USD: "$",
+  EUR: "€",
+};
+
 export function formatCurrency(
   amount: number | null | undefined,
   currency: "USD" | "EUR" = "EUR",
+  onlyPrefix: boolean = false,
 ) {
+  if (onlyPrefix && typeof amount === "number") {
+    return `${currencySymbols[currency]}${amount.toLocaleString()}`;
+  }
+
   return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency,
