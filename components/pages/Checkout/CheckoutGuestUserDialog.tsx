@@ -45,22 +45,18 @@ export default function CheckoutGuestUserDialog({
         ) : (
           <>
             <DialogHeader>
-              <DialogTitle>Proceed as guest or sign in?</DialogTitle>
+              <DialogTitle>Important notice for guest buyers !</DialogTitle>
 
               <div className="space-y-4 pt-2 text-sm leading-relaxed">
                 <p>
-                  <strong>Data Integrity:</strong> Registered users ensure that
-                  every transaction is traceable and transparent, reducing the
-                  risk of lost orders or fraudulent claims.
+                  Registered users ensure that every transaction is traceable
+                  and transparent, reducing the risk of lost orders or
+                  fraudulent claims. The guest checkout option significantly
+                  increases the risk of losing user data and makes customer
+                  support more difficult in the event of claims.
                 </p>
 
-                <p>
-                  The guest checkout option significantly increases the risk of
-                  losing user data and makes customer support more difficult in
-                  case of claims.
-                </p>
-
-                <p className="font-medium">Proceed as a guest or sign in?</p>
+                <p className="font-medium">Continue as a guest or register?</p>
               </div>
             </DialogHeader>
 

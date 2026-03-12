@@ -16,6 +16,7 @@ import { useAppCart } from "@/redux/features/cart/cartHooks";
 import { useForm } from "@tanstack/react-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import { NumericFormat } from "react-number-format";
 
 const COIN_MIN_AMOUNT = 750;
 const CustomBundleSchema = z.object({
@@ -106,15 +107,15 @@ export default function CustomBundle() {
                     >
                       {isLoading ? <Spinner className="size-4" /> : null}
                     </InputGroupAddon>
-                    <InputGroupInput
-                      disabled={isLoading}
-                      id="amount-input"
-                      name="amount-input"
-                      type="number"
-                      placeholder={`Enter at least ${COIN_MIN_AMOUNT} coins`}
+                    <NumericFormat
+                      customInput={InputGroupInput}
+                      thousandSeparator
+                      allowNegative={false}
                       value={field.state.value}
-                      onBlur={field.handleBlur}
-                      onChange={(e) => field.handleChange(e.target.value)}
+                      onValueChange={(values) =>
+                        field.handleChange(values.value)
+                      }
+                      placeholder={`Enter at least ${COIN_MIN_AMOUNT} coins`}
                     />
                   </InputGroup>
                   <FieldError errors={field.state.meta.errors} />

@@ -42,6 +42,7 @@
     "radix-ui": "^1.4.3",
     "react": "19.2.0",
     "react-dom": "19.2.0",
+    "react-number-format": "^5.4.4",
     "react-redux": "^9.2.0",
     "recharts": "^2.15.4",
     "redux-persist": "^6.0.0",
