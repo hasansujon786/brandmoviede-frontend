@@ -23,8 +23,7 @@ import { createGetVarient } from "@/lib/utils/varients";
 import { useGetRecentOrdersQuery } from "@/redux/api";
 import { IOrderItem } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
-import { EyeIcon, InfoIcon } from "lucide-react";
-import { useState } from "react";
+import { EyeIcon } from "lucide-react";
 
 export const statusVariantMap = {
   active: "info",

@@ -23,6 +23,14 @@ export interface IAdminCoinBundle {
   is_custom?: boolean;
 }
 
+export type IAdminCoinOwnerInfo = {
+  rspHead: {
+    code: number
+    prompt: string
+  }
+  balance: string
+}
+
 export type IAdminCoinBundleDataPayload = WithPaginationAndStatus<
   IAdminCoinBundle[]
 >;

@@ -3,6 +3,7 @@ import { baseApi } from "@/redux/api/baseApi";
 import {
   IAdminCoinBundle,
   IAdminCoinBundleDataPayload,
+  IAdminCoinOwnerInfo,
   IAdminCoinStats,
   ICreateCoinParams,
   IPaginationParams,
@@ -16,6 +17,7 @@ const coinApis = baseApi.injectEndpoints({
       query: () => `/admin/coin/stats`,
       transformResponse: (response: WithStatus<IAdminCoinStats>) =>
         response.data,
+      providesTags: ["Stats"] as const,
     }),
     adminGetAllCoinBundles: builder.query<
       IAdminCoinBundleDataPayload,
@@ -130,12 +132,19 @@ const coinApis = baseApi.injectEndpoints({
       transformResponse: (response: WithStatus<IAdminCoinBundle>) =>
         response.data,
     }),
+    adminGetOwnerCoinInfo: builder.query<IAdminCoinOwnerInfo, void>({
+      query: () => `/admin/owner/coins`,
+      providesTags: ["Stats"] as const,
+      transformResponse: (response: WithStatus<IAdminCoinOwnerInfo>) =>
+        response.data,
+    }),
   }),
   overrideExisting: false,
 });
 
 export const {
   useAdminGetCoinStatsQuery,
+  useAdminGetOwnerCoinInfoQuery,
   useAdminCreateCoinMutation,
   useAdminGetCoinBundleByIdQuery,
   useAdminGetAllCoinBundlesQuery,

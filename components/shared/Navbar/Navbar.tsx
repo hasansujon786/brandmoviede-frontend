@@ -36,6 +36,7 @@ import { usePathname } from "next/navigation";
 import { RoleUtils } from "@/types";
 import UserNotificationBell from "./UserNotificationBell";
 import { SocketProvider } from "@/redux/api/socket/SocketProvider";
+import React from "react";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -163,64 +164,90 @@ function ActionIcon({
   );
 }
 
+interface NotificationActionItem {
+  label: string;
+  href: string;
+  icon?: React.JSX.Element;
+  component?: React.ReactNode;
+}
+
 function ActionIcons(props: { isMobile: boolean }) {
   const pathname = usePathname();
 
   const { isAuthenticated, role } = useAuth();
-  const isUser = RoleUtils.isUser(role);
   const isAdmin = RoleUtils.isAdmin(role);
 
-  const actionLinks = isAuthenticated
-    ? [
-        {
-          label: "Profile",
-          href: isAdmin ? "/dashboard" : "/profile",
-          icon: <UserRound className="h-5 w-5 text-current" />,
-          show: isUser || isAdmin,
-        },
-        {
-          label: "Cart",
-          href: "/cart",
-          icon: <ShoppingCart className="h-5 w-5 text-current" />,
-          show: isUser,
-        },
-        {
-          label: "Notification",
-          href: "#",
-          icon: (
-            <SocketProvider>
-              <UserNotificationBell />
-            </SocketProvider>
-          ),
-          show: isUser,
-        },
-        {
-          label: "More",
-          href: "#",
-          component: <MoreActin key="more" />,
-          show: true,
-        },
-      ]
-    : [
-        {
-          label: "Cart",
-          href: "/cart",
-          icon: <ShoppingCart className="h-5 w-5 text-current" />,
-          show: true,
-        },
-        {
-          label: "Sign in",
-          href: "/signin",
-          icon: <LogInIcon className="h-5 w-5 text-current" />,
-          show: true,
-        },
-      ];
+  const adminActions: NotificationActionItem[] = [
+    {
+      label: "Profile",
+      href: "/dashboard",
+      icon: <UserRound className="h-5 w-5 text-current" />,
+    },
+    {
+      label: "Notification",
+      href: "#",
+      icon: (
+        <SocketProvider>
+          <UserNotificationBell />
+        </SocketProvider>
+      ),
+    },
+    {
+      label: "More",
+      href: "#",
+      component: <MoreActin key="more" />,
+    },
+  ];
 
-  const filtred = actionLinks.filter((l) => l.show);
+  const userActions: NotificationActionItem[] = [
+    {
+      label: "Profile",
+      href: "/profile",
+      icon: <UserRound className="h-5 w-5 text-current" />,
+    },
+    {
+      label: "Notification",
+      href: "#",
+      icon: (
+        <SocketProvider>
+          <UserNotificationBell />
+        </SocketProvider>
+      ),
+    },
+    {
+      label: "Cart",
+      href: "/cart",
+      icon: <ShoppingCart className="h-5 w-5 text-current" />,
+    },
+    {
+      label: "More",
+      href: "#",
+      component: <MoreActin key="more" />,
+    },
+  ];
+
+  const publicActions: NotificationActionItem[] = [
+    {
+      label: "Cart",
+      href: "/cart",
+      icon: <ShoppingCart className="h-5 w-5 text-current" />,
+    },
+    {
+      label: "Sign in",
+      href: "/signin",
+      icon: <LogInIcon className="h-5 w-5 text-current" />,
+    },
+  ];
+
+  const actins = isAuthenticated
+    ? isAdmin
+      ? adminActions
+      : userActions
+    : publicActions;
 
   return (
     <>
-      {filtred.map((link) => {
+      {actins.map((link) => {
         const isActive = pathname.startsWith(link.href);
 
         if (link?.component) {
