@@ -65,6 +65,10 @@ export const columns: ColumnDef<IOrderItem>[] = [
     cell: ({ row }) => row.original?.coin_amount ?? "N/A",
   },
   {
+    accessorKey: "sugo_id",
+    header: "Sugo ID",
+  },
+  {
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => {
@@ -80,10 +84,17 @@ export const columns: ColumnDef<IOrderItem>[] = [
   },
   {
     accessorKey: "status_msg",
-    header: "Coin Transfer Status",
+    header: "Transfer Status",
     cell: ({ row }) => {
+      const items = [
+        { label: "Status Code", value: row.original?.status_code },
+        { label: "Status Message", value: row.original?.status_msg },
+        { label: "Payment Method", value: row.original?.payment_method },
+        { label: "Payment Number", value: row.original?.payment_number },
+      ];
+
       return (
-        <div className="">
+        <div className="grid place-items-center">
           <Popover>
             <PopoverTrigger asChild>
               <Button
@@ -94,15 +105,18 @@ export const columns: ColumnDef<IOrderItem>[] = [
                 <EyeIcon className="size-4" />
               </Button>
             </PopoverTrigger>
-            <PopoverContent>
-              <PopoverHeader>
-                <PopoverTitle>
-                  Status Code: {row.original?.status_code ?? "N/A"}
-                </PopoverTitle>
-                <PopoverDescription>
-                  {row.original?.status_msg ?? "N/A"}
-                </PopoverDescription>
-              </PopoverHeader>
+            <PopoverContent className="min-w-sm" align="end">
+              <ul className="divide-y *:py-3">
+                {items.map((item, index) => (
+                  <li
+                    key={index}
+                    className={`flex items-center justify-between gap-2 font-medium`}
+                  >
+                    <span className="text-muted-foreground">{item.label}:</span>
+                    <span>{item.value ?? "N/A"}</span>
+                  </li>
+                ))}
+              </ul>
             </PopoverContent>
           </Popover>
         </div>

@@ -21,6 +21,9 @@ export interface IOrderItem {
   used: boolean | null;
   status_code?: number;
   status_msg?: string;
+  sugo_id?: string;
+  payment_method?: string;
+  billing_address?: string;
 }
 
 export interface IOverviewStats {
