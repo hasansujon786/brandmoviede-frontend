@@ -52,29 +52,21 @@ export default function ComingSoonPage() {
 
         {/* Title */}
         <h2 className="mb-4 text-3xl font-bold text-gray-900 md:text-4xl">
-          We’re Launching Something Amazing 🚀
+          We’re Launching Something{" "}
+          <span className="text-primary">Amazing</span>
         </h2>
 
         {/* Subtitle */}
-        <p className="mb-6 text-gray-700">
+        <p className="mx-auto mb-6 max-w-sm text-center text-gray-700">
           Our platform is currently under maintenance. We’ll be back shortly
           with a better experience.
         </p>
 
         {/* Countdown */}
-        <div className="mb-6 flex justify-center gap-4">
-          {["days", "hours", "minutes", "seconds"].map((unit) => (
-            <div key={unit} className="w-20 rounded-xl bg-white/30 px-4 py-3">
-              <p className="text-xl font-bold text-gray-900">
-                {timeLeft[unit] || 0}
-              </p>
-              <p className="text-xs text-gray-600 capitalize">{unit}</p>
-            </div>
-          ))}
-        </div>
+        <p className="animation-duration-[2s] animate-bounce text-5xl"> 🚀</p>
 
         {/* Footer note */}
-        <p className="text-sm text-gray-600">Stay tuned for updates 👀</p>
+        <p className="text-sm text-gray-600">Stay tuned for updates</p>
       </div>
     </div>
   );
