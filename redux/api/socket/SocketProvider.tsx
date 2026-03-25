@@ -86,7 +86,7 @@ export function SocketProvider({ children }: { children: ReactNode }) {
   const registerAppEvents = useEffectEvent((socket: Socket) => {
     Object.entries(eventHandlers).forEach(([event, handler]) => {
       socket.on(event, (data) => {
-        console.warn("Event fired", event, data);
+        // console.warn("Event fired", event, data);
         setHasNewNotification(true);
         handler(data);
       });
@@ -113,13 +113,13 @@ export function SocketProvider({ children }: { children: ReactNode }) {
 
     socketRef.current = socket;
 
-    socket.on("connect", () => {
-      console.log("Socket connected:", socket.id);
-    });
+    // socket.on("connect", () => {
+    //   console.log("Socket connected:", socket.id);
+    // });
 
-    socket.on("disconnect", () => {
-      console.log("Socket disconnected");
-    });
+    // socket.on("disconnect", () => {
+    //   console.log("Socket disconnected");
+    // });
 
     socket.on("connect_error", (err) => {
       console.error("Socket error:", err.message);

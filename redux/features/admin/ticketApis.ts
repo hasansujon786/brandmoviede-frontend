@@ -59,7 +59,6 @@ const ticketApis = baseApi.injectEndpoints({
               query.originalArgs,
               (draft) => {
                 const order = draft?.data?.find((item) => item.id === id);
-                console.log("found order", order);
 
                 if (order) {
                   order.used = !order.used;

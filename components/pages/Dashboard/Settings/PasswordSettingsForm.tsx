@@ -55,7 +55,6 @@ export default function PasswordSettingsForm({
     },
     onSubmit: async ({ value }) => {
       try {
-        console.log(value);
         const res = await changePassword({
           old_password: value.oldPassword,
           new_password: value.newPassword,
