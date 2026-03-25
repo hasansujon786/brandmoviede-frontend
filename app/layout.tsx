@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Bricolage_Grotesque, Inter_Tight } from "next/font/google";
 import "./globals.css";
 
-import { TwScreenSize } from "@/components/ui/tw-utils";
 import StoreProvider from "@/redux/StoreProvider";
 import AuthProvider from "@/redux/features/auth/AuthProvider";
 import { Toaster } from "sonner";
@@ -36,7 +35,7 @@ export default function RootLayout({
         <StoreProvider>
           <AuthProvider>{children}</AuthProvider>
         </StoreProvider>
-        <TwScreenSize />
+        {/* <TwScreenSize /> */}
         <Toaster position="bottom-right" richColors />
       </body>
     </html>
