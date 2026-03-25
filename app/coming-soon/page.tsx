@@ -1,7 +1,4 @@
-"use client";
-
 import { Dobis, DobisConfig } from "@/components/shared/Dobi/Dobi";
-import { useEffect, useState } from "react";
 
 const dobisConfig: DobisConfig = [
   { className: "bottom-1/3 left-20 size-18", varient: "kiss" },
@@ -12,31 +9,6 @@ const dobisConfig: DobisConfig = [
 ];
 
 export default function ComingSoonPage() {
-  const [timeLeft, setTimeLeft] = useState({});
-
-  useEffect(() => {
-    const targetDate = new Date("2026-04-01T00:00:00"); // change this
-
-    const timer = setInterval(() => {
-      const now = new Date();
-      const diff = targetDate - now;
-
-      if (diff <= 0) {
-        clearInterval(timer);
-        return;
-      }
-
-      setTimeLeft({
-        days: Math.floor(diff / (1000 * 60 * 60 * 24)),
-        hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
-        minutes: Math.floor((diff / (1000 * 60)) % 60),
-        seconds: Math.floor((diff / 1000) % 60),
-      });
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, []);
-
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-b from-[#d8a7b1] via-[#c7a6d8] to-[#eae7f2]">
       <Dobis items={dobisConfig} />
