@@ -8,7 +8,7 @@ import { toast } from "sonner";
 
 export default function TicketItem({
   event_ticket,
-  event_ticket_id,
+  ticket_code,
   status,
 }: IAppMyTicketOrderItem) {
   const info = [
@@ -24,7 +24,11 @@ export default function TicketItem({
 
   const isInactive = status === "Inactive";
   const handleCopyTicketId = () => {
-    navigator.clipboard.writeText(event_ticket_id);
+    if (!ticket_code) {
+      return;
+    }
+
+    navigator.clipboard.writeText(ticket_code);
     toast.success("Event Ticket ID copied");
   };
 
@@ -70,7 +74,7 @@ export default function TicketItem({
 
         <div className="flex w-full items-center justify-between gap-0 md:gap-x-32">
           <p className="text-primary-foreground font-heading text-sm font-semibold md:text-2xl lg:text-3xl">
-            {event_ticket_id}
+            {ticket_code ?? "Payment Status: failed"}
           </p>
 
           <Button

@@ -5,6 +5,8 @@ export interface IAppTicket {
   title: string;
   description: string;
   ticket_price: number;
+  event_ticket_id: string;
+  ticket_code: string;
   thumbnail: string;
   sold_limit: number;
   total_sold: number;
