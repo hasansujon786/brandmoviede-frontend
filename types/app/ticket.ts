@@ -24,6 +24,8 @@ export interface IAppTicketDetails {
   about: string;
   included: string[];
   ticket_price: number;
+  event_ticket_id: string;
+  ticket_code: string;
   status: string;
   ticket_status: ITicketStatus;
   sold_limit: number;
